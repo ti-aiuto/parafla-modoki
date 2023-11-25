@@ -112,6 +112,41 @@
               objectId: "randomC",
             },
           ],
+          31: [
+            {
+              event: frameEvents[6],
+              relativeFrameCountInEvent: 1,
+              objectId: "randomC",
+            },
+          ],
+          32: [
+            {
+              event: frameEvents[6],
+              relativeFrameCountInEvent: 2,
+              objectId: "randomC",
+            },
+          ],
+          33: [
+            {
+              event: frameEvents[6],
+              relativeFrameCountInEvent: 3,
+              objectId: "randomC",
+            },
+          ],
+          34: [
+            {
+              event: frameEvents[6],
+              relativeFrameCountInEvent: 4,
+              objectId: "randomC",
+            },
+          ],
+          35: [
+            {
+              event: frameEvents[6],
+              relativeFrameCountInEvent: 5,
+              objectId: "randomC",
+            },
+          ],
         };
 
         const depthToLayerWrapper = {};
@@ -177,12 +212,34 @@
                   image: {
                     source: event.putImage.source,
                   },
-                  // トゥイーンの場合はここのlayutOptionsの値を動的に変更する必要がある
                   layoutOptions: event.layoutOptions,
                 },
               };
             } else {
-              // TODO: 2以降の場合は必要に応じてモーショントトゥイーン
+              const event = scheduledFrameEvent.event;
+              const depth = event.depth;
+
+              const before = event.layoutOptions;
+              const after = event.lastKeyFrame.layoutOptions;
+
+              // TODO: ここでdepthあるかの判定
+              // TODO: ここでtypeの判定
+              depthToLayer[depth] = {
+                object: {
+                  // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
+                  type: "image",
+                  image: {
+                    source: event.putImage.source,
+                  },
+                  layoutOptions: {
+                    x: before.x + scheduledFrameEvent.relativeFrameCountInEvent * (after.x - before.x) / event.frameCount, 
+                    y: before.y + scheduledFrameEvent.relativeFrameCountInEvent * (after.y - before.y) / event.frameCount,
+                    width: before.width + scheduledFrameEvent.relativeFrameCountInEvent * (after.width - before.width) / event.frameCount, 
+                    height: before.height + scheduledFrameEvent.relativeFrameCountInEvent * (after.height - before.height) / event.frameCount,
+                  }
+                },
+              };
+             
             }
 
             render(depthToLayer);
