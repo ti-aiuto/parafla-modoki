@@ -30,8 +30,8 @@
                 "https://blog.ta.kasaki.info/wp-content/uploads/2022/06/IMG_20220524_122351263-1536x1152.jpg",
               type: "fixedImage",
               layoutOptions: {
-                x: 0,
-                y: 0,
+                x: 20,
+                y: 20,
                 width: 120,
                 height: 120,
               },
@@ -49,8 +49,8 @@
                 "https://blog.ta.kasaki.info/wp-content/uploads/2021/06/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88-2021-06-03-14.28.33.png",
               type: "fixedImage",
               layoutOptions: {
-                x: 0,
-                y: 0,
+                x: 40,
+                y: 40,
                 width: 120,
                 height: 120,
               },
@@ -84,6 +84,7 @@
         };
 
         const depthToLayerWrapper = {};
+        const objectIdToElement = {};
         function render(depthToLayer) {
           const root = document.getElementById("root");
           // TODO: 列挙順
@@ -122,8 +123,6 @@
         }
 
         const depthToLayer = {};
-        const objectIdToObject = {};
-
         let currentFrameCount = 0;
         setInterval(function () {
           currentFrameCount += 1;
