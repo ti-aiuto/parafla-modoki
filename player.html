@@ -57,6 +57,35 @@
             },
             depth: 1,
           },
+          {
+            type: "doNothing",
+            frameCount: 10,
+          },
+          {
+            type: "putImage",
+            putImage: {
+              type: "motionTweenImage",
+              source:
+                "https://blog.ta.kasaki.info/wp-content/uploads/2022/06/IMG_20220522_182837929-1152x1536.jpg",
+              layoutOptions: {
+                x: 0,
+                y: 0,
+                width: 120,
+                height: 120,
+              },
+              motionTweenImage: {
+                lastKeyFrame: {
+                  layoutOptions: {
+                    x: 50,
+                    y: 50,
+                    width: 120,
+                    height: 120,
+                  },
+                },
+              },
+            },
+            depth: 1,
+          },
         ];
 
         const absoluteFrameCountToScheduledFrameEvents = {
