@@ -2,6 +2,8 @@
 <html>
   <head>
     <script type="text/javascript">
+      const range = (start, end) => [...Array(end + 1).keys()].slice(start);
+
       function main() {
         const frameEvents = [
           {
@@ -18,7 +20,7 @@
               width: 120,
               height: 120,
             },
-            motionTweenEnabled: true
+            motionTweenEnabled: true,
           },
           {
             type: "doNothing",
@@ -38,7 +40,7 @@
               width: 120,
               height: 120,
             },
-            motionTweenEnabled: true
+            motionTweenEnabled: true,
           },
           {
             type: "doNothing",
@@ -58,7 +60,7 @@
               width: 120,
               height: 120,
             },
-            motionTweenEnabled: true
+            motionTweenEnabled: true,
           },
           {
             type: "doNothing",
@@ -86,68 +88,45 @@
                 height: 120,
               },
             },
-            motionTweenEnabled: true
+            motionTweenEnabled: true,
           },
         ];
 
-        const absoluteFrameCountToScheduledFrameEvents = {
-          1: [
-            {
-              event: frameEvents[0],
-              relativeFrameCountInEvent: 1,
-              objectId: "randomA",
-            },
-          ],
-          11: [
-            {
-              event: frameEvents[2],
-              relativeFrameCountInEvent: 1,
-              objectId: "randomB",
-            },
-          ],
-          21: [
-            {
-              event: frameEvents[4],
-              relativeFrameCountInEvent: 1,
-              objectId: "randomC",
-            },
-          ],
-          31: [
-            {
-              event: frameEvents[6],
-              relativeFrameCountInEvent: 1,
-              objectId: "randomC",
-            },
-          ],
-          32: [
-            {
-              event: frameEvents[6],
-              relativeFrameCountInEvent: 2,
-              objectId: "randomC",
-            },
-          ],
-          33: [
-            {
-              event: frameEvents[6],
-              relativeFrameCountInEvent: 3,
-              objectId: "randomC",
-            },
-          ],
-          34: [
-            {
-              event: frameEvents[6],
-              relativeFrameCountInEvent: 4,
-              objectId: "randomC",
-            },
-          ],
-          35: [
-            {
-              event: frameEvents[6],
-              relativeFrameCountInEvent: 5,
-              objectId: "randomC",
-            },
-          ],
-        };
+        function scheduleFrameEvents(frameEvents) {
+          const absoluteFrameCountToScheduledFrameEvents = {};
+          let currentFrameCount = 1;
+          frameEvents.forEach(function (frameEvent) {
+            const objectId = "dummy";
+            range(0, frameEvent.frameCount - 1).forEach(function (
+              frameCountInEvent,
+              index
+            ) {
+              const fixedFrameCountInEvent = currentFrameCount + index;
+              if (
+                !absoluteFrameCountToScheduledFrameEvents[
+                  fixedFrameCountInEvent
+                ]
+              ) {
+                absoluteFrameCountToScheduledFrameEvents[
+                  fixedFrameCountInEvent
+                ] = [];
+              }
+              if (frameEvent.type !== "doNothing") {
+                absoluteFrameCountToScheduledFrameEvents[
+                  fixedFrameCountInEvent
+                ].push({
+                  event: frameEvent,
+                  frameCountInEvent: index + 1,
+                  objectId: objectId,
+                });
+              }
+            });
+            currentFrameCount += frameEvent.frameCount;
+          });
+          return absoluteFrameCountToScheduledFrameEvents;
+        }
+
+        const absoluteFrameCountToScheduledFrameEvents = scheduleFrameEvents(frameEvents);
 
         const depthToLayerWrapper = {};
         const objectIdToElement = {}; // TODO: 要素のキャッシュを実装する
@@ -200,7 +179,7 @@
           }
 
           currentScheduledFrameEvents.forEach(function (scheduledFrameEvent) {
-            if (scheduledFrameEvent.relativeFrameCountInEvent === 1) {
+            if (scheduledFrameEvent.frameCountInEvent === 1) {
               const event = scheduledFrameEvent.event;
               const depth = event.depth;
               // TODO: ここでdepthあるかの判定
@@ -232,14 +211,29 @@
                     source: event.putImage.source,
                   },
                   layoutOptions: {
-                    x: before.x + scheduledFrameEvent.relativeFrameCountInEvent * (after.x - before.x) / event.frameCount, 
-                    y: before.y + scheduledFrameEvent.relativeFrameCountInEvent * (after.y - before.y) / event.frameCount,
-                    width: before.width + scheduledFrameEvent.relativeFrameCountInEvent * (after.width - before.width) / event.frameCount, 
-                    height: before.height + scheduledFrameEvent.relativeFrameCountInEvent * (after.height - before.height) / event.frameCount,
-                  }
+                    x:
+                      before.x +
+                      (scheduledFrameEvent.frameCountInEvent *
+                        (after.x - before.x)) /
+                        event.frameCount,
+                    y:
+                      before.y +
+                      (scheduledFrameEvent.frameCountInEvent *
+                        (after.y - before.y)) /
+                        event.frameCount,
+                    width:
+                      before.width +
+                      (scheduledFrameEvent.frameCountInEvent *
+                        (after.width - before.width)) /
+                        event.frameCount,
+                    height:
+                      before.height +
+                      (scheduledFrameEvent.frameCountInEvent *
+                        (after.height - before.height)) /
+                        event.frameCount,
+                  },
                 },
               };
-             
             }
 
             render(depthToLayer);
