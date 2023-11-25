@@ -5,9 +5,9 @@
       const frameEvents = [
         {
           type: "putImage",
-          image: {
+          putImage: {
             type: "fixedImage",
-            src: "https://blog.ta.kasaki.info/wp-content/uploads/2022/06/IMG_20220522_182837929-1152x1536.jpg",
+            source: "https://blog.ta.kasaki.info/wp-content/uploads/2022/06/IMG_20220522_182837929-1152x1536.jpg",
             layoutOptions: {
               x: 0,
               y: 0,
@@ -23,9 +23,9 @@
         },
         {
           type: "putImage",
-          image: {
+          putImage: {
+            source: "https://blog.ta.kasaki.info/wp-content/uploads/2022/06/IMG_20220524_122351263-1536x1152.jpg",
             type: "fixedImage",
-            src: "https://blog.ta.kasaki.info/wp-content/uploads/2022/06/IMG_20220524_122351263-1536x1152.jpg",
             layoutOptions: {
               x: 0,
               y: 0,
@@ -41,9 +41,9 @@
         },
         {
           type: "putImage",
-          image: {
+          putImage: {
+            source: "https://blog.ta.kasaki.info/wp-content/uploads/2021/06/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88-2021-06-03-14.28.33.png",
             type: "fixedImage",
-            src: "https://blog.ta.kasaki.info/wp-content/uploads/2021/06/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88-2021-06-03-14.28.33.png",
             layoutOptions: {
               x: 0,
               y: 0,
@@ -55,26 +55,68 @@
         },
       ];
 
-      const frames = {
+      const absoluteFrameCountToScheduledFrameEvents = {
         1: [
           {
             event: frameEvents[0],
-            relativeFrameCount: 1,
+            relativeFrameCountInEvent: 1,
+            objectId: "randomA",
           },
         ],
         11: [
           {
-            event: frameEvents[1],
-            relativeFrameCount: 1,
+            event: frameEvents[2],
+            relativeFrameCountInEvent: 1,
+            objectId: "randomB",
           },
         ],
         21: [
           {
-            event: frameEvents[2],
-            relativeFrameCount: 1,
+            event: frameEvents[4],
+            relativeFrameCountInEvent: 1,
+            objectId: "randomC",
           },
         ],
       };
+
+      const depthToLayer = {};
+      const objectIdToObject = {};
+
+      let currentFrameCount = 0;
+      setInterval(function () {
+        currentFrameCount += 1;
+        const currentScheduledFrameEvents =
+          absoluteFrameCountToScheduledFrameEvents[currentFrameCount];
+        if (!currentScheduledFrameEvents) {
+          // 何もしないフレーム
+          return;
+        }
+
+        currentScheduledFrameEvents.forEach(function (scheduledFrameEvent) {
+          if (scheduledFrameEvent.relativeFrameCountInEvent === 1) {
+            const event = scheduledFrameEvent.event;
+            const depth = event.depth;
+            // TODO: ここでdepthあるかの判定
+            // TODO: ここでtypeの判定
+            depthToLayer[depth] = {
+              object: {
+                // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
+                type: 'image',
+                image: {
+                  source: event.putImage.source
+                }
+              },
+              // トゥイーンの場合はここのlayutOptionsの値を動的に変更する必要がある
+              layutOptions: event.putImage.layoutOptions
+            };
+          } else {
+            // TODO: 2以降の場合は必要に応じてモーショントトゥイーン
+          }
+
+          console.log(depthToLayer);
+        });
+
+      }, 100);
     </script>
   </head>
   <body></body>
