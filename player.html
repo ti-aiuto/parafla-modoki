@@ -2,122 +2,170 @@
 <html>
   <head>
     <script type="text/javascript">
-      const frameEvents = [
-        {
-          type: "putImage",
-          putImage: {
-            type: "fixedImage",
-            source: "https://blog.ta.kasaki.info/wp-content/uploads/2022/06/IMG_20220522_182837929-1152x1536.jpg",
-            layoutOptions: {
-              x: 0,
-              y: 0,
-              width: 120,
-              height: 120,
-            },
-          },
-          depth: 1,
-        },
-        {
-          type: "doNothing",
-          frameCount: 10,
-        },
-        {
-          type: "putImage",
-          putImage: {
-            source: "https://blog.ta.kasaki.info/wp-content/uploads/2022/06/IMG_20220524_122351263-1536x1152.jpg",
-            type: "fixedImage",
-            layoutOptions: {
-              x: 0,
-              y: 0,
-              width: 120,
-              height: 120,
-            },
-          },
-          depth: 1,
-        },
-        {
-          type: "doNothing",
-          frameCount: 10,
-        },
-        {
-          type: "putImage",
-          putImage: {
-            source: "https://blog.ta.kasaki.info/wp-content/uploads/2021/06/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88-2021-06-03-14.28.33.png",
-            type: "fixedImage",
-            layoutOptions: {
-              x: 0,
-              y: 0,
-              width: 120,
-              height: 120,
-            },
-          },
-          depth: 1,
-        },
-      ];
-
-      const absoluteFrameCountToScheduledFrameEvents = {
-        1: [
+      function main() {
+        const frameEvents = [
           {
-            event: frameEvents[0],
-            relativeFrameCountInEvent: 1,
-            objectId: "randomA",
+            type: "putImage",
+            putImage: {
+              type: "fixedImage",
+              source:
+                "https://blog.ta.kasaki.info/wp-content/uploads/2022/06/IMG_20220522_182837929-1152x1536.jpg",
+              layoutOptions: {
+                x: 0,
+                y: 0,
+                width: 120,
+                height: 120,
+              },
+            },
+            depth: 1,
           },
-        ],
-        11: [
           {
-            event: frameEvents[2],
-            relativeFrameCountInEvent: 1,
-            objectId: "randomB",
+            type: "doNothing",
+            frameCount: 10,
           },
-        ],
-        21: [
           {
-            event: frameEvents[4],
-            relativeFrameCountInEvent: 1,
-            objectId: "randomC",
+            type: "putImage",
+            putImage: {
+              source:
+                "https://blog.ta.kasaki.info/wp-content/uploads/2022/06/IMG_20220524_122351263-1536x1152.jpg",
+              type: "fixedImage",
+              layoutOptions: {
+                x: 0,
+                y: 0,
+                width: 120,
+                height: 120,
+              },
+            },
+            depth: 1,
           },
-        ],
-      };
+          {
+            type: "doNothing",
+            frameCount: 10,
+          },
+          {
+            type: "putImage",
+            putImage: {
+              source:
+                "https://blog.ta.kasaki.info/wp-content/uploads/2021/06/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88-2021-06-03-14.28.33.png",
+              type: "fixedImage",
+              layoutOptions: {
+                x: 0,
+                y: 0,
+                width: 120,
+                height: 120,
+              },
+            },
+            depth: 1,
+          },
+        ];
 
-      const depthToLayer = {};
-      const objectIdToObject = {};
+        const absoluteFrameCountToScheduledFrameEvents = {
+          1: [
+            {
+              event: frameEvents[0],
+              relativeFrameCountInEvent: 1,
+              objectId: "randomA",
+            },
+          ],
+          11: [
+            {
+              event: frameEvents[2],
+              relativeFrameCountInEvent: 1,
+              objectId: "randomB",
+            },
+          ],
+          21: [
+            {
+              event: frameEvents[4],
+              relativeFrameCountInEvent: 1,
+              objectId: "randomC",
+            },
+          ],
+        };
 
-      let currentFrameCount = 0;
-      setInterval(function () {
-        currentFrameCount += 1;
-        const currentScheduledFrameEvents =
-          absoluteFrameCountToScheduledFrameEvents[currentFrameCount];
-        if (!currentScheduledFrameEvents) {
-          // 何もしないフレーム
-          return;
+        const depthToLayerWrapper = {};
+        function render(depthToLayer) {
+          const root = document.getElementById("root");
+          // TODO: 列挙順
+          Object.keys(depthToLayer).forEach(function (depth) {
+            const layer = depthToLayer[depth];
+            const object = layer.object;
+            console.log(object);
+            if (!object) {
+              return;
+            }
+
+            if (!depthToLayerWrapper[depth]) {
+              const newWrapper = document.createElement("div");
+              // TODO: ここでposition: absolute, zindex, width, height設定
+              root.appendChild(newWrapper);
+              depthToLayerWrapper[depth] = newWrapper;
+            }
+            const wrapper = depthToLayerWrapper[depth];
+            while (wrapper.firstChild) {
+              wrapper.removeChild(wrapper.firstChild);
+            }
+
+            if (object.type === "image") {
+              const imageElement = document.createElement("img");
+              imageElement.src = object.image.source;
+              wrapper.appendChild(imageElement);
+              const layoutOptions = object.layoutOptions;
+              console.log(layoutOptions);
+              imageElement.style.position = "absolute";
+              imageElement.style.width = `${layoutOptions.width}px`;
+              imageElement.style.height = `${layoutOptions.height}px`;
+              imageElement.style.left = `${layoutOptions.x}px`;
+              imageElement.style.top = `${layoutOptions.y}px`;
+            }
+          });
         }
 
-        currentScheduledFrameEvents.forEach(function (scheduledFrameEvent) {
-          if (scheduledFrameEvent.relativeFrameCountInEvent === 1) {
-            const event = scheduledFrameEvent.event;
-            const depth = event.depth;
-            // TODO: ここでdepthあるかの判定
-            // TODO: ここでtypeの判定
-            depthToLayer[depth] = {
-              object: {
-                // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
-                type: 'image',
-                image: {
-                  source: event.putImage.source
-                }
-              },
-              // トゥイーンの場合はここのlayutOptionsの値を動的に変更する必要がある
-              layutOptions: event.putImage.layoutOptions
-            };
-          } else {
-            // TODO: 2以降の場合は必要に応じてモーショントトゥイーン
+        const depthToLayer = {};
+        const objectIdToObject = {};
+
+        let currentFrameCount = 0;
+        setInterval(function () {
+          currentFrameCount += 1;
+          const currentScheduledFrameEvents =
+            absoluteFrameCountToScheduledFrameEvents[currentFrameCount];
+          if (!currentScheduledFrameEvents) {
+            // 何もしないフレーム
+            return;
           }
 
-          console.log(depthToLayer);
-        });
+          currentScheduledFrameEvents.forEach(function (scheduledFrameEvent) {
+            if (scheduledFrameEvent.relativeFrameCountInEvent === 1) {
+              const event = scheduledFrameEvent.event;
+              const depth = event.depth;
+              // TODO: ここでdepthあるかの判定
+              // TODO: ここでtypeの判定
+              depthToLayer[depth] = {
+                object: {
+                  // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
+                  type: "image",
+                  image: {
+                    source: event.putImage.source,
+                  },
+                  // トゥイーンの場合はここのlayutOptionsの値を動的に変更する必要がある
+                  layoutOptions: event.putImage.layoutOptions,
+                },
+              };
+            } else {
+              // TODO: 2以降の場合は必要に応じてモーショントトゥイーン
+            }
 
-      }, 100);
+            render(depthToLayer);
+          });
+        }, 100);
+      }
+
+      window.onload = function () {
+        main();
+      };
     </script>
   </head>
-  <body></body>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
