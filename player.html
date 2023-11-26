@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="slideshowstop.js" type="text/javascript"></script>
+    <script src="slideshowcontrol.js" type="text/javascript"></script>
     <script type="text/javascript">
       const range = (start, end) => [...Array(end + 1).keys()].slice(start);
 
@@ -63,10 +63,23 @@
           scheduleFrameEvents(frameEvents);
 
         // 最後まで達したら最初に戻るため
-        const lastFrameCount = Math.max.apply(null, Object.keys(absoluteFrameCountToScheduledFrameEvents));
+        const lastFrameCount = Math.max.apply(
+          null,
+          Object.keys(absoluteFrameCountToScheduledFrameEvents)
+        );
 
         const depthToLayerWrapper = {};
         const objectIdToElement = {}; // TODO: 要素のキャッシュを実装する
+
+        function setLayoutOptionsToElement(element, layoutOptions) {
+          console.log(layoutOptions);
+          element.style.position = "absolute";
+          element.style.width = `${layoutOptions.width}px`;
+          element.style.height = `${layoutOptions.height}px`;
+          element.style.left = `${layoutOptions.x}px`;
+          element.style.top = `${layoutOptions.y}px`;
+        }
+
         function render(depthToLayer) {
           const root = document.getElementById("root");
 
@@ -106,13 +119,24 @@
               const imageElement = document.createElement("img");
               imageElement.src = object.image.source;
               wrapper.appendChild(imageElement);
+              setLayoutOptionsToElement(imageElement, object.layoutOptions);
+            } else if (object.type === "text") {
+              const textElement = document.createElement("div");
+              textElement.innerText = object.text.label;
+              wrapper.appendChild(textElement);
               const layoutOptions = object.layoutOptions;
               console.log(layoutOptions);
-              imageElement.style.position = "absolute";
-              imageElement.style.width = `${layoutOptions.width}px`;
-              imageElement.style.height = `${layoutOptions.height}px`;
-              imageElement.style.left = `${layoutOptions.x}px`;
-              imageElement.style.top = `${layoutOptions.y}px`;
+              setLayoutOptionsToElement(textElement, object.layoutOptions);
+
+              if (object.text.borderWidth) {
+                textElement.style.borderWidth = `${object.text.borderWidth}px`;
+              }
+              if (object.text.borderStyle) {
+                textElement.style.borderStyle = object.text.borderStyle;
+              }
+              if (object.text.borderColor) {
+                textElement.style.borderColor = object.text.borderColor;
+              }
             }
           });
         }
@@ -159,17 +183,31 @@
               }
             }
 
-            if (event.type === "putImage") {
-              if (scheduledFrameEvent.frameCountInEvent <= 1) { // 0または1
+            if (event.type === "putImage" || event.type === "putText") {
+              let objectBase = null;
+              // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
+              if (event.type === "putImage") {
+                objectBase = {
+                  type: "image",
+                  image: {
+                    source: event.putImage.source,
+                  },
+                };
+              } else if (event.type === "putText") {
+                objectBase = {
+                  type: "text",
+                  text: {
+                    ...event.putText,
+                  },
+                };
+              }
+
+              if (scheduledFrameEvent.frameCountInEvent <= 1) {
+                // 0または1
                 // TODO: ここでdepthあるかの判定
-                // TODO: ここでtypeの判定
                 depthToLayer[depth] = {
                   object: {
-                    // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
-                    type: "image",
-                    image: {
-                      source: event.putImage.source,
-                    },
+                    ...objectBase,
                     layoutOptions: event.layoutOptions,
                   },
                 };
@@ -181,11 +219,7 @@
                 // TODO: ここでtypeの判定
                 depthToLayer[depth] = {
                   object: {
-                    // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
-                    type: "image",
-                    image: {
-                      source: event.putImage.source,
-                    },
+                    ...objectBase,
                     layoutOptions: {
                       x:
                         before.x +
