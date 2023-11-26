@@ -13,7 +13,7 @@
           let currentFrameCount = 1;
 
           frameEvents.forEach(function (frameEvent) {
-            const objectId = "dummy";
+            const objectId = "dummy" + Math.random(); // この値はframeEvent内で一律で持てるとよい
 
             // この分岐はなくても動くが無駄なオブジェクトが生成されるのを避けたい
             if (
@@ -75,7 +75,6 @@
           Object.keys(absoluteFrameCountToScheduledFrameEvents)
         );
         const depthToLayerWrapper = {};
-        const objectIdToElement = {}; // TODO: 要素のキャッシュを実装する
 
         function setLayoutOptionsToElement(element, layoutOptions) {
           element.style.position = "absolute";
@@ -118,48 +117,63 @@
 
             // TODO: ここで必要なければremoveしない実装にできるとよい
             const wrapper = depthToLayerWrapper[depth];
-            while (wrapper.firstChild) {
-              wrapper.removeChild(wrapper.firstChild);
+            const object = layer && layer.object;
+            if (!object) {
+              if (wrapper.firstChild) {
+                wrapper.removeChild(wrapper.firstChild);
+              }
+              return;
             }
 
-            if (!layer) {
-              return;
+            let targetElement = null;
+            if (object.useCache) {
+              const candidateElement = wrapper.firstChild;
+              if (candidateElement.dataset.objectId === object.objectId) {
+                targetElement = candidateElement;
+                // console.log('cache利用');
+              }
             }
-            const object = layer.object;
-            if (!object) {
-              return;
+            if (!targetElement) {
+              if (wrapper.firstChild) {
+                wrapper.removeChild(wrapper.firstChild);
+              }
+              if (object.type === "image") {
+                targetElement = document.createElement("img");
+              } else if (object.type === "text") {
+                targetElement = document.createElement("div");
+              }
             }
 
             if (object.type === "image") {
-              const imageElement = document.createElement("img");
-              imageElement.src = object.image.source;
-              wrapper.appendChild(imageElement);
-              setLayoutOptionsToElement(imageElement, object.layoutOptions);
+              targetElement.src = object.image.source;
+              targetElement.dataset.objectId = object.objectId;
+              wrapper.appendChild(targetElement);
+              setLayoutOptionsToElement(targetElement, object.layoutOptions);
               setOnClickActionListener(
-                imageElement,
+                targetElement,
                 object.onClickAction,
                 handleAction
               );
             } else if (object.type === "text") {
-              const textElement = document.createElement("div");
-              textElement.innerText = object.text.content;
-              wrapper.appendChild(textElement);
+              targetElement.dataset.objectId = object.objectId;
+              targetElement.innerText = object.text.content;
+              wrapper.appendChild(targetElement);
               const layoutOptions = object.layoutOptions;
-              setLayoutOptionsToElement(textElement, object.layoutOptions);
+              setLayoutOptionsToElement(targetElement, object.layoutOptions);
               setOnClickActionListener(
-                textElement,
+                targetElement,
                 object.onClickAction,
                 handleAction
               );
 
               if (object.text.borderWidth) {
-                textElement.style.borderWidth = `${object.text.borderWidth}px`;
+                targetElement.style.borderWidth = `${object.text.borderWidth}px`;
               }
               if (object.text.borderStyle) {
-                textElement.style.borderStyle = object.text.borderStyle;
+                targetElement.style.borderStyle = object.text.borderStyle;
               }
               if (object.text.borderColor) {
-                textElement.style.borderColor = object.text.borderColor;
+                targetElement.style.borderColor = object.text.borderColor;
               }
             }
           });
@@ -217,14 +231,14 @@
           },
           setUserVariable(key, value) {
             userVariables[key] = JSON.stringify(value);
-          }, 
+          },
           getUserVariable(key) {
             if (userVariables[key] !== undefined) {
               return JSON.parse(userVariables[key]);
             } else {
               return undefined;
             }
-          }, 
+          },
         };
         function handleAction(action) {
           // stop, gotoAndPlayはframeCountが1になる
@@ -239,7 +253,7 @@
           } else if (action.type === "gotoAndPlay") {
             context.gotoAndPlay(action.gotoAndPlay.destination);
           } else if (action.type === "executeScript") {
-            const func = new Function('context', action.executeScript.content);
+            const func = new Function("context", action.executeScript.content);
             func(context);
           }
         }
@@ -250,7 +264,7 @@
 
           // 最後まで行ったら最初に戻る（判定これでいいのかな？）
           if (currentFrameCount > lastFrameCount) {
-            currentFrameCount = 0;
+            currentFrameCount = 1;
           }
 
           // 飛び先が指定されていたらそっちにいく
@@ -283,6 +297,7 @@
                     source: event.putImage.source,
                   },
                   onClickAction: event.onClickAction,
+                  objectId: scheduledFrameEvent.objectId,
                 };
               } else if (event.type === "putText") {
                 objectBase = {
@@ -291,6 +306,7 @@
                     ...event.putText,
                   },
                   onClickAction: event.onClickAction,
+                  objectId: scheduledFrameEvent.objectId,
                 };
               }
 
@@ -300,6 +316,7 @@
                 depthToLayer[depth] = {
                   object: {
                     ...objectBase,
+                    useCache: false,
                     layoutOptions: event.layoutOptions,
                   },
                 };
@@ -311,6 +328,7 @@
                 depthToLayer[depth] = {
                   object: {
                     ...objectBase,
+                    useCache: true,
                     layoutOptions: {
                       x:
                         before.x +
