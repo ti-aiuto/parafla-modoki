@@ -13,7 +13,6 @@ window.frameEvents = [
       width: 120,
       height: 120,
     },
-    motionTweenEnabled: true,
   },
   {
     type: "doNothing",
@@ -33,7 +32,6 @@ window.frameEvents = [
       width: 120,
       height: 120,
     },
-    motionTweenEnabled: true,
   },
   {
     type: "doNothing",
@@ -53,7 +51,6 @@ window.frameEvents = [
       width: 120,
       height: 120,
     },
-    motionTweenEnabled: true,
   },
   {
     type: "doNothing",
@@ -81,6 +78,5 @@ window.frameEvents = [
         height: 120,
       },
     },
-    motionTweenEnabled: true,
   },
 ];
