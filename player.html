@@ -134,7 +134,7 @@
               setOnClickActionListener(imageElement, object.onClickAction, handleAction);
             } else if (object.type === "text") {
               const textElement = document.createElement("div");
-              textElement.innerText = object.text.label;
+              textElement.innerText = object.text.content;
               wrapper.appendChild(textElement);
               const layoutOptions = object.layoutOptions;
               console.log(layoutOptions);

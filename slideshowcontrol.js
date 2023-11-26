@@ -2,7 +2,7 @@ window.frameEvents = [
   {
     type: "putText",
     putText: {
-      label: "STOP",
+      content: "STOP",
       borderColor: "#000000",
       borderStyle: "solid",
       borderWidth: "1",
@@ -22,7 +22,7 @@ window.frameEvents = [
   {
     type: "putText",
     putText: {
-      label: "START",
+      content: "START",
       borderColor: "#000000",
       borderStyle: "solid",
       borderWidth: "1",
