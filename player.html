@@ -48,6 +48,13 @@
         const objectIdToElement = {}; // TODO: 要素のキャッシュを実装する
         function render(depthToLayer) {
           const root = document.getElementById("root");
+
+          root.style.border = 'solid 1px #000';
+          root.style.width = '640px';
+          root.style.height = '480px';
+          root.style.position = 'relative';
+          root.style.overflow = 'hidden';
+
           // TODO: 列挙順
           Object.keys(depthToLayer).forEach(function (depth) {
             const layer = depthToLayer[depth];
