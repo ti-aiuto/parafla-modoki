@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="depthsample.js" type="text/javascript"></script>
+    <script src="slideshow.js" type="text/javascript"></script>
     <script type="text/javascript">
       const range = (start, end) => [...Array(end + 1).keys()].slice(start);
 
@@ -24,7 +24,7 @@
 
               absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push({
                 event: frameEvent,
-                frameCountInEvent: 0,
+                frameCountInEvent: 0, // 便宜上0にしておく
               });
             } else {
               range(0, frameEvent.frameCount - 1).forEach(function (
@@ -144,7 +144,7 @@
             }
 
             if (event.type === "putImage") {
-              if (scheduledFrameEvent.frameCountInEvent === 1) {
+              if (scheduledFrameEvent.frameCountInEvent <= 1) { // 0または1
                 // TODO: ここでdepthあるかの判定
                 // TODO: ここでtypeの判定
                 depthToLayer[depth] = {
