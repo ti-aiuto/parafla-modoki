@@ -14,36 +14,42 @@
 
           frameEvents.forEach(function (frameEvent) {
             const objectId = "dummy";
-            if (frameEvent.frameCount === 0) {
-              if (
-                !absoluteFrameCountToScheduledFrameEvents[currentFrameCount]
-              ) {
-                absoluteFrameCountToScheduledFrameEvents[currentFrameCount] =
-                  [];
-              }
 
-              absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push({
-                event: frameEvent,
-                frameCountInEvent: 0, // 便宜上0にしておく
-                objectId: objectId,
-              });
-            } else {
-              range(0, frameEvent.frameCount - 1).forEach(function (
-                frameCountInEvent,
-                index
-              ) {
-                const fixedFrameCountInEvent = currentFrameCount + index;
+            // この分岐はなくても動くが無駄なオブジェクトが生成されるのを避けたい
+            if (
+              frameEvent.type !== "doNothing" &&
+              frameEvent.type !== "defineLabel"
+            ) {
+              if (frameEvent.frameCount === 0) {
                 if (
-                  !absoluteFrameCountToScheduledFrameEvents[
-                    fixedFrameCountInEvent
-                  ]
+                  !absoluteFrameCountToScheduledFrameEvents[currentFrameCount]
                 ) {
-                  absoluteFrameCountToScheduledFrameEvents[
-                    fixedFrameCountInEvent
-                  ] = [];
+                  absoluteFrameCountToScheduledFrameEvents[currentFrameCount] =
+                    [];
                 }
-                if (frameEvent.type !== "doNothing") {
-                  // この分岐はなくても動くが無駄なオブジェクトが生成されるのを避けたい
+
+                absoluteFrameCountToScheduledFrameEvents[
+                  currentFrameCount
+                ].push({
+                  event: frameEvent,
+                  frameCountInEvent: 0, // 便宜上0にしておく
+                  objectId: objectId,
+                });
+              } else {
+                range(0, frameEvent.frameCount - 1).forEach(function (
+                  frameCountInEvent,
+                  index
+                ) {
+                  const fixedFrameCountInEvent = currentFrameCount + index;
+                  if (
+                    !absoluteFrameCountToScheduledFrameEvents[
+                      fixedFrameCountInEvent
+                    ]
+                  ) {
+                    absoluteFrameCountToScheduledFrameEvents[
+                      fixedFrameCountInEvent
+                    ] = [];
+                  }
                   absoluteFrameCountToScheduledFrameEvents[
                     fixedFrameCountInEvent
                   ].push({
@@ -51,9 +57,10 @@
                     frameCountInEvent: index + 1,
                     objectId: objectId,
                   });
-                }
-              });
+                });
+              }
             }
+
             currentFrameCount += frameEvent.frameCount;
           });
           return absoluteFrameCountToScheduledFrameEvents;
@@ -82,13 +89,13 @@
           if (!action) {
             return;
           }
-          element.addEventListener('click', function() {
-            console.log('click', element, action);
-            handleAction(action); 
+          element.addEventListener("click", function () {
+            console.log("click", element, action);
+            handleAction(action);
           });
         }
-        
-        function render(depthToLayer, {handleAction}) {
+
+        function render(depthToLayer, { handleAction }) {
           const root = document.getElementById("root");
 
           // TODO: ここの設定値も外から持ってくる
@@ -128,14 +135,22 @@
               imageElement.src = object.image.source;
               wrapper.appendChild(imageElement);
               setLayoutOptionsToElement(imageElement, object.layoutOptions);
-              setOnClickActionListener(imageElement, object.onClickAction, handleAction);
+              setOnClickActionListener(
+                imageElement,
+                object.onClickAction,
+                handleAction
+              );
             } else if (object.type === "text") {
               const textElement = document.createElement("div");
               textElement.innerText = object.text.content;
               wrapper.appendChild(textElement);
               const layoutOptions = object.layoutOptions;
               setLayoutOptionsToElement(textElement, object.layoutOptions);
-              setOnClickActionListener(textElement, object.onClickAction, handleAction);
+              setOnClickActionListener(
+                textElement,
+                object.onClickAction,
+                handleAction
+              );
 
               if (object.text.borderWidth) {
                 textElement.style.borderWidth = `${object.text.borderWidth}px`;
@@ -150,21 +165,22 @@
           });
         }
 
-        function calcualteLabelFrameCount(absoluteFrameCountToScheduledFrameEvents) {
+        function calcualteLabelFrameCount(frameEvents) {
           const labelToFrameCount = {};
-          Object.keys(absoluteFrameCountToScheduledFrameEvents).forEach(function(frameCount) {
-            absoluteFrameCountToScheduledFrameEvents[frameCount].forEach(function(scheduledFrameEvent) {
-              if (scheduledFrameEvent.event.type === 'defineLabel') {
-                const label = scheduledFrameEvent.event.defineLabel.label;
-                labelToFrameCount[label] = frameCount;
-              }
-            });
+          let currentFrameCount = 1;
+          frameEvents.forEach(function (frameEvent) {
+            if (frameEvent.type === "defineLabel") {
+              const label = frameEvent.defineLabel.label;
+              labelToFrameCount[label] = currentFrameCount;
+            }
+
+            currentFrameCount += frameEvent.frameCount;
           });
           return labelToFrameCount;
         }
 
         const depthToLayer = {};
-        const labelToFrameCount = calcualteLabelFrameCount(absoluteFrameCountToScheduledFrameEvents);;
+        const labelToFrameCount = calcualteLabelFrameCount(frameEvents);
         let currentFrameCount = 1;
         let jumpToFrameCount = null;
         let isPlaying = true;
@@ -180,13 +196,18 @@
           },
           gotoAndPlay(destination) {
             // TODO: 本当はここでバリデーションが必要
-            if (typeof destination === 'string') {
-              console.log('label', destination, labelToFrameCount[destination], Number(labelToFrameCount[destination]));
+            if (typeof destination === "string") {
+              console.log(
+                "label",
+                destination,
+                labelToFrameCount[destination],
+                Number(labelToFrameCount[destination])
+              );
               jumpToFrameCount = Number(labelToFrameCount[destination]);
             } else {
               jumpToFrameCount = destination;
             }
-            isPlaying = true;            
+            isPlaying = true;
           },
           eraseLayers(depths) {
             if (depths.includes("all")) {
@@ -240,7 +261,7 @@
             const depth = event.depth;
 
             if (event.type === "executeAction") {
-              console.log('executeAction', event.executeAction);
+              console.log("executeAction", event.executeAction);
               handleAction(event.executeAction);
             }
 
@@ -310,7 +331,7 @@
               }
             }
 
-            render(depthToLayer, {handleAction});
+            render(depthToLayer, { handleAction });
           });
           currentFrameCount += 1;
         }, 100);
