@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="slideshowlabelsample.js" type="text/javascript"></script>
+    <script src="slideshowlabelscript.js" type="text/javascript"></script>
     <script type="text/javascript">
       const range = (start, end) => [...Array(end + 1).keys()].slice(start);
 
@@ -227,6 +227,9 @@
             context.play();
           } else if (action.type === "gotoAndPlay") {
             context.gotoAndPlay(action.gotoAndPlay.destination);
+          } else if (action.type === "executeScript") {
+            const func = new Function('context', action.executeScript.content);
+            func(context);
           }
         }
         setInterval(function () {
