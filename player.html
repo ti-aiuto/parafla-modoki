@@ -144,6 +144,34 @@
         const depthToLayer = {};
         let currentFrameCount = 0;
         let isPlaying = true;
+
+        const context = {
+          play() {
+            isPlaying = true;
+          },
+          stop() {
+            isPlaying = false;
+          },
+          eraseLayers(depths) {
+            if (depths.includes("all")) {
+              Object.keys(depthToLayer).forEach(function (eachDepth) {
+                depthToLayer[eachDepth] = undefined;
+              });
+            } else {
+              depths.forEach(function (eachDepth) {
+                depthToLayer[eachDepth] = undefined;
+              });
+            }
+          },
+        };
+        function handleAction(action) {
+          if (action.type === "eraseLayers") {
+            const depths = action.eraseLayers.depths;
+            context.eraseLayers(depths);
+          } else if (action.type === "stop") {
+            context.stop();
+          }
+        }
         setInterval(function () {
           if (!isPlaying) {
             return false;
@@ -167,20 +195,7 @@
             const depth = event.depth;
 
             if (event.type === "executeAction") {
-              if (event.executeAction.type === "eraseLayers") {
-                const depths = event.executeAction.eraseLayers.depths;
-                if (depths.includes("all")) {
-                  Object.keys(depthToLayer).forEach(function (eachDepth) {
-                    depthToLayer[eachDepth] = undefined;
-                  });
-                } else {
-                  depths.forEach(function (eachDepth) {
-                    depthToLayer[eachDepth] = undefined;
-                  });
-                }
-              } else if (event.executeAction.type === "stop") {
-                isPlaying = false;
-              }
+              handleAction(event.executeAction);
             }
 
             if (event.type === "putImage" || event.type === "putText") {
