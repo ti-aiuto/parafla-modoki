@@ -94,7 +94,7 @@
           });
         }
 
-        function render(depthToLayer, { handleAction }) {
+        function render(depthToLayer, { handleAction, rootInstanceId }) {
           const root = document.getElementById("root");
 
           // TODO: ここの設定値も外から持ってくる
@@ -128,7 +128,7 @@
             let targetElement = null;
             if (object.useCache) {
               const candidateElement = wrapper.firstChild;
-              if (candidateElement.dataset.objectId === object.objectId) {
+              if (candidateElement.dataset.objectId === rootInstanceId + '_' +  object.objectId) {
                 targetElement = candidateElement;
                 // console.log('cache利用');
               }
@@ -144,9 +144,9 @@
               }
             }
 
+            targetElement.dataset.objectId = rootInstanceId + '_' +  object.objectId;
             if (object.type === "image") {
               targetElement.src = object.image.source;
-              targetElement.dataset.objectId = object.objectId;
               wrapper.appendChild(targetElement);
               setLayoutOptionsToElement(targetElement, object.layoutOptions);
               setOnClickActionListener(
@@ -155,7 +155,6 @@
                 handleAction
               );
             } else if (object.type === "text") {
-              targetElement.dataset.objectId = object.objectId;
               targetElement.innerText = object.text.content;
               wrapper.appendChild(targetElement);
               const layoutOptions = object.layoutOptions;
@@ -201,6 +200,7 @@
         console.log(absoluteFrameCountToScheduledFrameEvents);
         console.log(labelToFrameCount);
 
+        const rootInstanceId = 'rootDummyHoge';
         const userVariables = {};
         const context = {
           play() {
@@ -356,7 +356,7 @@
               }
             }
 
-            render(depthToLayer, { handleAction });
+            render(depthToLayer, { handleAction, rootInstanceId });
           });
           currentFrameCount += 1;
         }, 100);
