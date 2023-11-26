@@ -105,7 +105,7 @@
           root.style.position = "relative";
           root.style.overflow = "hidden";
 
-          // TODO: 列挙順
+          // TODO: 列挙順がdepth順になっていることを保証する
           Object.keys(depthToLayer).forEach(function (depth) {
             const layer = depthToLayer[depth];
 
@@ -197,12 +197,6 @@
           gotoAndPlay(destination) {
             // TODO: 本当はここでバリデーションが必要
             if (typeof destination === "string") {
-              console.log(
-                "label",
-                destination,
-                labelToFrameCount[destination],
-                Number(labelToFrameCount[destination])
-              );
               jumpToFrameCount = Number(labelToFrameCount[destination]);
             } else {
               jumpToFrameCount = destination;
