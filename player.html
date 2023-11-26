@@ -11,58 +11,70 @@
         function scheduleFrameEvents(frameEvents) {
           const absoluteFrameCountToScheduledFrameEvents = {};
           let currentFrameCount = 1;
+
           frameEvents.forEach(function (frameEvent) {
             const objectId = "dummy";
-            range(0, frameEvent.frameCount - 1).forEach(function (
-              frameCountInEvent,
-              index
-            ) {
-              const fixedFrameCountInEvent = currentFrameCount + index;
+            if (frameEvent.frameCount === 0) {
               if (
-                !absoluteFrameCountToScheduledFrameEvents[
-                  fixedFrameCountInEvent
-                ]
+                !absoluteFrameCountToScheduledFrameEvents[currentFrameCount]
               ) {
-                absoluteFrameCountToScheduledFrameEvents[
-                  fixedFrameCountInEvent
-                ] = [];
+                absoluteFrameCountToScheduledFrameEvents[currentFrameCount] =
+                  [];
               }
-              if (frameEvent.type !== "doNothing") {
-                absoluteFrameCountToScheduledFrameEvents[
-                  fixedFrameCountInEvent
-                ].push({
-                  event: frameEvent,
-                  frameCountInEvent: index + 1,
-                  objectId: objectId,
-                });
-              }
-            });
+
+              absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push({
+                event: frameEvent,
+                frameCountInEvent: 0,
+              });
+            } else {
+              range(0, frameEvent.frameCount - 1).forEach(function (
+                frameCountInEvent,
+                index
+              ) {
+                const fixedFrameCountInEvent = currentFrameCount + index;
+                if (
+                  !absoluteFrameCountToScheduledFrameEvents[
+                    fixedFrameCountInEvent
+                  ]
+                ) {
+                  absoluteFrameCountToScheduledFrameEvents[
+                    fixedFrameCountInEvent
+                  ] = [];
+                }
+                if (frameEvent.type !== "doNothing") {
+                  // この分岐はなくても動くが無駄なオブジェクトが生成されるのを避けたい
+                  absoluteFrameCountToScheduledFrameEvents[
+                    fixedFrameCountInEvent
+                  ].push({
+                    event: frameEvent,
+                    frameCountInEvent: index + 1,
+                    objectId: objectId,
+                  });
+                }
+              });
+            }
             currentFrameCount += frameEvent.frameCount;
           });
           return absoluteFrameCountToScheduledFrameEvents;
         }
 
-        const absoluteFrameCountToScheduledFrameEvents = scheduleFrameEvents(frameEvents);
+        const absoluteFrameCountToScheduledFrameEvents =
+          scheduleFrameEvents(frameEvents);
 
         const depthToLayerWrapper = {};
         const objectIdToElement = {}; // TODO: 要素のキャッシュを実装する
         function render(depthToLayer) {
           const root = document.getElementById("root");
 
-          root.style.border = 'solid 1px #000';
-          root.style.width = '640px';
-          root.style.height = '480px';
-          root.style.position = 'relative';
-          root.style.overflow = 'hidden';
+          root.style.border = "solid 1px #000";
+          root.style.width = "640px";
+          root.style.height = "480px";
+          root.style.position = "relative";
+          root.style.overflow = "hidden";
 
           // TODO: 列挙順
           Object.keys(depthToLayer).forEach(function (depth) {
             const layer = depthToLayer[depth];
-            const object = layer.object;
-            console.log(object);
-            if (!object) {
-              return;
-            }
 
             if (!depthToLayerWrapper[depth]) {
               const newWrapper = document.createElement("div");
@@ -70,10 +82,21 @@
               root.appendChild(newWrapper);
               depthToLayerWrapper[depth] = newWrapper;
             }
+
+            // TODO: ここで必要なければremoveしない実装にできるとよい
             const wrapper = depthToLayerWrapper[depth];
             while (wrapper.firstChild) {
               wrapper.removeChild(wrapper.firstChild);
             }
+
+            if (!layer) {
+              return;
+            }
+            const object = layer.object;
+            if (!object) {
+              return;
+            }
+            console.log(object);
 
             if (object.type === "image") {
               const imageElement = document.createElement("img");
@@ -102,61 +125,76 @@
           }
 
           currentScheduledFrameEvents.forEach(function (scheduledFrameEvent) {
-            if (scheduledFrameEvent.frameCountInEvent === 1) {
-              const event = scheduledFrameEvent.event;
-              const depth = event.depth;
-              // TODO: ここでdepthあるかの判定
-              // TODO: ここでtypeの判定
-              depthToLayer[depth] = {
-                object: {
-                  // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
-                  type: "image",
-                  image: {
-                    source: event.putImage.source,
-                  },
-                  layoutOptions: event.layoutOptions,
-                },
-              };
-            } else {
-              const event = scheduledFrameEvent.event;
-              const depth = event.depth;
+            const event = scheduledFrameEvent.event;
+            const depth = event.depth;
 
-              const before = event.layoutOptions;
-              const after = event.lastKeyFrame.layoutOptions;
+            if (event.type === "executeAction") {
+              if (event.executeAction.type === "eraseLayers") {
+                const depths = event.executeAction.eraseLayers.depths;
+                if (depths.includes("all")) {
+                  Object.keys(depthToLayer).forEach(function (eachDepth) {
+                    depthToLayer[eachDepth] = undefined;
+                  });
+                } else {
+                  depths.forEach(function (eachDepth) {
+                    depthToLayer[eachDepth] = undefined;
+                  });
+                }
+              }
+            }
 
-              // TODO: ここでdepthあるかの判定
-              // TODO: ここでtypeの判定
-              depthToLayer[depth] = {
-                object: {
-                  // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
-                  type: "image",
-                  image: {
-                    source: event.putImage.source,
+            if (event.type === "putImage") {
+              if (scheduledFrameEvent.frameCountInEvent === 1) {
+                // TODO: ここでdepthあるかの判定
+                // TODO: ここでtypeの判定
+                depthToLayer[depth] = {
+                  object: {
+                    // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
+                    type: "image",
+                    image: {
+                      source: event.putImage.source,
+                    },
+                    layoutOptions: event.layoutOptions,
                   },
-                  layoutOptions: {
-                    x:
-                      before.x +
-                      (scheduledFrameEvent.frameCountInEvent *
-                        (after.x - before.x)) /
-                        event.frameCount,
-                    y:
-                      before.y +
-                      (scheduledFrameEvent.frameCountInEvent *
-                        (after.y - before.y)) /
-                        event.frameCount,
-                    width:
-                      before.width +
-                      (scheduledFrameEvent.frameCountInEvent *
-                        (after.width - before.width)) /
-                        event.frameCount,
-                    height:
-                      before.height +
-                      (scheduledFrameEvent.frameCountInEvent *
-                        (after.height - before.height)) /
-                        event.frameCount,
+                };
+              } else {
+                const before = event.layoutOptions;
+                const after = event.lastKeyFrame.layoutOptions;
+
+                // TODO: ここでdepthあるかの判定
+                // TODO: ここでtypeの判定
+                depthToLayer[depth] = {
+                  object: {
+                    // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
+                    type: "image",
+                    image: {
+                      source: event.putImage.source,
+                    },
+                    layoutOptions: {
+                      x:
+                        before.x +
+                        (scheduledFrameEvent.frameCountInEvent *
+                          (after.x - before.x)) /
+                          event.frameCount,
+                      y:
+                        before.y +
+                        (scheduledFrameEvent.frameCountInEvent *
+                          (after.y - before.y)) /
+                          event.frameCount,
+                      width:
+                        before.width +
+                        (scheduledFrameEvent.frameCountInEvent *
+                          (after.width - before.width)) /
+                          event.frameCount,
+                      height:
+                        before.height +
+                        (scheduledFrameEvent.frameCountInEvent *
+                          (after.height - before.height)) /
+                          event.frameCount,
+                    },
                   },
-                },
-              };
+                };
+              }
             }
 
             render(depthToLayer);
