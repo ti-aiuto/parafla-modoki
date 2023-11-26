@@ -15,6 +15,9 @@ window.frameEvents = [
       width: 60,
       height: 30,
     },
+    onClickAction: {
+      type: 'stop'
+    }
   },
   {
     type: "putText",
@@ -32,6 +35,9 @@ window.frameEvents = [
       width: 60,
       height: 30,
     },
+    onClickAction: {
+      type: 'play'
+    }
   },
   {
     type: "putImage",

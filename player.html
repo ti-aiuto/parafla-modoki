@@ -80,7 +80,17 @@
           element.style.top = `${layoutOptions.y}px`;
         }
 
-        function render(depthToLayer) {
+        function setOnClickActionListener(element, action, handleAction) {
+          if (!action) {
+            return;
+          }
+          element.addEventListener('click', function() {
+            console.log('click', element, action);
+            handleAction(action); 
+          });
+        }
+        
+        function render(depthToLayer, {handleAction}) {
           const root = document.getElementById("root");
 
           // TODO: ここの設定値も外から持ってくる
@@ -121,6 +131,7 @@
               imageElement.src = object.image.source;
               wrapper.appendChild(imageElement);
               setLayoutOptionsToElement(imageElement, object.layoutOptions);
+              setOnClickActionListener(imageElement, object.onClickAction, handleAction);
             } else if (object.type === "text") {
               const textElement = document.createElement("div");
               textElement.innerText = object.text.label;
@@ -128,6 +139,7 @@
               const layoutOptions = object.layoutOptions;
               console.log(layoutOptions);
               setLayoutOptionsToElement(textElement, object.layoutOptions);
+              setOnClickActionListener(textElement, object.onClickAction, handleAction);
 
               if (object.text.borderWidth) {
                 textElement.style.borderWidth = `${object.text.borderWidth}px`;
@@ -171,6 +183,8 @@
             context.eraseLayers(depths);
           } else if (action.type === "stop") {
             context.stop();
+          } else if (action.type === "play") {
+            context.play();
           }
         }
         setInterval(function () {
@@ -208,6 +222,7 @@
                   image: {
                     source: event.putImage.source,
                   },
+                  onClickAction: event.onClickAction,
                 };
               } else if (event.type === "putText") {
                 objectBase = {
@@ -215,6 +230,7 @@
                   text: {
                     ...event.putText,
                   },
+                  onClickAction: event.onClickAction,
                 };
               }
 
@@ -263,7 +279,7 @@
               }
             }
 
-            render(depthToLayer);
+            render(depthToLayer, {handleAction});
           });
         }, 100);
       }
