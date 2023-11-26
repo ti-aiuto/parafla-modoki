@@ -58,7 +58,7 @@ window.frameEvents = [
   },
   {
     type: "executeAction",
-    frameCount: 0,
+    frameCount: 1,
     executeAction: {
       type: 'stop',
     }
