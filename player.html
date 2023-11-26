@@ -25,6 +25,7 @@
               absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push({
                 event: frameEvent,
                 frameCountInEvent: 0, // 便宜上0にしておく
+                objectId: objectId,
               });
             } else {
               range(0, frameEvent.frameCount - 1).forEach(function (
@@ -60,6 +61,9 @@
 
         const absoluteFrameCountToScheduledFrameEvents =
           scheduleFrameEvents(frameEvents);
+
+        // 最後まで達したら最初に戻るため
+        const lastFrameCount = Math.max.apply(null, Object.keys(absoluteFrameCountToScheduledFrameEvents));
 
         const depthToLayerWrapper = {};
         const objectIdToElement = {}; // TODO: 要素のキャッシュを実装する
@@ -117,6 +121,11 @@
         let currentFrameCount = 0;
         setInterval(function () {
           currentFrameCount += 1;
+          // 最後まで行ったら最初に戻る（判定これでいいのかな？）
+          if (currentFrameCount > lastFrameCount) {
+            currentFrameCount = 0;
+          }
+
           const currentScheduledFrameEvents =
             absoluteFrameCountToScheduledFrameEvents[currentFrameCount];
           if (!currentScheduledFrameEvents) {
