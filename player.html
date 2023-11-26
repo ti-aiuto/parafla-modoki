@@ -187,6 +187,7 @@
         console.log(absoluteFrameCountToScheduledFrameEvents);
         console.log(labelToFrameCount);
 
+        const userVariables = {};
         const context = {
           play() {
             isPlaying = true;
@@ -214,6 +215,16 @@
               });
             }
           },
+          setUserVariable(key, value) {
+            userVariables[key] = JSON.stringify(value);
+          }, 
+          getUserVariable(key) {
+            if (userVariables[key] !== undefined) {
+              return JSON.parse(userVariables[key]);
+            } else {
+              return undefined;
+            }
+          }, 
         };
         function handleAction(action) {
           // stop, gotoAndPlayはframeCountが1になる
