@@ -13,7 +13,7 @@
           let currentFrameCount = 1;
 
           frameEvents.forEach(function (frameEvent) {
-            const objectId = "dummy" + Math.random(); // この値はframeEvent内で一律で持てるとよい
+            const objectId = frameEvent.objectId ? frameEvent.objectId : "auto" + Math.random(); // 値が未指定の場合もframeEvent内で一律で持てるとよい
 
             // この分岐はなくても動くが無駄なオブジェクトが生成されるのを避けたい
             if (
