@@ -239,8 +239,10 @@
           },
           setUserVariable(key, value) {
             userVariables[key] = JSON.stringify(value);
+            console.log('ユーザ変数設定', key, userVariables[key]);
           },
           getUserVariable(key) {
+            console.log('ユーザ変数取得', key, userVariables[key]);
             if (userVariables[key] !== undefined) {
               return JSON.parse(userVariables[key]);
             } else {

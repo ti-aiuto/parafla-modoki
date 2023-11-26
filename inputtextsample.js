@@ -91,7 +91,10 @@ window.frameEvents = [
       type: "executeScript",
       executeScript: {
         content: `const val = context.findTextObjectById("inputValue").getValue(); 
-        context.findTextObjectById("result").setValue(Number(val) ** 2); ` 
+        context.setUserVariable('test', val);
+        context.findTextObjectById("result").setValue(Number(val) ** 2); 
+        console.log(context.getUserVariable('test'));
+        ` 
       }
     },
   },
