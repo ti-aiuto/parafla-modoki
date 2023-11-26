@@ -67,12 +67,10 @@
           null,
           Object.keys(absoluteFrameCountToScheduledFrameEvents)
         );
-
         const depthToLayerWrapper = {};
         const objectIdToElement = {}; // TODO: 要素のキャッシュを実装する
 
         function setLayoutOptionsToElement(element, layoutOptions) {
-          console.log(layoutOptions);
           element.style.position = "absolute";
           element.style.width = `${layoutOptions.width}px`;
           element.style.height = `${layoutOptions.height}px`;
@@ -124,7 +122,6 @@
             if (!object) {
               return;
             }
-            console.log(object);
 
             if (object.type === "image") {
               const imageElement = document.createElement("img");
@@ -137,7 +134,6 @@
               textElement.innerText = object.text.content;
               wrapper.appendChild(textElement);
               const layoutOptions = object.layoutOptions;
-              console.log(layoutOptions);
               setLayoutOptionsToElement(textElement, object.layoutOptions);
               setOnClickActionListener(textElement, object.onClickAction, handleAction);
 
@@ -169,7 +165,8 @@
 
         const depthToLayer = {};
         const labelToFrameCount = calcualteLabelFrameCount(absoluteFrameCountToScheduledFrameEvents);;
-        let currentFrameCount = 0;
+        let currentFrameCount = 1;
+        let jumpToFrameCount = null;
         let isPlaying = true;
         console.log(absoluteFrameCountToScheduledFrameEvents);
         console.log(labelToFrameCount);
@@ -184,9 +181,10 @@
           gotoAndPlay(destination) {
             // TODO: 本当はここでバリデーションが必要
             if (typeof destination === 'string') {
-              currentFrameCount = labelToFrameCount[destination];
+              console.log('label', destination, labelToFrameCount[destination], Number(labelToFrameCount[destination]));
+              jumpToFrameCount = Number(labelToFrameCount[destination]);
             } else {
-              currentFrameCount = destination;
+              jumpToFrameCount = destination;
             }
             isPlaying = true;            
           },
@@ -225,6 +223,13 @@
           if (currentFrameCount > lastFrameCount) {
             currentFrameCount = 0;
           }
+
+          // 飛び先が指定されていたらそっちにいく
+          if (jumpToFrameCount !== null) {
+            currentFrameCount = jumpToFrameCount;
+            jumpToFrameCount = null;
+          }
+
           console.log(currentFrameCount);
 
           const currentScheduledFrameEvents =
