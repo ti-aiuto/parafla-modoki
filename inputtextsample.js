@@ -90,7 +90,8 @@ window.frameEvents = [
     onClickAction: {
       type: "executeScript",
       executeScript: {
-        content: 'alert(123)'
+        content: `const val = context.findTextObjectById("inputValue").getValue(); 
+        context.findTextObjectById("result").setValue(Number(val) ** 2); ` 
       }
     },
   },

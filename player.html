@@ -140,7 +140,11 @@
               if (object.type === "image") {
                 targetElement = document.createElement("img");
               } else if (object.type === "text") {
-                targetElement = document.createElement("div");
+                if (object.text.editable) {
+                  targetElement = document.createElement("input");
+                } else {
+                  targetElement = document.createElement("div");
+                }
               }
             }
 
@@ -155,7 +159,11 @@
                 handleAction
               );
             } else if (object.type === "text") {
-              targetElement.innerText = object.text.content;
+              if (object.text.editable) {
+                targetElement.value = object.text.content;
+              } else {
+                targetElement.innerText = object.text.content;
+              }
               wrapper.appendChild(targetElement);
               const layoutOptions = object.layoutOptions;
               setLayoutOptionsToElement(targetElement, object.layoutOptions);
@@ -239,6 +247,21 @@
               return undefined;
             }
           },
+          findTextObjectById(id) {
+            const fullObjectId = rootInstanceId + '_' + id;
+            const element = document.querySelector(`[data-object-id="${fullObjectId}"]`);
+            if (!element) {
+              return null;
+            }
+            return {
+              getValue() {
+                return element.value;
+              }, 
+              setValue(value) {
+                element.value = value;
+              }
+            };
+          }
         };
         function handleAction(action) {
           // stop, gotoAndPlayはframeCountが1になる
