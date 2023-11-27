@@ -15,64 +15,67 @@
         const calcualteLabelFrameCount = window.calcualteLabelFrameCount;
 
         const rootInstanceId = "rootDummyHoge";
-        const userVariables = {};
-        const context = {
-          play() {
-            controller.play();
-          },
-          stop() {
-            controller.stop();
-          },
-          gotoAndPlay(destination) {
-            // TODO: 本当はここでバリデーションが必要
-            if (typeof destination === "string") {
-              jumpToFrameCount = Number(labelToFrameCount[destination]);
-            } else {
-              jumpToFrameCount = destination;
-            }
-            isPlaying = true;
-          },
-          eraseLayers(depths) {
-            if (depths.includes("all")) {
-              Object.keys(depthToLayer).forEach(function (eachDepth) {
-                depthToLayer[eachDepth] = undefined;
-              });
-            } else {
-              depths.forEach(function (eachDepth) {
-                depthToLayer[eachDepth] = undefined;
-              });
-            }
-          },
-          setUserVariable(key, value) {
-            userVariables[key] = JSON.stringify(value);
-            console.log("ユーザ変数設定", key, userVariables[key]);
-          },
-          getUserVariable(key) {
-            console.log("ユーザ変数取得", key, userVariables[key]);
-            if (userVariables[key] !== undefined) {
-              return JSON.parse(userVariables[key]);
-            } else {
-              return undefined;
-            }
-          },
-          findTextObjectById(id) {
-            const fullObjectId = rootInstanceId + "_" + id;
-            const element = document.querySelector(
-              `[data-object-id="${fullObjectId}"]`
-            );
-            if (!element) {
-              return null;
-            }
-            return {
-              getValue() {
-                return element.value;
-              },
-              setValue(value) {
-                element.value = value;
-              },
-            };
-          },
-        };
+        const context = (function () {
+          const instance = {
+            userVariables: {},
+            play() {
+              controller.play();
+            },
+            stop() {
+              controller.stop();
+            },
+            gotoAndPlay(destination) {
+              // TODO: 本当はここでバリデーションが必要
+              if (typeof destination === "string") {
+                jumpToFrameCount = Number(labelToFrameCount[destination]);
+              } else {
+                jumpToFrameCount = destination;
+              }
+              isPlaying = true;
+            },
+            eraseLayers(depths) {
+              if (depths.includes("all")) {
+                Object.keys(depthToLayer).forEach(function (eachDepth) {
+                  depthToLayer[eachDepth] = undefined;
+                });
+              } else {
+                depths.forEach(function (eachDepth) {
+                  depthToLayer[eachDepth] = undefined;
+                });
+              }
+            },
+            setUserVariable(key, value) {
+              instance.userVariables[key] = JSON.stringify(value);
+              console.log("ユーザ変数設定", key, instance.userVariables[key]);
+            },
+            getUserVariable(key) {
+              console.log("ユーザ変数取得", key, instance.userVariables[key]);
+              if (instance.userVariables[key] !== undefined) {
+                return JSON.parse(instance.userVariables[key]);
+              } else {
+                return undefined;
+              }
+            },
+            findTextObjectById(id) {
+              const fullObjectId = rootInstanceId + "_" + id;
+              const element = document.querySelector(
+                `[data-object-id="${fullObjectId}"]`
+              );
+              if (!element) {
+                return null;
+              }
+              return {
+                getValue() {
+                  return element.value;
+                },
+                setValue(value) {
+                  element.value = value;
+                },
+              };
+            },
+          };
+          return instance;
+        })();
 
         function handleAction(action) {
           // stop, gotoAndPlayはframeCountが1になる
