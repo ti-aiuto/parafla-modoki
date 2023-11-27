@@ -97,6 +97,7 @@
           targetElement.value = object.text.content;
         } else {
           targetElement.innerText = object.text.content;
+          targetElement.style.cursor = 'default';
         }
         wrapper.appendChild(targetElement);
         setLayoutOptionsToElement(targetElement, layoutOptions);
