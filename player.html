@@ -67,8 +67,7 @@
           // stop, gotoAndPlayはframeCountが1になる
           // defineLabel, eraseLayersはframeCountは0
           if (action.type === "eraseLayers") {
-            const depths = action.eraseLayers.depths;
-            context.eraseLayers(depths);
+            context.eraseLayers(action.eraseLayers.depths);
           } else if (action.type === "stop") {
             context.stop();
           } else if (action.type === "play") {
