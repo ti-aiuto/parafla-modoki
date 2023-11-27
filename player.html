@@ -23,14 +23,6 @@
         const render = window.render;
         const calcualteLabelFrameCount = window.calcualteLabelFrameCount;
 
-        const depthToLayer = {};
-        const labelToFrameCount = calcualteLabelFrameCount(frameEvents);
-        let currentFrameCount = 1;
-        let jumpToFrameCount = null;
-        let isPlaying = true;
-        console.log(absoluteFrameCountToScheduledFrameEvents);
-        console.log(labelToFrameCount);
-
         const rootInstanceId = "rootDummyHoge";
         const userVariables = {};
         const context = {
@@ -90,6 +82,7 @@
             };
           },
         };
+
         function handleAction(action) {
           // stop, gotoAndPlayはframeCountが1になる
           // defineLabel, eraseLayersはframeCountは0
@@ -107,109 +100,135 @@
             func(context);
           }
         }
-        setInterval(function () {
-          if (!isPlaying) {
-            return false;
+
+        const controller = (function () {
+          const instance = {};
+
+          instance.load = function (frameEvents) {
+            instance.labelToFrameCount = calcualteLabelFrameCount(frameEvents);
+            instance.isPlaying = false;
+            instance.currentFrameCount = 1;
+            instance.jumpToFrameCount = null;
+            // 表示データ
+            instance.depthToLayer = {};
+          };
+
+          instance.play = function() {
+            instance.isPlaying = true;
+          }
+          instance.stop = function() {
+            instance.isPlaying = false;
           }
 
-          // 最後まで行ったら最初に戻る（判定これでいいのかな？）
-          if (currentFrameCount > lastFrameCount) {
-            currentFrameCount = 1;
-          }
-
-          // 飛び先が指定されていたらそっちにいく
-          if (jumpToFrameCount !== null) {
-            currentFrameCount = jumpToFrameCount;
-            jumpToFrameCount = null;
-          }
-
-          console.log(currentFrameCount);
-
-          const currentScheduledFrameEvents =
-            absoluteFrameCountToScheduledFrameEvents[currentFrameCount] || [];
-
-          currentScheduledFrameEvents.forEach(function (scheduledFrameEvent) {
-            const event = scheduledFrameEvent.event;
-            const depth = event.depth;
-
-            if (event.type === "executeAction") {
-              console.log("executeAction", event.executeAction);
-              handleAction(event.executeAction);
+          instance.tick = function () {
+            if (!instance.isPlaying) {
+              return false;
             }
 
-            if (event.type === "putImage" || event.type === "putText") {
-              let objectBase = null;
-              // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
-              if (event.type === "putImage") {
-                objectBase = {
-                  type: "image",
-                  image: {
-                    source: event.putImage.source,
-                  },
-                  onClickAction: event.onClickAction,
-                  objectId: scheduledFrameEvent.objectId,
-                };
-              } else if (event.type === "putText") {
-                objectBase = {
-                  type: "text",
-                  text: {
-                    ...event.putText,
-                  },
-                  onClickAction: event.onClickAction,
-                  objectId: scheduledFrameEvent.objectId,
-                };
+            // 最後まで行ったら最初に戻る（判定これでいいのかな？）
+            if (instance.currentFrameCount > instance.lastFrameCount) {
+              instance.currentFrameCount = 1;
+            }
+
+            // 飛び先が指定されていたらそっちにいく
+            if (instance.jumpToFrameCount !== null) {
+              instance.currentFrameCount = instance.jumpToFrameCount;
+              instance.jumpToFrameCount = null;
+            }
+
+            // console.log(instance.currentFrameCount);
+
+            const currentScheduledFrameEvents =
+              absoluteFrameCountToScheduledFrameEvents[instance.currentFrameCount] || [];
+
+            currentScheduledFrameEvents.forEach(function (scheduledFrameEvent) {
+              const event = scheduledFrameEvent.event;
+              const depth = event.depth;
+
+              if (event.type === "executeAction") {
+                console.log("executeAction", event.executeAction);
+                handleAction(event.executeAction);
               }
 
-              if (scheduledFrameEvent.frameCountInEvent <= 1) {
-                // 0または1
-                // TODO: ここでdepthあるかの判定
-                depthToLayer[depth] = {
-                  object: {
-                    ...objectBase,
-                    useCache: false,
-                    layoutOptions: event.layoutOptions,
-                  },
-                };
-              } else {
-                const before = event.layoutOptions;
-                const after = event.lastKeyFrame.layoutOptions;
-
-                // TODO: ここでdepthあるかの判定
-                depthToLayer[depth] = {
-                  object: {
-                    ...objectBase,
-                    useCache: true,
-                    layoutOptions: {
-                      x:
-                        before.x +
-                        (scheduledFrameEvent.frameCountInEvent *
-                          (after.x - before.x)) /
-                          event.frameCount,
-                      y:
-                        before.y +
-                        (scheduledFrameEvent.frameCountInEvent *
-                          (after.y - before.y)) /
-                          event.frameCount,
-                      width:
-                        before.width +
-                        (scheduledFrameEvent.frameCountInEvent *
-                          (after.width - before.width)) /
-                          event.frameCount,
-                      height:
-                        before.height +
-                        (scheduledFrameEvent.frameCountInEvent *
-                          (after.height - before.height)) /
-                          event.frameCount,
+              if (event.type === "putImage" || event.type === "putText") {
+                let objectBase = null;
+                // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
+                if (event.type === "putImage") {
+                  objectBase = {
+                    type: "image",
+                    image: {
+                      source: event.putImage.source,
                     },
-                  },
-                };
-              }
-            }
+                    onClickAction: event.onClickAction,
+                    objectId: scheduledFrameEvent.objectId,
+                  };
+                } else if (event.type === "putText") {
+                  objectBase = {
+                    type: "text",
+                    text: {
+                      ...event.putText,
+                    },
+                    onClickAction: event.onClickAction,
+                    objectId: scheduledFrameEvent.objectId,
+                  };
+                }
 
-            render(depthToLayer, { handleAction, rootInstanceId });
-          });
-          currentFrameCount += 1;
-        }, 100);
+                if (scheduledFrameEvent.frameCountInEvent <= 1) {
+                  // 0または1
+                  // TODO: ここでdepthあるかの判定
+                  instance.depthToLayer[depth] = {
+                    object: {
+                      ...objectBase,
+                      useCache: false,
+                      layoutOptions: event.layoutOptions,
+                    },
+                  };
+                } else {
+                  const before = event.layoutOptions;
+                  const after = event.lastKeyFrame.layoutOptions;
+
+                  // TODO: ここでdepthあるかの判定
+                  instance.depthToLayer[depth] = {
+                    object: {
+                      ...objectBase,
+                      useCache: true,
+                      layoutOptions: {
+                        x:
+                          before.x +
+                          (scheduledFrameEvent.frameCountInEvent *
+                            (after.x - before.x)) /
+                            event.frameCount,
+                        y:
+                          before.y +
+                          (scheduledFrameEvent.frameCountInEvent *
+                            (after.y - before.y)) /
+                            event.frameCount,
+                        width:
+                          before.width +
+                          (scheduledFrameEvent.frameCountInEvent *
+                            (after.width - before.width)) /
+                            event.frameCount,
+                        height:
+                          before.height +
+                          (scheduledFrameEvent.frameCountInEvent *
+                            (after.height - before.height)) /
+                            event.frameCount,
+                      },
+                    },
+                  };
+                }
+              }
+
+              render(instance.depthToLayer, { handleAction, rootInstanceId });
+            });
+            instance.currentFrameCount += 1;
+          };
+
+          return instance;
+        })();
+        controller.load(frameEvents);
+        setInterval(controller.tick, 100);
+        controller.play();
       }
 
       window.onload = function () {
