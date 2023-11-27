@@ -115,5 +115,5 @@
     });
   }
 
-  window.render = render;
+  window.renderer = {render};
 })();

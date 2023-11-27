@@ -11,7 +11,7 @@
         const frameEvents = window.frameEvents;
         const scheduleFrameEvents = window.scheduleFrameEvents;
 
-        const render = window.render;
+        const renderer = window.renderer;
         const calcualteLabelFrameCount = window.calcualteLabelFrameCount;
 
         const rootInstanceId = "rootDummyHoge";
@@ -63,7 +63,8 @@
             instance.labelToFrameCount = calcualteLabelFrameCount(frameEvents);
             instance.currentFrameCount = 1;
             instance.jumpToFrameCount = null;
-            // 表示データ
+
+            // 表示データ(外部RAMのイメージ)
             instance.depthToLayer = {};
 
             instance.absoluteFrameCountToScheduledFrameEvents =
@@ -236,7 +237,7 @@
                 }
               }
 
-              render(instance.depthToLayer, { handleAction: instance.handleAction, rootInstanceId });
+              renderer.render(instance.depthToLayer, { handleAction: instance.handleAction, rootInstanceId });
             });
             instance.currentFrameCount += 1;
           };
