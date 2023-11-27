@@ -77,10 +77,12 @@
       }
 
       targetElement.dataset.objectId = rootInstanceId + "_" + object.objectId;
+      const layoutOptions = object.layoutOptions;
+
       if (object.type === "image") {
         targetElement.src = object.image.source;
         wrapper.appendChild(targetElement);
-        setLayoutOptionsToElement(targetElement, object.layoutOptions);
+        setLayoutOptionsToElement(targetElement, layoutOptions);
         setOnClickActionListener(
           targetElement,
           object.onClickAction,
@@ -93,8 +95,7 @@
           targetElement.innerText = object.text.content;
         }
         wrapper.appendChild(targetElement);
-        const layoutOptions = object.layoutOptions;
-        setLayoutOptionsToElement(targetElement, object.layoutOptions);
+        setLayoutOptionsToElement(targetElement, layoutOptions);
         setOnClickActionListener(
           targetElement,
           object.onClickAction,
