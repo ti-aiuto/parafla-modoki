@@ -3,7 +3,7 @@
   <head>
     <script src="compiler.js" type="text/javascript"></script>
     <script src="render.js" type="text/javascript"></script>
-    <script src="slideshowloop.js" type="text/javascript"></script>
+    <script src="slideshowlabel.js" type="text/javascript"></script>
     <script type="text/javascript">
       function main() {
         const frameEvents = window.frameEvents;
@@ -25,7 +25,7 @@
 
             instance.absoluteFrameCountToScheduledFrameEvents =
               scheduleFrameEvents(frameEvents);
-              console.log(instance.absoluteFrameCountToScheduledFrameEvents);
+            console.log(instance.absoluteFrameCountToScheduledFrameEvents);
 
             // 最後まで達したら最初に戻るため
             instance.lastFrameCount = Math.max.apply(
@@ -59,6 +59,24 @@
                 image: {
                   source:
                     "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iCiAgIHhtbG5zOmNjPSJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9ucyMiCiAgIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIKICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpzb2RpcG9kaT0iaHR0cDovL3NvZGlwb2RpLnNvdXJjZWZvcmdlLm5ldC9EVEQvc29kaXBvZGktMC5kdGQiCiAgIHhtbG5zOmlua3NjYXBlPSJodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy9uYW1lc3BhY2VzL2lua3NjYXBlIgogICB3aWR0aD0iNjQwIgogICBoZWlnaHQ9IjQ4MCIKICAgdmlld0JveD0iMCAwIDE2OS4zMzMzMyAxMjciCiAgIHZlcnNpb249IjEuMSIKICAgaWQ9InN2ZzgiCiAgIHNvZGlwb2RpOmRvY25hbWU9InBhZ2UzLnN2ZyIKICAgaW5rc2NhcGU6dmVyc2lvbj0iMC45Mi40ICg1ZGE2ODljMzEzLCAyMDE5LTAxLTE0KSI+CiAgPGRlZnMKICAgICBpZD0iZGVmczIiIC8+CiAgPHNvZGlwb2RpOm5hbWVkdmlldwogICAgIGlkPSJiYXNlIgogICAgIHBhZ2Vjb2xvcj0iI2ZmZmZmZiIKICAgICBib3JkZXJjb2xvcj0iIzY2NjY2NiIKICAgICBib3JkZXJvcGFjaXR5PSIxLjAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAiCiAgICAgaW5rc2NhcGU6cGFnZXNoYWRvdz0iMiIKICAgICBpbmtzY2FwZTp6b29tPSIxLjIzODU4MSIKICAgICBpbmtzY2FwZTpjeD0iLTQ4LjY0Mjg1NyIKICAgICBpbmtzY2FwZTpjeT0iMTgwLjYxOTQ1IgogICAgIGlua3NjYXBlOmRvY3VtZW50LXVuaXRzPSJtbSIKICAgICBpbmtzY2FwZTpjdXJyZW50LWxheWVyPSJsYXllcjEiCiAgICAgc2hvd2dyaWQ9ImZhbHNlIgogICAgIHVuaXRzPSJweCIKICAgICBpbmtzY2FwZTp3aW5kb3ctd2lkdGg9IjE5MjAiCiAgICAgaW5rc2NhcGU6d2luZG93LWhlaWdodD0iOTkxIgogICAgIGlua3NjYXBlOndpbmRvdy14PSItOSIKICAgICBpbmtzY2FwZTp3aW5kb3cteT0iLTkiCiAgICAgaW5rc2NhcGU6d2luZG93LW1heGltaXplZD0iMSIgLz4KICA8bWV0YWRhdGEKICAgICBpZD0ibWV0YWRhdGE1Ij4KICAgIDxyZGY6UkRGPgogICAgICA8Y2M6V29yawogICAgICAgICByZGY6YWJvdXQ9IiI+CiAgICAgICAgPGRjOmZvcm1hdD5pbWFnZS9zdmcreG1sPC9kYzpmb3JtYXQ+CiAgICAgICAgPGRjOnR5cGUKICAgICAgICAgICByZGY6cmVzb3VyY2U9Imh0dHA6Ly9wdXJsLm9yZy9kYy9kY21pdHlwZS9TdGlsbEltYWdlIiAvPgogICAgICAgIDxkYzp0aXRsZSAvPgogICAgICA8L2NjOldvcms+CiAgICA8L3JkZjpSREY+CiAgPC9tZXRhZGF0YT4KICA8ZwogICAgIGlua3NjYXBlOmxhYmVsPSLjg6zjgqTjg6Tjg7wgMSIKICAgICBpbmtzY2FwZTpncm91cG1vZGU9ImxheWVyIgogICAgIGlkPSJsYXllcjEiCiAgICAgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwtMTY5Ljk5OTk4KSI+CiAgICA8cmVjdAogICAgICAgc3R5bGU9Im9wYWNpdHk6MTtmaWxsOiNmZmZmZmY7ZmlsbC1vcGFjaXR5OjAuOTUxODA3MjtzdHJva2U6Izc1ZTE2NztzdHJva2Utd2lkdGg6MS4yMTMzMDE0MjtzdHJva2UtbGluZWNhcDpzcXVhcmU7c3Ryb2tlLWxpbmVqb2luOm1pdGVyO3N0cm9rZS1taXRlcmxpbWl0OjE7c3Ryb2tlLWRhc2hhcnJheTpub25lO3N0cm9rZS1vcGFjaXR5OjE7cGFpbnQtb3JkZXI6bWFya2VycyBmaWxsIHN0cm9rZSIKICAgICAgIGlkPSJyZWN0MjIiCiAgICAgICB3aWR0aD0iMTY5LjMzMzMzIgogICAgICAgaGVpZ2h0PSIxMjciCiAgICAgICB4PSIwIgogICAgICAgeT0iMTY5Ljk5OTk4IgogICAgICAgcnk9IjAiIC8+CiAgICA8dGV4dAogICAgICAgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIKICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zaXplOjEwLjU4MzMzMzAycHg7bGluZS1oZWlnaHQ6MS4yNTtmb250LWZhbWlseTpzYW5zLXNlcmlmO2xldHRlci1zcGFjaW5nOjBweDt3b3JkLXNwYWNpbmc6MHB4O2ZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6MC4yNjQ1ODMzMiIKICAgICAgIHg9IjQ2LjU2ODc0OCIKICAgICAgIHk9IjIzOC4yNTUiCiAgICAgICBpZD0idGV4dDQ1MzQiPjx0c3BhbgogICAgICAgICBzb2RpcG9kaTpyb2xlPSJsaW5lIgogICAgICAgICBpZD0idHNwYW40NTMyIgogICAgICAgICB4PSI0Ni41Njg3NDgiCiAgICAgICAgIHk9IjIzOC4yNTUiCiAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtc2l6ZToxNi45MzMzMzI0NHB4O2ZvbnQtZmFtaWx5OkhHU0dvdGhpY007LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjpIR1NHb3RoaWNNO3N0cm9rZS13aWR0aDowLjI2NDU4MzMyIj4z44Oa44O844K455uuPC90c3Bhbj48L3RleHQ+CiAgPC9nPgo8L3N2Zz4K",
+                },
+              },
+              11: {
+                type: "text",
+                text: {
+                  content: "image1",
+                  borderColor: "#000000",
+                  borderStyle: "solid",
+                  borderWidth: "1",
+                },
+              },
+              12: {
+                type: "text",
+                text: {
+                  content: "image2",
+                  borderColor: "#000000",
+                  borderStyle: "solid",
+                  borderWidth: "1",
                 },
               },
             };
@@ -187,16 +205,18 @@
                 if (event.type === "putImage") {
                   objectBase = {
                     type: "image",
-                    image: instance.findResourceById(event.putImage.resourceId)['image'],
+                    image: instance.findResourceById(event.putImage.resourceId)[
+                      "image"
+                    ],
                     onClickAction: event.onClickAction,
                     objectId: scheduledFrameEvent.objectId,
                   };
                 } else if (event.type === "putText") {
                   objectBase = {
                     type: "text",
-                    text: {
-                      ...event.putText,
-                    },
+                    text: instance.findResourceById(event.putText.resourceId)[
+                      "text"
+                    ],
                     onClickAction: event.onClickAction,
                     objectId: scheduledFrameEvent.objectId,
                   };

@@ -10,10 +10,7 @@ window.frameEvents = [
   {
     type: "putText",
     putText: {
-      content: "image1",
-      borderColor: "#000000",
-      borderStyle: "solid",
-      borderWidth: "1",
+      resourceId: 11,
     },
     depth: 10,
     frameCount: 0,
@@ -34,10 +31,7 @@ window.frameEvents = [
   {
     type: "putText",
     putText: {
-      content: "image2",
-      borderColor: "#000000",
-      borderStyle: "solid",
-      borderWidth: "1",
+      resourceId: 12,
     },
     depth: 11,
     frameCount: 0,
@@ -63,16 +57,6 @@ window.frameEvents = [
     },
   },
 
-  // {
-  //   type: "executeAction",
-  //   frameCount: 1,
-  //   executeAction: {
-  //     type: "gotoAndPlay",
-  //     gotoAndPlay: {
-  //       destination: "titleScreen",
-  //     },
-  //   },
-  // },
   {
     type: "defineLabel",
     defineLabel: {
@@ -83,16 +67,15 @@ window.frameEvents = [
   {
     type: "putImage",
     putImage: {
-      source:
-        "https://blog.ta.kasaki.info/wp-content/uploads/2022/06/IMG_20220522_182837929-1152x1536.jpg",
+      resourceId: 1,
     },
     depth: 1,
     frameCount: 0,
     layoutOptions: {
       x: 0,
       y: 0,
-      width: 120,
-      height: 120,
+      width: 640,
+      height: 480,
     },
   },
 
@@ -114,16 +97,15 @@ window.frameEvents = [
   {
     type: "putImage",
     putImage: {
-      source:
-        "https://blog.ta.kasaki.info/wp-content/uploads/2022/06/IMG_20220524_122351263-1536x1152.jpg",
+      resourceId: 2,
     },
     depth: 1,
     frameCount: 0,
     layoutOptions: {
-      x: 20,
-      y: 20,
-      width: 120,
-      height: 120,
+      x: 0,
+      y: 0,
+      width: 640,
+      height: 480,
     },
   },
 
