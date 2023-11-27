@@ -19,7 +19,7 @@
     });
   }
 
-  function render(depthToLayer, { handleAction, rootInstanceId }) {
+  function render(depthToLayer) {
     const root = document.getElementById("root");
 
     // TODO: ここの設定値も外から持ってくる
@@ -55,7 +55,7 @@
         const candidateElement = wrapper.firstChild;
         if (
           candidateElement.dataset.objectId ===
-          rootInstanceId + "_" + object.objectId
+          instance.generateFullObjectId(object.objectId)
         ) {
           targetElement = candidateElement;
           // console.log('cache利用');
@@ -76,7 +76,9 @@
         }
       }
 
-      targetElement.dataset.objectId = rootInstanceId + "_" + object.objectId;
+      targetElement.dataset.objectId = instance.generateFullObjectId(
+        object.objectId
+      );
       const layoutOptions = object.layoutOptions;
 
       if (object.type === "image") {
@@ -86,7 +88,7 @@
         setOnClickActionListener(
           targetElement,
           object.onClickAction,
-          handleAction
+          instance.handleAction
         );
       } else if (object.type === "text") {
         if (object.text.editable) {
@@ -99,7 +101,7 @@
         setOnClickActionListener(
           targetElement,
           object.onClickAction,
-          handleAction
+          instance.handleAction
         );
 
         if (object.text.borderWidth) {
@@ -115,5 +117,32 @@
     });
   }
 
-  window.renderer = {render};
+  const instance = { render };
+  instance.findTextObjectById = function (id) {
+    const fullObjectId = instance.generateFullObjectId(id);
+    const element = document.querySelector(
+      `[data-object-id="${fullObjectId}"]`
+    );
+    if (!element) {
+      return null;
+    }
+    return {
+      getValue() {
+        return element.value;
+      },
+      setValue(value) {
+        element.value = value;
+      },
+    };
+  };
+
+  instance.generateFullObjectId = function (objectId) {
+    return instance.rootInstanceId + "_" + objectId;
+  };
+  instance.prepare = function ({ rootInstanceId, handleAction }) {
+    instance.rootInstanceId = rootInstanceId;
+    instance.handleAction = handleAction;
+  };
+
+  window.renderer = instance;
 })();

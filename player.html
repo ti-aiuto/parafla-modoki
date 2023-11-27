@@ -14,7 +14,6 @@
         const renderer = window.renderer;
         const calcualteLabelFrameCount = window.calcualteLabelFrameCount;
 
-        const rootInstanceId = "rootDummyHoge";
         const context = (function () {
           const instance = {
             play() {
@@ -36,21 +35,7 @@
               return controller.getUserVariable(key);
             },
             findTextObjectById(id) {
-              const fullObjectId = rootInstanceId + "_" + id;
-              const element = document.querySelector(
-                `[data-object-id="${fullObjectId}"]`
-              );
-              if (!element) {
-                return null;
-              }
-              return {
-                getValue() {
-                  return element.value;
-                },
-                setValue(value) {
-                  element.value = value;
-                },
-              };
+              return renderer.findTextObjectById(id);
             },
           };
           return instance;
@@ -76,7 +61,11 @@
               Object.keys(instance.absoluteFrameCountToScheduledFrameEvents)
             );
 
+            // ユーザが好きに使っていい変数
             instance.userVariables = {};
+
+            // TODO: ダミーの値を設定
+            instance.rootInstanceId = "rootDummyHoge";
           };
 
           instance.play = function () {
@@ -237,7 +226,10 @@
                 }
               }
 
-              renderer.render(instance.depthToLayer, { handleAction: instance.handleAction, rootInstanceId });
+              renderer.render(instance.depthToLayer, {
+                handleAction: instance.handleAction,
+                rootInstanceId: instance.rootInstanceId,
+              });
             });
             instance.currentFrameCount += 1;
           };
@@ -245,6 +237,10 @@
           return instance;
         })();
         controller.load(frameEvents);
+        renderer.prepare({
+          handleAction: controller.handleAction,
+          rootInstanceId: controller.rootInstanceId,
+        });
         controller.play();
       }
 
