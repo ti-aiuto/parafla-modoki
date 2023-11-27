@@ -11,7 +11,6 @@
 
       // この分岐はなくても動くが無駄なオブジェクトが生成されるのを避けたい
       if (
-        frameEvent.type !== "doNothing" &&
         frameEvent.type !== "defineLabel"
       ) {
         if (frameEvent.frameCount === 0) {
@@ -27,9 +26,13 @@
         } else {
           range(0, frameEvent.frameCount - 1).forEach(function (
             frameCountInEvent,
-            index
           ) {
-            const fixedFrameCountInEvent = currentFrameCount + index;
+            if (frameEvent.type === "doNothing" && frameCountInEvent !== frameEvent.frameCount - 1) {
+              // 最後の1フレーム以外は追加しない
+              return;
+            }
+
+            const fixedFrameCountInEvent = currentFrameCount + frameCountInEvent;
             if (
               !absoluteFrameCountToScheduledFrameEvents[fixedFrameCountInEvent]
             ) {
@@ -40,7 +43,7 @@
               fixedFrameCountInEvent
             ].push({
               event: frameEvent,
-              frameCountInEvent: index + 1,
+              frameCountInEvent: frameCountInEvent + 1,
               objectId: objectId,
             });
           });
