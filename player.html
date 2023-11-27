@@ -11,15 +11,6 @@
         const frameEvents = window.frameEvents;
         const scheduleFrameEvents = window.scheduleFrameEvents;
 
-        const absoluteFrameCountToScheduledFrameEvents =
-          scheduleFrameEvents(frameEvents);
-
-        // 最後まで達したら最初に戻るため
-        const lastFrameCount = Math.max.apply(
-          null,
-          Object.keys(absoluteFrameCountToScheduledFrameEvents)
-        );
-
         const render = window.render;
         const calcualteLabelFrameCount = window.calcualteLabelFrameCount;
 
@@ -27,10 +18,10 @@
         const userVariables = {};
         const context = {
           play() {
-            isPlaying = true;
+            controller.play();
           },
           stop() {
-            isPlaying = false;
+            controller.stop();
           },
           gotoAndPlay(destination) {
             // TODO: 本当はここでバリデーションが必要
@@ -111,14 +102,23 @@
             instance.jumpToFrameCount = null;
             // 表示データ
             instance.depthToLayer = {};
+
+            instance.absoluteFrameCountToScheduledFrameEvents =
+              scheduleFrameEvents(frameEvents);
+
+            // 最後まで達したら最初に戻るため
+            instance.lastFrameCount = Math.max.apply(
+              null,
+              Object.keys(instance.absoluteFrameCountToScheduledFrameEvents)
+            );
           };
 
-          instance.play = function() {
+          instance.play = function () {
             instance.isPlaying = true;
-          }
-          instance.stop = function() {
+          };
+          instance.stop = function () {
             instance.isPlaying = false;
-          }
+          };
 
           instance.tick = function () {
             if (!instance.isPlaying) {
@@ -139,7 +139,9 @@
             // console.log(instance.currentFrameCount);
 
             const currentScheduledFrameEvents =
-              absoluteFrameCountToScheduledFrameEvents[instance.currentFrameCount] || [];
+              instance.absoluteFrameCountToScheduledFrameEvents[
+                instance.currentFrameCount
+              ] || [];
 
             currentScheduledFrameEvents.forEach(function (scheduledFrameEvent) {
               const event = scheduledFrameEvent.event;
