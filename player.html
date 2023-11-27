@@ -56,23 +56,6 @@
           return instance;
         })();
 
-        function handleAction(action) {
-          // stop, gotoAndPlayはframeCountが1になる
-          // defineLabel, eraseLayersはframeCountは0
-          if (action.type === "eraseLayers") {
-            context.eraseLayers(action.eraseLayers.depths);
-          } else if (action.type === "stop") {
-            context.stop();
-          } else if (action.type === "play") {
-            context.play();
-          } else if (action.type === "gotoAndPlay") {
-            context.gotoAndPlay(action.gotoAndPlay.destination);
-          } else if (action.type === "executeScript") {
-            const func = new Function("context", action.executeScript.content);
-            func(context);
-          }
-        }
-
         const controller = (function () {
           const instance = {};
 
@@ -136,6 +119,26 @@
             }
           };
 
+          instance.handleAction = function (action) {
+            // stop, gotoAndPlayはframeCountが1になる
+            // defineLabel, eraseLayersはframeCountは0
+            if (action.type === "eraseLayers") {
+              context.eraseLayers(action.eraseLayers.depths);
+            } else if (action.type === "stop") {
+              context.stop();
+            } else if (action.type === "play") {
+              context.play();
+            } else if (action.type === "gotoAndPlay") {
+              context.gotoAndPlay(action.gotoAndPlay.destination);
+            } else if (action.type === "executeScript") {
+              const func = new Function(
+                "context",
+                action.executeScript.content
+              );
+              func(context);
+            }
+          };
+
           instance.tick = function () {
             // 最後まで行ったら最初に戻る（判定これでいいのかな？）
             if (instance.currentFrameCount > instance.lastFrameCount) {
@@ -161,7 +164,7 @@
 
               if (event.type === "executeAction") {
                 console.log("executeAction", event.executeAction);
-                handleAction(event.executeAction);
+                instance.handleAction(event.executeAction);
               }
 
               if (event.type === "putImage" || event.type === "putText") {
@@ -233,7 +236,7 @@
                 }
               }
 
-              render(instance.depthToLayer, { handleAction, rootInstanceId });
+              render(instance.depthToLayer, { handleAction: instance.handleAction, rootInstanceId });
             });
             instance.currentFrameCount += 1;
           };
