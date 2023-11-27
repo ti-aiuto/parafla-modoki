@@ -12,33 +12,6 @@
         const renderer = window.renderer;
         const calcualteLabelFrameCount = window.calcualteLabelFrameCount;
 
-        const context = (function () {
-          const instance = {
-            play() {
-              controller.play();
-            },
-            stop() {
-              controller.stop();
-            },
-            gotoAndPlay(destination) {
-              controller.gotoAndPlay(destination);
-            },
-            eraseLayers(depths) {
-              controller.eraseLayers(depths);
-            },
-            setUserVariable(key, value) {
-              controller.setUserVariable(key, value);
-            },
-            getUserVariable(key) {
-              return controller.getUserVariable(key);
-            },
-            findTextObjectById(id) {
-              return renderer.findTextObjectById(id);
-            },
-          };
-          return instance;
-        })();
-
         const controller = (function () {
           const instance = {};
 
@@ -108,6 +81,30 @@
           };
 
           instance.handleAction = function (action) {
+            const context = {
+              play() {
+                controller.play();
+              },
+              stop() {
+                controller.stop();
+              },
+              gotoAndPlay(destination) {
+                controller.gotoAndPlay(destination);
+              },
+              eraseLayers(depths) {
+                controller.eraseLayers(depths);
+              },
+              setUserVariable(key, value) {
+                controller.setUserVariable(key, value);
+              },
+              getUserVariable(key) {
+                return controller.getUserVariable(key);
+              },
+              findTextObjectById(id) {
+                return renderer.findTextObjectById(id);
+              },
+            };
+
             // stop, gotoAndPlayはframeCountが1になる
             // defineLabel, eraseLayersはframeCountは0
             if (action.type === "eraseLayers") {
