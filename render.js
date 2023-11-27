@@ -79,6 +79,8 @@
       targetElement.dataset.objectId = instance.generateFullObjectId(
         object.objectId
       );
+      targetElement.style.zIndex = depth;
+
       const layoutOptions = object.layoutOptions;
 
       if (object.type === "image") {
@@ -112,6 +114,9 @@
         }
         if (object.text.borderColor) {
           targetElement.style.borderColor = object.text.borderColor;
+        }
+        if (object.text.backgroundColor) {
+          targetElement.style.backgroundColor = object.text.backgroundColor;
         }
       }
     });
