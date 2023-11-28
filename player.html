@@ -208,9 +208,6 @@
             // 表示データ(外部RAMのイメージ)
             instance.depthToLayer = {};
 
-            // 変数のバインディング用
-            instance.variableNameToBindings = {};
-
             instance.absoluteFrameCountToScheduledFrameEvents =
               scheduleFrameEvents(frameEvents);
             console.log(instance.absoluteFrameCountToScheduledFrameEvents);
@@ -300,36 +297,7 @@
                 controller.eraseLayers(depths);
               },
               setUserVariable(key, value, updateBinding = true) {
-                controller.setUserVariable(key, value);
-                Object.keys(instance.variableNameToBindings).forEach(function (
-                  variableName
-                ) {
-                  if (variableName === key) {
-                    const bindings =
-                      instance.variableNameToBindings[variableName];
-                    bindings.forEach(function (binding) {
-                      let content = binding.template;
-                      console.log(binding);
-                      binding.allVariableNames.forEach(function (
-                        includedVariableName
-                      ) {
-                        content = content.replace(
-                          new RegExp(`{{${includedVariableName}}}`),
-                          instance.getUserVariable(includedVariableName)
-                        );
-                      });
-                      console.log(
-                        "バインディング template:",
-                        binding.template,
-                        "変数: ",
-                        binding.allVariableNames,
-                        "結果",
-                        content
-                      );
-                      context.findTextObjectById(binding.objectId).setValue(content);
-                    });
-                  }
-                });
+                controller.setUserVariable(key, value);                
               },
               getUserVariable(key, defaultValue) {
                 return controller.getUserVariable(key, defaultValue);
@@ -421,27 +389,7 @@
                       scheduledFrameEvent.objectId
                     ),
                     rendered: false,
-                  };
-                  if (event.putText.variableBinding) {
-                    const template =
-                      event.putText.variableBinding.template.replace(
-                        /{{\s*(\w+?)\s*}}/g,
-                        "{{$1}}"
-                      );
-                    const variableRows = [...template.matchAll(/{{(\w+)}}/g)];
-                    const allVariableNames = variableRows.map((row) => row[1]);
-                    allVariableNames.forEach(function (variableName) {
-                      if (!instance.variableNameToBindings[variableName]) {
-                        instance.variableNameToBindings[variableName] = [];
-                      }
-                      instance.variableNameToBindings[variableName].push({
-                        objectId: scheduledFrameEvent.objectId,
-                        template,
-                        allVariableNames,
-                      });
-                    });
-                    // 別途表示とデータ更新の処理を走らせる
-                  }
+                  };                  
                 }
 
                 if (scheduledFrameEvent.frameCountInEvent <= 1) {

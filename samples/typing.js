@@ -158,9 +158,6 @@ window.frameEventsTyping = [
     type: "putText",
     putText: {
       resourceId: 43,  
-      variableBinding: {
-        template: '{{nokoriJikan}}'
-      }
     },
     depth: 2,
     frameCount: 1,
