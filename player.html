@@ -549,7 +549,7 @@
             eventTypeI18n(event) {
               let content = eventTypeTable[event.type];
               if (event.type === "defineLabel") {
-                content += `\n(ラベル名: ${event["defineLabel"]["label"]})`;
+                content += `\n(ラベル名: 「${event["defineLabel"]["label"]}」)`;
               } else if (
                 event.type === "putImage" ||
                 event.type === "putText"
@@ -573,7 +573,7 @@
               if (action["type"] === "eraseLayers") {
                 content += `\n(深度: ${action["eraseLayers"]["depths"]})`;
               } else if (action["type"] === "gotoAndPlay") {
-                content += `\n(行先: ${action["gotoAndPlay"]["destination"]})`;
+                content += `\n(行先: 「${action["gotoAndPlay"]["destination"]}」)`;
               } else if (action["type"] === "executeScript") {
                 content += `(スクリプトの内容: )`;
               }
