@@ -302,6 +302,12 @@
               getUserVariable(key, defaultValue) {
                 return controller.getUserVariable(key, defaultValue);
               },
+              setTextValue(objectId, value) {
+
+              },
+              getTextValue(objectId) {
+                
+              },
               findTextObjectById(objectId) {
                 return renderer.findTextObjectByFullObjectId(
                   instance.generateFullObjectId(objectId)
@@ -614,6 +620,14 @@
               :disabled="started"
             >
               深度
+            </button>
+          </li>
+          <li>
+            <button
+              @click="selectStory('frameEventsInputText')"
+              :disabled="started"
+            >
+              テキスト入力
             </button>
           </li>
           <li>
