@@ -308,11 +308,6 @@
               getTextValue(objectId) {
                 return controller.getTextValue(objectId);
               },
-              findTextObjectById(objectId) {
-                return renderer.findTextObjectByFullObjectId(
-                  instance.generateFullObjectId(objectId)
-                );
-              },
             };
 
             // stop, gotoAndPlayはframeCountが1になる

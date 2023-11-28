@@ -120,25 +120,6 @@
   }
 
   const instance = { render };
-  instance.findTextObjectByFullObjectId = function (fullId) {
-    const element = document.querySelector(`[data-full-object-id="${fullId}"]`);
-    if (!element) {
-      return null;
-    }
-    return {
-      element,
-      getValue() {
-        return element.value;
-      },
-      setValue(value) {
-        if (element.tagName === "INPUT") {
-          element.value = value;
-        } else {
-          element.innerHTML = value; // XSS
-        }
-      },
-    };
-  };
 
   instance.prepare = function ({ rootInstanceId, handleAction }) {
     instance.rootInstanceId = rootInstanceId;
