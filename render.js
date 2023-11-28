@@ -54,7 +54,7 @@
       const candidateElement = wrapper.firstChild;
       if (
         candidateElement &&
-        candidateElement.dataset.objectId === object.fullObjectId
+        candidateElement.dataset.fullObjectId === object.fullObjectId
       ) {
         targetElement = candidateElement;
         console.log("cache利用");
@@ -69,11 +69,14 @@
         } else if (object.type === "text") {
           if (object.text.editable) {
             targetElement = document.createElement("input");
+            targetElement.addEventListener('change', function(event) {
+              targetElement.value = object.text.content;
+            });
           } else {
             targetElement = document.createElement("div");
           }
         }
-        targetElement.dataset.objectId = object.fullObjectId;
+        targetElement.dataset.fullObjectId = object.fullObjectId;
         targetElement.style.zIndex = depth;
         wrapper.appendChild(targetElement);
         setOnClickActionListener(
@@ -117,7 +120,7 @@
   const instance = { render };
   instance.findTextObjectByFullObjectId = function (fullId) {
     const element = document.querySelector(
-      `[data-object-id="${fullId}"]`
+      `[data-full-object-id="${fullId}"]`
     );
     if (!element) {
       return null;

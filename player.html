@@ -297,17 +297,13 @@
                 controller.eraseLayers(depths);
               },
               setUserVariable(key, value, updateBinding = true) {
-                controller.setUserVariable(key, value);                
+                controller.setUserVariable(key, value);
               },
               getUserVariable(key, defaultValue) {
                 return controller.getUserVariable(key, defaultValue);
               },
-              setTextValue(objectId, value) {
-
-              },
-              getTextValue(objectId) {
-                
-              },
+              setTextValue(objectId, value) {},
+              getTextValue(objectId) {},
               findTextObjectById(objectId) {
                 return renderer.findTextObjectByFullObjectId(
                   instance.generateFullObjectId(objectId)
@@ -332,6 +328,23 @@
               );
               func(context);
             }
+          };
+
+          instance.setTextValue = function (objectId, value) {
+            instance.depthToLayer[depth].forEach(function ({ object }) {
+              if (!object) {
+                return;
+              }
+              if (
+                object.fullObjectId === instance.generateFullObjectId(objectId)
+              ) {
+                object.text.content = value;
+              }
+            });
+          };
+
+          instance.getTextValue = function (objectId) {
+            // rendererから同期しておく
           };
 
           instance.tick = function () {
@@ -375,9 +388,11 @@
                 if (event.type === "putImage") {
                   objectBase = {
                     type: "image",
-                    image: instance.findResourceById(event.putImage.resourceId)[
-                      "image"
-                    ],
+                    image: structuredClone(
+                      instance.findResourceById(event.putImage.resourceId)[
+                        "image"
+                      ]
+                    ),
                     onClickAction: event.onClickAction,
                     fullObjectId: instance.generateFullObjectId(
                       scheduledFrameEvent.objectId
@@ -387,15 +402,17 @@
                 } else if (event.type === "putText") {
                   objectBase = {
                     type: "text",
-                    text: instance.findResourceById(event.putText.resourceId)[
-                      "text"
-                    ],
+                    text: structuredClone(
+                      instance.findResourceById(event.putText.resourceId)[
+                        "text"
+                      ]
+                    ),
                     onClickAction: event.onClickAction,
                     fullObjectId: instance.generateFullObjectId(
                       scheduledFrameEvent.objectId
                     ),
                     rendered: false,
-                  };                  
+                  };
                 }
 
                 if (scheduledFrameEvent.frameCountInEvent <= 1) {

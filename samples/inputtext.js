@@ -46,8 +46,8 @@ window.frameEventsInputText = [
       type: "executeScript",
       executeScript: {
         content: `// 入力値をとってきて計算して結果を入れる処理
-        const val = context.findTextObjectById("inputValue").getValue(); 
-        context.findTextObjectById("result").setValue(Number(val) ** 2);`,
+        const val = context.getTextValue("inputValue"); 
+        context.setTextValue("result", Number(val) ** 2);`,
       },
     },
   },
