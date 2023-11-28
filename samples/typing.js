@@ -167,6 +167,7 @@ window.frameEventsTyping = [
       width: 150,
       height: 30,
     },
+    objectId: 'nokorijikan'
   },
   {
     type: "putText",
@@ -223,14 +224,25 @@ window.frameEventsTyping = [
         // タイピング画面の準備(キー操作の検知とカウントダウンの設定など)
 
         // 変数初期化
+        // 他のイベントと共用の変数はユーザ定義変数にしておく
         context.setUserVariable('nagashitaSushiCount', 0);
         context.setUserVariable('currentUtsumoji', null);
         context.setUserVariable('cursor', 0);
-        context.setUserVariable('nokoriJikan', 5);
+
+        // このイベント内でしか使わない変数は通常のJSの変数
+        let nokoriJikan = 5;
+        let correctCount = 0;
+        let wrongCount = 0;
+        let saraCount = 0;
+
+        function updateNokoriJikan() {
+          context.setTextValue('nokorijikan', nokoriJikan);
+        }
+        updateNokoriJikan();
 
         const countDownTimerId = setInterval(function() { 
-          const nokoriJikan = context.getUserVariable('nokoriJikan') - 1;
-          context.setUserVariable('nokoriJikan', nokoriJikan);
+          nokoriJikan -= 1;
+          updateNokoriJikan();
           
           if (nokoriJikan <= 0) {
             clearInterval(countDownTimerId);
@@ -243,13 +255,8 @@ window.frameEventsTyping = [
           }
         }, 1000);
 
-        let correctCount = 0;
-        let wrongCount = 0;
-        let saraCount = 0;
-
         function updateSaramaisu() {
-          const textObject = context.findTextObjectById("saramaisuu");
-          textObject.setValue('打った皿の枚数:' + saraCount);
+          context.setTextValue('saramaisuu', '打った皿の枚数:' + saraCount);
         }
         updateSaramaisu();
 
@@ -258,26 +265,32 @@ window.frameEventsTyping = [
           if (!currentUtsumoji) {
             return; // セット前
           }
-          const cursor = context.getUserVariable('cursor', 0);
-
+          const cursor = context.getUserVariable('cursor');
           const currentChar = currentUtsumoji[cursor];
+
           if (currentChar === event.key) {
+            // 打った文字が正しい場合
+            // TODO: ここでヘボン式など他の入力方法の考慮
+
+            // どこまで打ったかを記憶
             context.setUserVariable('cursor', cursor + 1);
+
+            // ここまでで打った文字の表示
+            context.setTextValue('uttamoji', currentUtsumoji.slice(0, cursor + 1));  
 
             correctCount += 1;
             if (cursor + 1 === currentUtsumoji.length) {
+              // 全部打ち終わった場合
               saraCount += 1;
               updateSaramaisu();
               context.gotoAndPlay('寿司を流す');
             }
-
-            const textObject = context.findTextObjectById("uttamoji");
-            textObject.setValue(currentUtsumoji.slice(0, cursor + 1));  
           } else {
             wrongCount += 1;
           }
         }
         
+        // 最初の一問目
         context.gotoAndPlay('寿司を流す');
       `,
       
@@ -317,19 +330,17 @@ window.frameEventsTyping = [
       executeScript: {
         content: `// 次にタイプするお題を設定して、寿司を流し始める処理
         const nagashitaSushiCount = context.getUserVariable('nagashitaSushiCount', 0);
+        // これから出題する単語
         context.setUserVariable('currentUtsumoji', ['misonikomi', 'kishimen', 'ebifurya'][nagashitaSushiCount]);
+        const currentUtsumoji = context.getUserVariable('currentUtsumoji');
+        context.setTextValue("utsumoji", currentUtsumoji);
+
+        // 何文字目まで打ったかをリセットする
         context.setUserVariable('cursor', 0);
 
-        const currentUtsumoji = context.getUserVariable('currentUtsumoji');
-        function updateUtsumoji() {
-          const textObject = context.findTextObjectById("utsumoji");
-          textObject.setValue(currentUtsumoji);
-        }
-        updateUtsumoji();
-
-        const textObject = context.findTextObjectById("uttamoji");
-        textObject.setValue('');  
-
+        // これまでに打った文字を空にする
+        context.setTextValue('uttamoji', '');  
+        // 現在何問目か
         context.setUserVariable('nagashitaSushiCount', nagashitaSushiCount + 1);
       `,
       
@@ -368,14 +379,6 @@ window.frameEventsTyping = [
       },
     },
   },
-// {
-  //   type: "executeAction",
-  //   frameCount: 1,
-  //   executeAction: {
-  //     type: "stop",
-  //   },
-  // },
-
 
   {
     type: "defineLabel",
@@ -454,8 +457,7 @@ window.frameEventsTyping = [
         const wrongCount = context.getUserVariable('wrongCount');
         const saraCount = context.getUserVariable('saraCount');
 
-        const textObject = context.findTextObjectById("seiseki");
-        textObject.setValue(\`正解キー数: \${correctCount} 間違えたキー数: \${wrongCount} 正答数: \${saraCount} \`);  
+        context.setTextValue('seiseki', \`正解キー数: \${correctCount} 間違えたキー数: \${wrongCount} 正答数: \${saraCount} \`);  
       `,
       
       }
