@@ -69,8 +69,8 @@
         } else if (object.type === "text") {
           if (object.text.editable) {
             targetElement = document.createElement("input");
-            targetElement.addEventListener('change', function(event) {
-              targetElement.value = object.text.content;
+            targetElement.addEventListener("input", function (event) {
+              object.text.content = event.target.value; // 元のオブジェクトに同期しておく
             });
           } else {
             targetElement = document.createElement("div");
@@ -86,42 +86,42 @@
         );
       }
 
-      if (!object.rendered) {
-        const layoutOptions = object.layoutOptions;
-        setLayoutOptionsToElement(targetElement, layoutOptions);
-        if (object.type === "image") {
-          targetElement.src = object.image.source;
-        } else if (object.type === "text") {
-          if (object.text.editable) {
+      const layoutOptions = object.layoutOptions;
+      setLayoutOptionsToElement(targetElement, layoutOptions);
+      if (object.type === "image") {
+        targetElement.src = object.image.source;
+      } else if (object.type === "text") {
+        if (object.text.editable) {
+          if (targetElement.value !== object.text.content) {
             targetElement.value = object.text.content;
-          } else {
+          }
+        } else {
+          if (targetElement.innerHTML !== object.text.content) {
             targetElement.innerHTML = object.text.content; // XSS
-            targetElement.style.cursor = "default";
+            object.text.content = targetElement.innerHTML; // ブラウザがinnerHTMLを補正する可能性がありそう  
           }
-          // 全部上書きしたほうがいい
-          if (object.text.borderWidth) {
-            targetElement.style.borderWidth = `${object.text.borderWidth}px`;
-          }
-          if (object.text.borderStyle) {
-            targetElement.style.borderStyle = object.text.borderStyle;
-          }
-          if (object.text.borderColor) {
-            targetElement.style.borderColor = object.text.borderColor;
-          }
-          if (object.text.backgroundColor) {
-            targetElement.style.backgroundColor = object.text.backgroundColor;
-          }
+          targetElement.style.cursor = "default";
         }
-        object.rendered = true;
+        // 全部デフォルト値を持った上で上書きしたほうがいい
+        if (object.text.borderWidth) {
+          targetElement.style.borderWidth = `${object.text.borderWidth}px`;
+        }
+        if (object.text.borderStyle) {
+          targetElement.style.borderStyle = object.text.borderStyle;
+        }
+        if (object.text.borderColor) {
+          targetElement.style.borderColor = object.text.borderColor;
+        }
+        if (object.text.backgroundColor) {
+          targetElement.style.backgroundColor = object.text.backgroundColor;
+        }
       }
     });
   }
 
   const instance = { render };
   instance.findTextObjectByFullObjectId = function (fullId) {
-    const element = document.querySelector(
-      `[data-full-object-id="${fullId}"]`
-    );
+    const element = document.querySelector(`[data-full-object-id="${fullId}"]`);
     if (!element) {
       return null;
     }

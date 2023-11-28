@@ -302,8 +302,12 @@
               getUserVariable(key, defaultValue) {
                 return controller.getUserVariable(key, defaultValue);
               },
-              setTextValue(objectId, value) {},
-              getTextValue(objectId) {},
+              setTextValue(objectId, value) {
+                controller.setTextValue(objectId, value);
+              },
+              getTextValue(objectId) {
+                return controller.getTextValue(objectId);
+              },
               findTextObjectById(objectId) {
                 return renderer.findTextObjectByFullObjectId(
                   instance.generateFullObjectId(objectId)
@@ -331,21 +335,37 @@
           };
 
           instance.setTextValue = function (objectId, value) {
-            instance.depthToLayer[depth].forEach(function ({ object }) {
+            for ({object} of Object.values(instance.depthToLayer)) {
               if (!object) {
-                return;
+                continue;
               }
               if (
                 object.fullObjectId === instance.generateFullObjectId(objectId)
               ) {
                 object.text.content = value;
+                break;
               }
-            });
+            }
+            instance.render();
           };
 
           instance.getTextValue = function (objectId) {
-            // rendererから同期しておく
+            for ({object} of Object.values(instance.depthToLayer)) {
+              if (!object) {
+                continue;
+              }
+              if (
+                object.fullObjectId === instance.generateFullObjectId(objectId)
+              ) {
+                return object.text.content;
+              }
+            }
+            return undefined;
           };
+
+          instance.render = function() {
+            renderer.render(instance.depthToLayer);
+          }
 
           instance.tick = function () {
             // 最後まで行ったら最初に戻る（判定これでいいのかな？）
@@ -362,8 +382,6 @@
               "frame_count"
             ).innerText = `フレーム番号: ${instance.currentFrameCount}`;
 
-            // console.log(instance.currentFrameCount);
-
             const currentScheduledFrameEvents =
               instance.absoluteFrameCountToScheduledFrameEvents[
                 instance.currentFrameCount
@@ -371,7 +389,7 @@
 
             currentScheduledFrameEvents.forEach(function (scheduledFrameEvent) {
               if (instance.jumpToFrameCount !== null) {
-                return; // このフレームでの処理は続行せずに指定フレームに飛ぶまで待つ実装をいれてもよい
+                return; // frameCount>1のイベントよりも前にgotoAndPlayを実行していた場合は先に飛ぶ
               }
 
               const event = scheduledFrameEvent.event;
@@ -460,9 +478,7 @@
                 }
               }
 
-              renderer.render(instance.depthToLayer);
-
-              // TODO: renderされた後でバインディングのための処理を定義する
+              instance.render();
             });
 
             instance.currentFrameCount += 1;
