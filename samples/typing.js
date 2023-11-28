@@ -357,7 +357,7 @@ window.frameEventsTyping = [
       resourceId: 35,
     },
     depth: 10,
-    frameCount: 30,
+    frameCount: 60,
     layoutOptions: {
       x: 640,
       y: 100,

@@ -241,7 +241,7 @@
 
           instance.play = function () {
             instance.stop();
-            instance.timerId = setInterval(this.tick, 100);
+            instance.timerId = setInterval(this.tick, 50);
           };
           instance.stop = function () {
             clearInterval(instance.timerId);
