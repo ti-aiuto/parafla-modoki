@@ -57,10 +57,10 @@
         candidateElement.dataset.fullObjectId === object.fullObjectId
       ) {
         targetElement = candidateElement;
-        console.log("cache利用");
       }
 
       if (!targetElement) {
+        console.log("cache無し");
         if (wrapper.firstChild) {
           wrapper.removeChild(wrapper.firstChild);
         }
@@ -70,7 +70,7 @@
           if (object.text.editable) {
             targetElement = document.createElement("input");
             targetElement.addEventListener("input", function (event) {
-              object.text.content = event.target.value; // 元のオブジェクトに同期しておく
+              object.text.content = event.target.value; // 中間データオブジェクトに同期しておく
             });
           } else {
             targetElement = document.createElement("div");
