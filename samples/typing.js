@@ -160,7 +160,7 @@ window.frameEventsTyping = [
       resourceId: 43,  
     },
     depth: 2,
-    frameCount: 1,
+    frameCount: 0,
     layoutOptions: {
       x: 350,
       y: 50,
@@ -175,7 +175,7 @@ window.frameEventsTyping = [
       resourceId: 44,
     },
     depth: 3,
-    frameCount: 1,
+    frameCount: 0,
     layoutOptions: {
       x: 250,
       y: 350,
@@ -190,7 +190,7 @@ window.frameEventsTyping = [
       resourceId: 45,
     },
     depth: 4,
-    frameCount: 1,
+    frameCount: 0,
     layoutOptions: {
       x: 250,
       y: 380,
@@ -205,7 +205,7 @@ window.frameEventsTyping = [
       resourceId: 46,
     },
     depth: 5,
-    frameCount: 1,
+    frameCount: 0,
     layoutOptions: {
       x: 50,
       y: 50,
@@ -293,7 +293,6 @@ window.frameEventsTyping = [
         // 最初の一問目
         context.gotoAndPlay('寿司を流す');
       `,
-      
       }
     },
   },
@@ -343,7 +342,6 @@ window.frameEventsTyping = [
         // 現在何問目か
         context.setUserVariable('nagashitaSushiCount', nagashitaSushiCount + 1);
       `,
-      
       }
     },
   },
