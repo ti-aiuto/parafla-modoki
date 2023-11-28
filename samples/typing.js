@@ -1,5 +1,4 @@
 window.frameEventsTyping = [
-
   {
     type: "defineLabel",
     defineLabel: {
@@ -112,7 +111,7 @@ window.frameEventsTyping = [
             event.preventDefault();
           }
         }`,
-      }
+      },
     },
   },
   {
@@ -122,7 +121,7 @@ window.frameEventsTyping = [
       type: "stop",
     },
   },
-  
+
   {
     type: "defineLabel",
     defineLabel: {
@@ -157,7 +156,7 @@ window.frameEventsTyping = [
   {
     type: "putText",
     putText: {
-      resourceId: 43,  
+      resourceId: 43,
     },
     depth: 2,
     frameCount: 0,
@@ -167,7 +166,7 @@ window.frameEventsTyping = [
       width: 150,
       height: 30,
     },
-    objectId: 'nokorijikan'
+    objectId: "nokorijikan",
   },
   {
     type: "putText",
@@ -182,7 +181,7 @@ window.frameEventsTyping = [
       width: 150,
       height: 30,
     },
-    objectId: 'utsumoji'
+    objectId: "utsumoji",
   },
   {
     type: "putText",
@@ -197,7 +196,7 @@ window.frameEventsTyping = [
       width: 150,
       height: 30,
     },
-    objectId: 'uttamoji'
+    objectId: "uttamoji",
   },
   {
     type: "putText",
@@ -212,7 +211,7 @@ window.frameEventsTyping = [
       width: 150,
       height: 30,
     },
-    objectId: 'saramaisuu'
+    objectId: "saramaisuu",
   },
   {
     type: "executeAction",
@@ -283,7 +282,14 @@ window.frameEventsTyping = [
               // 全部打ち終わった場合
               saraCount += 1;
               updateSaramaisu();
-              context.gotoAndPlay('寿司を流す');
+              // context.gotoAndPlay('寿司を流す');
+              if (saraCount === 1) {
+                context.gotoAndPlay('皿1枚目');
+              } else if (saraCount === 2) {
+                context.gotoAndPlay('皿2枚目');
+              } else if (saraCount === 3) {
+                context.gotoAndPlay('皿3枚目');
+              } // TODO: 4枚目以降も要考慮 
             }
           } else {
             wrongCount += 1;
@@ -293,7 +299,7 @@ window.frameEventsTyping = [
         // 最初の一問目
         context.gotoAndPlay('寿司を流す');
       `,
-      }
+      },
     },
   },
   {
@@ -342,7 +348,7 @@ window.frameEventsTyping = [
         // 現在何問目か
         context.setUserVariable('nagashitaSushiCount', nagashitaSushiCount + 1);
       `,
-      }
+      },
     },
   },
   {
@@ -358,7 +364,7 @@ window.frameEventsTyping = [
       width: 150,
       height: 150,
     },
-    
+
     lastKeyFrame: {
       layoutOptions: {
         x: -150,
@@ -368,6 +374,102 @@ window.frameEventsTyping = [
       },
     },
   },
+  {
+    type: "executeAction",
+    executeAction: {
+      type: "gotoAndPlay",
+      gotoAndPlay: {
+        destination: "寿司を流す",
+      },
+    },
+  },
+
+  {
+    type: "defineLabel",
+    defineLabel: {
+      label: "皿1枚目",
+    },
+    frameCount: 0,
+  },
+  {
+    type: "putImage",
+    putImage: {
+      resourceId: 36,
+    },
+    depth: 21,
+    frameCount: 0,
+    layoutOptions: {
+      x: 30,
+      y: 400,
+      width: 150,
+      height: 50,
+    },
+  },
+
+  {
+    type: "executeAction",
+    executeAction: {
+      type: "gotoAndPlay",
+      gotoAndPlay: {
+        destination: "寿司を流す",
+      },
+    },
+  },
+
+  {
+    type: "defineLabel",
+    defineLabel: {
+      label: "皿2枚目",
+    },
+    frameCount: 0,
+  },
+  {
+    type: "putImage",
+    putImage: {
+      resourceId: 36,
+    },
+    depth: 22,
+    frameCount: 0,
+    layoutOptions: {
+      x: 30,
+      y: 350,
+      width: 150,
+      height: 50,
+    },
+  },
+
+  {
+    type: "executeAction",
+    executeAction: {
+      type: "gotoAndPlay",
+      gotoAndPlay: {
+        destination: "寿司を流す",
+      },
+    },
+  },
+
+  {
+    type: "defineLabel",
+    defineLabel: {
+      label: "皿3枚目",
+    },
+    frameCount: 0,
+  },
+  {
+    type: "putImage",
+    putImage: {
+      resourceId: 36,
+    },
+    depth: 23,
+    frameCount: 0,
+    layoutOptions: {
+      x: 30,
+      y: 300,
+      width: 150,
+      height: 50,
+    },
+  },
+
   {
     type: "executeAction",
     executeAction: {
@@ -442,7 +544,7 @@ window.frameEventsTyping = [
       width: 500,
       height: 30,
     },
-    objectId: 'seiseki'
+    objectId: "seiseki",
   },
   {
     type: "executeAction",
@@ -457,8 +559,7 @@ window.frameEventsTyping = [
 
         context.setTextValue('seiseki', \`正解キー数: \${correctCount} 間違えたキー数: \${wrongCount} 正答数: \${saraCount} \`);  
       `,
-      
-      }
+      },
     },
   },
   {
@@ -468,5 +569,4 @@ window.frameEventsTyping = [
       type: "stop",
     },
   },
- 
 ];
