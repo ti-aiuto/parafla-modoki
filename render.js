@@ -100,7 +100,9 @@
             targetElement.innerHTML = object.text.content; // XSS
             object.text.content = targetElement.innerHTML; // ブラウザがinnerHTMLを補正する可能性がありそう  
           }
-          targetElement.style.cursor = "default";
+        }
+        if (object.onClickAction) {
+          targetElement.style.cursor = "pointer";
         }
         // 全部デフォルト値を持った上で上書きしたほうがいい
         if (object.text.borderWidth) {
