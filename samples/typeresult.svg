@@ -14,7 +14,7 @@
    viewBox="0 0 169.33333 127"
    version="1.1"
    id="svg8"
-   sodipodi:docname="typehowto.svg"
+   sodipodi:docname="typeresult.svg"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
   <defs
      id="defs2" />
@@ -26,7 +26,7 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.238581"
-     inkscape:cx="177.42229"
+     inkscape:cx="209.71731"
      inkscape:cy="180.61945"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -65,24 +65,24 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="50.413876"
-       y="203.00801"
+       x="32.683575"
+       y="202.79439"
        id="text4534"><tspan
          sodipodi:role="line"
          id="tspan4532"
-         x="50.413876"
-         y="203.00801"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.93333244px;font-family:HGSGothicM;-inkscape-font-specification:HGSGothicM;stroke-width:0.26458332">説明画面</tspan></text>
+         x="32.683575"
+         y="202.79439"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.93333244px;font-family:HGSGothicM;-inkscape-font-specification:HGSGothicM;stroke-width:0.26458332">結果発表画面</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="39.142475"
-       y="265.63611"
+       x="56.659161"
+       y="223.76695"
        id="text4534-9"><tspan
          sodipodi:role="line"
          id="tspan4532-3"
-         x="39.142475"
-         y="265.63611"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.76111126px;font-family:HGSGothicM;-inkscape-font-specification:HGSGothicM;stroke-width:0.26458332">スペースを押してスタート</tspan></text>
+         x="56.659161"
+         y="223.76695"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.76111126px;font-family:HGSGothicM;-inkscape-font-specification:HGSGothicM;stroke-width:0.26458332">色々スコア表示</tspan></text>
   </g>
 </svg>

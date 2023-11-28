@@ -1,4 +1,4 @@
-window.frameEvents = [
+window.frameEventsSlideshowLabel = [
   {
     type: "defineLabel",
     defineLabel: {

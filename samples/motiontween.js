@@ -1,4 +1,4 @@
-window.frameEvents = [
+window.frameEventsMotionTween = [
   {
     type: "putImage",
     putImage: {

@@ -13,10 +13,10 @@
     if (!action) {
       return;
     }
-    element.addEventListener("click", function () {
+    element.onclick = function () {
       console.log("click", element, action);
       handleAction(action);
-    });
+    };
   }
 
   function render(depthToLayer) {
@@ -40,10 +40,10 @@
         depthToLayerWrapper[depth] = newWrapper;
       }
 
-      // TODO: ここで必要なければremoveしない実装にできるとよい
       const wrapper = depthToLayerWrapper[depth];
       const object = layer && layer.object;
       if (!object) {
+        // 何もなくなってたら消すだけ
         if (wrapper.firstChild) {
           wrapper.removeChild(wrapper.firstChild);
         }
@@ -51,16 +51,15 @@
       }
 
       let targetElement = null;
-      if (object.useCache) {
-        const candidateElement = wrapper.firstChild;
-        if (
-          candidateElement.dataset.objectId ===
-          instance.generateFullObjectId(object.objectId)
-        ) {
-          targetElement = candidateElement;
-          // console.log('cache利用');
-        }
+      const candidateElement = wrapper.firstChild;
+      if (
+        candidateElement &&
+        candidateElement.dataset.objectId === object.fullObjectId
+      ) {
+        targetElement = candidateElement;
+        console.log("cache利用");
       }
+
       if (!targetElement) {
         if (wrapper.firstChild) {
           wrapper.removeChild(wrapper.firstChild);
@@ -74,77 +73,70 @@
             targetElement = document.createElement("div");
           }
         }
+        targetElement.dataset.objectId = object.fullObjectId;
+        targetElement.style.zIndex = depth;
+        wrapper.appendChild(targetElement);
+        setOnClickActionListener(
+          targetElement,
+          object.onClickAction,
+          instance.handleAction
+        );
       }
 
-      targetElement.dataset.objectId = instance.generateFullObjectId(
-        object.objectId
-      );
-      targetElement.style.zIndex = depth;
-
-      const layoutOptions = object.layoutOptions;
-
-      if (object.type === "image") {
-        targetElement.src = object.image.source;
-        wrapper.appendChild(targetElement);
+      if (!object.rendered) {
+        const layoutOptions = object.layoutOptions;
         setLayoutOptionsToElement(targetElement, layoutOptions);
-        setOnClickActionListener(
-          targetElement,
-          object.onClickAction,
-          instance.handleAction
-        );
-      } else if (object.type === "text") {
-        if (object.text.editable) {
-          targetElement.value = object.text.content;
-        } else {
-          targetElement.innerText = object.text.content;
-          targetElement.style.cursor = 'default';
+        if (object.type === "image") {
+          targetElement.src = object.image.source;
+        } else if (object.type === "text") {
+          if (object.text.editable) {
+            targetElement.value = object.text.content;
+          } else {
+            targetElement.innerHTML = object.text.content; // XSS
+            targetElement.style.cursor = "default";
+          }
+          // 全部上書きしたほうがいい
+          if (object.text.borderWidth) {
+            targetElement.style.borderWidth = `${object.text.borderWidth}px`;
+          }
+          if (object.text.borderStyle) {
+            targetElement.style.borderStyle = object.text.borderStyle;
+          }
+          if (object.text.borderColor) {
+            targetElement.style.borderColor = object.text.borderColor;
+          }
+          if (object.text.backgroundColor) {
+            targetElement.style.backgroundColor = object.text.backgroundColor;
+          }
         }
-        wrapper.appendChild(targetElement);
-        setLayoutOptionsToElement(targetElement, layoutOptions);
-        setOnClickActionListener(
-          targetElement,
-          object.onClickAction,
-          instance.handleAction
-        );
-
-        if (object.text.borderWidth) {
-          targetElement.style.borderWidth = `${object.text.borderWidth}px`;
-        }
-        if (object.text.borderStyle) {
-          targetElement.style.borderStyle = object.text.borderStyle;
-        }
-        if (object.text.borderColor) {
-          targetElement.style.borderColor = object.text.borderColor;
-        }
-        if (object.text.backgroundColor) {
-          targetElement.style.backgroundColor = object.text.backgroundColor;
-        }
+        object.rendered = true;
       }
     });
   }
 
   const instance = { render };
-  instance.findTextObjectById = function (id) {
-    const fullObjectId = instance.generateFullObjectId(id);
+  instance.findTextObjectByFullObjectId = function (fullId) {
     const element = document.querySelector(
-      `[data-object-id="${fullObjectId}"]`
+      `[data-object-id="${fullId}"]`
     );
     if (!element) {
       return null;
     }
     return {
+      element,
       getValue() {
         return element.value;
       },
       setValue(value) {
-        element.value = value;
+        if (element.tagName === "INPUT") {
+          element.value = value;
+        } else {
+          element.innerHTML = value; // XSS
+        }
       },
     };
   };
 
-  instance.generateFullObjectId = function (objectId) {
-    return instance.rootInstanceId + "_" + objectId;
-  };
   instance.prepare = function ({ rootInstanceId, handleAction }) {
     instance.rootInstanceId = rootInstanceId;
     instance.handleAction = handleAction;

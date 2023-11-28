@@ -1,4 +1,4 @@
-window.frameEvents = [
+window.frameEventsDepth = [
   {
     type: "putImage",
     putImage: {

@@ -1,4 +1,4 @@
-window.frameEvents = [
+window.frameEventsSlideshowLoop = [
   {
     type: "putImage",
     putImage: {

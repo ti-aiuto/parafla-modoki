@@ -1,4 +1,4 @@
-window.frameEvents = [
+window.frameEventsInputText = [
   {
     type: "putText",
     putText: {
@@ -45,7 +45,8 @@ window.frameEvents = [
     onClickAction: {
       type: "executeScript",
       executeScript: {
-        content: `const val = context.findTextObjectById("inputValue").getValue(); 
+        content: `// 入力値をとってきて計算して結果を入れる処理
+        const val = context.findTextObjectById("inputValue").getValue(); 
         context.findTextObjectById("result").setValue(Number(val) ** 2);`,
       },
     },

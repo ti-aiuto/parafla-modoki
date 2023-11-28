@@ -1,4 +1,4 @@
-window.frameEvents = [
+window.frameEventsSlideshowStop = [
   {
     type: "putImage",
     putImage: {
