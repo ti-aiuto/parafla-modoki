@@ -338,7 +338,7 @@
           };
 
           instance.setTextValue = function (objectId, value) {
-            for ({object} of Object.values(instance.depthToLayer)) {
+            for ({ object } of Object.values(instance.depthToLayer)) {
               if (!object) {
                 continue;
               }
@@ -353,7 +353,7 @@
           };
 
           instance.getTextValue = function (objectId) {
-            for ({object} of Object.values(instance.depthToLayer)) {
+            for ({ object } of Object.values(instance.depthToLayer)) {
               if (!object) {
                 continue;
               }
@@ -366,9 +366,9 @@
             return undefined;
           };
 
-          instance.render = function() {
+          instance.render = function () {
             renderer.render(instance.depthToLayer);
-          }
+          };
 
           instance.tick = function () {
             // 最後まで行ったら最初に戻る（判定これでいいのかな？）
@@ -561,6 +561,9 @@
                   content += `\n(移動先位置: ${JSON.stringify(
                     event.lastKeyFrame["layoutOptions"]
                   )})`;
+                }
+                if (event.objectId) {
+                  content += `\n(オブジェクトID: ${event.objectId})`;
                 }
               }
               return content;
