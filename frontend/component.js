@@ -97,8 +97,18 @@ const Component = function (
       eraseLayers(depths) {
         instance.eraseLayers(depths);
       },
-      setComponentUserVariable(key, value, updateBinding = true) {
+      setComponentUserVariable(key, value) {
         instance.setComponentUserVariable(key, value);
+      },
+      incrementComponentUserVariable(key) {
+        const nextValue = instance.getComponentUserVariable(key) + 1;
+        instance.setComponentUserVariable(key, nextValue);
+        return nextValue;
+      },
+      decrementComponentUserVariable(key) {
+        const nextValue = instance.getComponentUserVariable(key) - 1;
+        instance.setComponentUserVariable(key, nextValue);
+        return nextValue;
       },
       getComponentUserVariable(key, defaultValue) {
         return instance.getComponentUserVariable(key, defaultValue);
