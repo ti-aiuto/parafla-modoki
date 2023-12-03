@@ -82,7 +82,7 @@ const RootController = function () {
   };
   instance.unregisterGlobalKeydownListener = function (listenerId) {
     if (instance.keydownListeners[listenerId]) {
-      document.removeEventListener(instance.keydownListeners[listenerId]);
+      document.removeEventListener("keydown", instance.keydownListeners[listenerId]);
     }
   };
 

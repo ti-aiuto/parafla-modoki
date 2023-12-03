@@ -90,9 +90,9 @@ const Component = function (
   };
 
   instance.callComponentUserFunction = function (name, args = {}) {
-    console.debug("ユーザ関数呼び出し", name);
+    console.debug("ユーザ関数呼び出し", name, args);
     const content = instance.componentUserFunctions[name];
-    const func = new Function("context", "arguments", content);
+    const func = new Function("context", "args", content);
     const context = instance.createContext();
     return func(context, args || {});
   };
