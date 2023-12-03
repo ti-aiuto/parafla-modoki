@@ -40,7 +40,7 @@ const RootController = function () {
   instance.registerMousedownEvent = function () {};
   instance.unregisterMousedownEvent = function () {};
 
-  instance.registerTimer = function (
+  instance.startUserTimer = function (
     listenerId,
     component,
     componentUserFunctionName
@@ -54,7 +54,7 @@ const RootController = function () {
     }, interval);
     instance.timers[listenerId] = { timerId };
   };
-  instance.unregisterTimer = function (listenerId) {
+  instance.clearUserTimer = function (listenerId) {
     clearInterval(instance.timers[listenerId]?.timerId);
     instance.timers[listenerId] = undefined;
   };
