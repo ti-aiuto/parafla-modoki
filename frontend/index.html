@@ -2,54 +2,76 @@
 <html>
   <head>
     <script type="text/javascript">
-      window.onload = function() {
-        const AssetsManager = function() {
+      window.onload = function () {
+        const AssetsManager = function () {
           const instance = {};
           return instance;
         };
 
-        const RootController = function() {
+        const RootController = function () {
+          const instance = {};
+
+          instance.registerClickEvent = function () {};
+          instance.unregisterClickEvent = function () {};
+
+          instance.registerHoverEvent = function () {};
+          instance.unregisterHoverEvent = function () {};
+
+          instance.registerMousedownEvent = function () {};
+          instance.unregisterMousedownEvent = function () {};
+
+          instance.registerTimer = function () {};
+          instance.unregisterTimer = function () {};
+
+          return instance;
+        };
+
+        const ScheduledEvents = function () {
           const instance = {};
           return instance;
         };
 
-        const ScheduledEvents = function() {
-          const instance = {};
-          return instance;
-        }
-
-        const ScreenObjectsManager = function() {
+        const ScreenObjectsManager = function () {
           const instance = {};
           return instance;
         };
 
-        const Compiler = function() {
-          const instance = {};
-          return instance;
-        };
-
-        const Component = function() {
+        const Compiler = function () {
           const instance = {};
 
-          // TODO: rootControllerとscheduledEventsを引数にうけとる
-          // screenObjectsManagerは内部でnewする
+          instance.compileScheduledEvents = function () {
+            const scheduledEvents = ScheduledEvents();
+
+            return scheduledEvents;
+          };
 
           return instance;
         };
-        
-        const Renderer = function() {
+
+        const Component = function (
+          rootController,
+          scheduledEvents,
+          screenObjectsManager
+        ) {
           const instance = {};
-          
+
+          instance.rootController = rootController;
+          instance.scheduledEvents = scheduledEvents;
+          instance.screenObjectsManager = screenObjectsManager;
+
+          return instance;
+        };
+
+        const Renderer = function () {
+          const instance = {};
+
           // root要素からscreenObjectsManagerを受け取ってrenderする
 
           return instance;
         };
-      }
+      };
     </script>
-    <style>
-    </style>
+    <style></style>
   </head>
-  <body>
-   
-  </body>
+  <body></body>
 </html>
