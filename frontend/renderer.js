@@ -1,6 +1,5 @@
 const Renderer = function () {
   const instance = {};
-
   const depthToLayerWrapper = {};
 
   function setLayoutOptionsToElement(element, layoutOptions) {
@@ -10,16 +9,6 @@ const Renderer = function () {
     element.style.left = `${layoutOptions.x}px`;
     element.style.top = `${layoutOptions.y}px`;
   }
-
-  // function setOnClickActionListener(element, action, handleAction) {
-  //   if (!action) {
-  //     return;
-  //   }
-  //   element.onclick = function () {
-  //     console.log("click", element, action);
-  //     handleAction(action);
-  //   };
-  // }
 
   instance.render = function render(screenObjectsManager) {
     const depthToLayer = screenObjectsManager.depthToLayer;
@@ -63,7 +52,7 @@ const Renderer = function () {
       }
 
       if (!targetElement) {
-        console.log("cache無し");
+        console.debug("cache無し");
         if (wrapper.firstChild) {
           wrapper.removeChild(wrapper.firstChild);
         }
