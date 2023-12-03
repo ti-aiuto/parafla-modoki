@@ -87,9 +87,5 @@ const RootController = function () {
     instance.keydownListeners[listenerId] = undefined;
   };
 
-  instance.defineUserVariable = function () {};
-  instance.setUserVariable = function () {};
-  instance.getUserVariable = function () {};
-
   return instance;
 };
