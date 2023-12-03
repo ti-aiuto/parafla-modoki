@@ -67,7 +67,7 @@ const Component = function (
 
   instance.setComponentUserVariable = function (key, value) {
     instance.componentUserVariables[key] = JSON.stringify(value);
-    console.log("ユーザ変数設定", key, instance.userVariables[key]);
+    console.log("ユーザ変数設定", key, instance.componentUserVariables[key]);
   };
   instance.getComponentUserVariable = function (key, defaultValue = undefined) {
     console.log(

@@ -224,9 +224,9 @@ window.frameEventsTyping = [
 
         // 変数初期化
         // 他のイベントと共用の変数はユーザ定義変数にしておく
-        context.setUserVariable('nagashitaSushiCount', 0);
-        context.setUserVariable('currentUtsumoji', null);
-        context.setUserVariable('cursor', 0);
+        context.setComponentUserVariable('nagashitaSushiCount', 0);
+        context.setComponentUserVariable('currentUtsumoji', null);
+        context.setComponentUserVariable('cursor', 0);
 
         // このイベント内でしか使わない変数は通常のJSの変数
         let nokoriJikan = 5;
@@ -247,9 +247,9 @@ window.frameEventsTyping = [
             clearInterval(countDownTimerId);
             document.onkeydown = null;
 
-            context.setUserVariable('correctCount', correctCount);
-            context.setUserVariable('wrongCount', wrongCount);
-            context.setUserVariable('saraCount', saraCount);
+            context.setComponentUserVariable('correctCount', correctCount);
+            context.setComponentUserVariable('wrongCount', wrongCount);
+            context.setComponentUserVariable('saraCount', saraCount);
             context.gotoAndPlay('結果画面') 
           }
         }, 1000);
@@ -260,11 +260,11 @@ window.frameEventsTyping = [
         updateSaramaisu();
 
         document.onkeydown = function(event) {
-          const currentUtsumoji = context.getUserVariable('currentUtsumoji');
+          const currentUtsumoji = context.getComponentUserVariable('currentUtsumoji');
           if (!currentUtsumoji) {
             return; // セット前
           }
-          const cursor = context.getUserVariable('cursor');
+          const cursor = context.getComponentUserVariable('cursor');
           const currentChar = currentUtsumoji[cursor];
 
           if (currentChar === event.key) {
@@ -272,7 +272,7 @@ window.frameEventsTyping = [
             // TODO: ここでヘボン式など他の入力方法の考慮
 
             // どこまで打ったかを記憶
-            context.setUserVariable('cursor', cursor + 1);
+            context.setComponentUserVariable('cursor', cursor + 1);
 
             // ここまでで打った文字の表示
             context.setTextValue('uttamoji', currentUtsumoji.slice(0, cursor + 1));  
@@ -334,19 +334,19 @@ window.frameEventsTyping = [
       type: "executeScript",
       executeScript: {
         content: `// 次にタイプするお題を設定して、寿司を流し始める処理
-        const nagashitaSushiCount = context.getUserVariable('nagashitaSushiCount', 0);
+        const nagashitaSushiCount = context.getComponentUserVariable('nagashitaSushiCount', 0);
         // これから出題する単語
-        context.setUserVariable('currentUtsumoji', ['misonikomi', 'kishimen', 'ebifurya'][nagashitaSushiCount]);
-        const currentUtsumoji = context.getUserVariable('currentUtsumoji');
+        context.setComponentUserVariable('currentUtsumoji', ['misonikomi', 'kishimen', 'ebifurya'][nagashitaSushiCount]);
+        const currentUtsumoji = context.getComponentUserVariable('currentUtsumoji');
         context.setTextValue("utsumoji", currentUtsumoji);
 
         // 何文字目まで打ったかをリセットする
-        context.setUserVariable('cursor', 0);
+        context.setComponentUserVariable('cursor', 0);
 
         // これまでに打った文字を空にする
         context.setTextValue('uttamoji', '');  
         // 現在何問目か
-        context.setUserVariable('nagashitaSushiCount', nagashitaSushiCount + 1);
+        context.setComponentUserVariable('nagashitaSushiCount', nagashitaSushiCount + 1);
       `,
       },
     },
@@ -553,9 +553,9 @@ window.frameEventsTyping = [
       type: "executeScript",
       executeScript: {
         content: `// 覚えているスコア情報を取り出して画面に表示する
-        const correctCount = context.getUserVariable('correctCount');
-        const wrongCount = context.getUserVariable('wrongCount');
-        const saraCount = context.getUserVariable('saraCount');
+        const correctCount = context.getComponentUserVariable('correctCount');
+        const wrongCount = context.getComponentUserVariable('wrongCount');
+        const saraCount = context.getComponentUserVariable('saraCount');
 
         context.setTextValue('seiseki', \`正解キー数: \${correctCount} 間違えたキー数: \${wrongCount} 正答数: \${saraCount} \`);  
       `,
