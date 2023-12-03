@@ -2,6 +2,7 @@ const RootController = function () {
   const instance = {};
   instance.clickActions = {};
   instance.timers = {};
+  instance.keydownListeners = {};
 
   document.addEventListener("click", function (event) {
     const clickedFullObjectIds = [];
@@ -57,6 +58,31 @@ const RootController = function () {
   instance.clearUserTimer = function (listenerId) {
     clearInterval(instance.timers[listenerId]?.timerId);
     instance.timers[listenerId] = undefined;
+  };
+
+  instance.registerGlobalKeydownListener = function (
+    listenerId,
+    component,
+    componentUserFunctionName
+  ) {
+    const listener = function (event) {
+      const preventDefault = component.callComponentUserFunction(
+        componentUserFunctionName,
+        {
+          key: event.key,
+        }
+      );
+      if (preventDefault) {
+        event.preventDefault();
+      }
+    };
+    document.addEventListener("keydown", listener);
+    instance.keydownListeners[listenerId] = { listener };
+  };
+  instance.unregisterGlobalKeydownListener = function (listenerId) {
+    if (instance.keydownListeners[listenerId]) {
+      document.removeEventListener(instance.keydownListeners[listenerId]);
+    }
   };
 
   instance.defineUserVariable = function () {};
