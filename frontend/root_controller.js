@@ -54,10 +54,10 @@ const RootController = function () {
         tickCount,
       });
     }, interval);
-    instance.timers[listenerId] = { timerId };
+    instance.timers[listenerId] = timerId;
   };
   instance.clearUserTimer = function (listenerId) {
-    clearInterval(instance.timers[listenerId]?.timerId);
+    clearInterval(instance.timers[listenerId]);
     instance.timers[listenerId] = undefined;
   };
 
@@ -78,12 +78,13 @@ const RootController = function () {
       }
     };
     document.addEventListener("keydown", listener);
-    instance.keydownListeners[listenerId] = { listener };
+    instance.keydownListeners[listenerId] = listener;
   };
   instance.unregisterGlobalKeydownListener = function (listenerId) {
     if (instance.keydownListeners[listenerId]) {
       document.removeEventListener("keydown", instance.keydownListeners[listenerId]);
     }
+    instance.keydownListeners[listenerId] = undefined;
   };
 
   instance.defineUserVariable = function () {};
