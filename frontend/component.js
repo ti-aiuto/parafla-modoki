@@ -63,28 +63,28 @@ const Component = function (
   instance.handleAction = function (action) {
     const context = {
       play() {
-        controller.play();
+        instance.play();
       },
       stop() {
-        controller.stop();
+        instance.stop();
       },
       gotoAndPlay(destination) {
-        controller.gotoAndPlay(destination);
+        instance.gotoAndPlay(destination);
       },
       eraseLayers(depths) {
-        controller.eraseLayers(depths);
+        instance.eraseLayers(depths);
       },
       setUserVariable(key, value, updateBinding = true) {
-        controller.setUserVariable(key, value);
+        instance.setUserVariable(key, value);
       },
       getUserVariable(key, defaultValue) {
-        return controller.getUserVariable(key, defaultValue);
+        return instance.getUserVariable(key, defaultValue);
       },
       setTextValue(objectId, value) {
-        controller.setTextValue(objectId, value);
+        instance.setTextValue(objectId, value);
       },
       getTextValue(objectId) {
-        return controller.getTextValue(objectId);
+        return instance.getTextValue(objectId);
       },
     };
 
@@ -160,6 +160,11 @@ const Component = function (
 
       const event = scheduledFrameEvent.event;
       const depth = event.depth;
+
+      if (event.type === "executeAction") {
+        console.log("executeAction", event.executeAction);
+        instance.handleAction(event.executeAction);
+      }
 
       if (event.type === "putImage" || event.type === "putText") {
         let objectBase = null;
