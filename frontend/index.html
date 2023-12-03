@@ -23,6 +23,10 @@
           instance.registerTimer = function () {};
           instance.unregisterTimer = function () {};
 
+          instance.defineUserVariable = function () {};
+          instance.setUserVariable = function () {};
+          instance.getUserVariable = function () {};
+
           return instance;
         };
 
@@ -65,7 +69,9 @@
         const Renderer = function () {
           const instance = {};
 
+          instance.render = function(screenObjectsManager) {
           // root要素からscreenObjectsManagerを受け取ってrenderする
+          }
 
           return instance;
         };
