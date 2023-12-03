@@ -1,5 +1,23 @@
 window.frameEventsTyping = [
   {
+    type: "executeAction",
+    executeAction: {
+      type: "defineComponentUserFunction",
+      defineComponentUserFunction: {
+        name: "準備画面のキー押下時",
+        content: `// スペースキーが押されたらプレイ画面にいく処理
+        document.onkeydown = function(event) {
+          if (event.key === ' ') {
+            context.gotoAndPlay('プレイ画面');
+            event.preventDefault();
+          }
+        }`,
+      },
+    },
+    frameCount: 0,
+  },
+
+  {
     type: "defineLabel",
     defineLabel: {
       label: "タイトル画面",
@@ -102,15 +120,9 @@ window.frameEventsTyping = [
     type: "executeAction",
     frameCount: 0,
     executeAction: {
-      type: "executeScript",
-      executeScript: {
-        content: `// スペースキーが押されたらプレイ画面にいく処理
-        document.onkeydown = function(event) {
-          if (event.key === ' ') {
-            context.gotoAndPlay('プレイ画面');
-            event.preventDefault();
-          }
-        }`,
+      type: "callComponentUserFunction",
+      callComponentUserFunction: {
+        name: "準備画面のキー押下時",
       },
     },
   },
@@ -547,8 +559,9 @@ window.frameEventsTyping = [
     executeAction: {
       type: "setTextValue",
       setTextValue: {
-        objectId: 'seiseki', 
-        value: '正解キー数: {{correctCount}} 間違えたキー数: {{wrongCount}} 正答数: {{saraCount}}',
+        objectId: "seiseki",
+        value:
+          "正解キー数: {{correctCount}} 間違えたキー数: {{wrongCount}} 正答数: {{saraCount}}",
       },
     },
   },

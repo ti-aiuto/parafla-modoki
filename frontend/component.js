@@ -21,6 +21,7 @@ const Component = function (
   instance.rootInstanceId = "rootDummyHoge";
   instance.renderer = renderer;
   instance.componentUserVariables = {};
+  instance.componentUserFunctions = {};
 
   instance.findAssetById = function (id) {
     return instance.assetsManager.find(id);
@@ -57,7 +58,7 @@ const Component = function (
     // TODO: 本当はここでバリデーションが必要
     if (typeof destination === "string") {
       const label = instance.componentSource.labelToFrameNumber[destination];
-      console.log("ラベル解決", destination, label);
+      console.debug("ラベル解決", destination, label);
       instance.jumpToFrameCount = Number(label);
     } else {
       instance.jumpToFrameCount = destination;
@@ -67,10 +68,10 @@ const Component = function (
 
   instance.setComponentUserVariable = function (key, value) {
     instance.componentUserVariables[key] = JSON.stringify(value);
-    console.log("ユーザ変数設定", key, instance.componentUserVariables[key]);
+    console.debug("ユーザ変数設定", key, instance.componentUserVariables[key]);
   };
   instance.getComponentUserVariable = function (key, defaultValue = undefined) {
-    console.log(
+    console.debug(
       "ユーザ変数取得",
       key,
       instance.componentUserVariables[key],
@@ -83,7 +84,20 @@ const Component = function (
     }
   };
 
-  instance.handleAction = function (action) {
+  instance.defineComponentUserFunction = function (name, content) {
+    console.debug("ユーザ関数定義", name, content);
+    instance.componentUserFunctions[name] = content;
+  };
+
+  instance.callComponentUserFunction = function (name) {
+    const context = instance.createContext();
+    console.debug("ユーザ関数呼び出し", name);
+    const content = instance.componentUserFunctions[name];
+    const func = new Function("context", content);
+    func(context);
+  };
+
+  instance.createContext = function () {
     const context = {
       play() {
         instance.play();
@@ -99,6 +113,12 @@ const Component = function (
       },
       setComponentUserVariable(key, value) {
         instance.setComponentUserVariable(key, value);
+      },
+      defineComponentUserFunction(name, content) {
+        instance.defineComponentUserFunction(name, content);
+      },
+      callComponentUserFunction(name) {
+        instance.callComponentUserFunction(name);
       },
       incrementComponentUserVariable(key) {
         const nextValue = instance.getComponentUserVariable(key) + 1;
@@ -120,6 +140,11 @@ const Component = function (
         return instance.getTextValue(objectId);
       },
     };
+    return context;
+  };
+
+  instance.handleAction = function (action) {
+    const context = instance.createContext();
 
     if (action.type === "eraseLayers") {
       context.eraseLayers(action.eraseLayers.depths);
@@ -133,7 +158,17 @@ const Component = function (
       const func = new Function("context", action.executeScript.content);
       func(context);
     } else if (action.type === "setTextValue") {
-      context.setTextValue(action.setTextValue.objectId, action.setTextValue.value);
+      context.setTextValue(
+        action.setTextValue.objectId,
+        action.setTextValue.value
+      );
+    } else if (action.type === "defineComponentUserFunction") {
+      context.defineComponentUserFunction(
+        action.defineComponentUserFunction.name,
+        action.defineComponentUserFunction.content
+      );
+    } else if (action.type === "callComponentUserFunction") {
+      context.callComponentUserFunction(action.callComponentUserFunction.name);
     } else if (action.type === "putObject") {
       let objectBase = null;
       const putObject = action["putObject"];
