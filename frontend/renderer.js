@@ -82,11 +82,6 @@ const Renderer = function () {
         targetElement.dataset.fullObjectId = object.fullObjectId;
         targetElement.style.zIndex = depth;
         wrapper.appendChild(targetElement);
-        // setOnClickActionListener(
-        //   targetElement,
-        //   object.onClickAction,
-        //   instance.handleAction
-        // );
       }
 
       const layoutOptions = object.layoutOptions;

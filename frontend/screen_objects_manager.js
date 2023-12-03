@@ -3,7 +3,6 @@ const ScreenObjectsManager = function () {
   instance.depthToLayer = {};
 
   instance.eraseLayers = function (depths) {
-    // TODO: 移動
     if (depths.includes("all")) {
       Object.keys(instance.depthToLayer).forEach(function (eachDepth) {
         instance.depthToLayer[eachDepth] = undefined;
@@ -13,6 +12,24 @@ const ScreenObjectsManager = function () {
         instance.depthToLayer[eachDepth] = undefined;
       });
     }
+  };
+
+  instance.findLayersByDepths = function (depths) {
+    const result = [];
+    if (depths.includes("all")) {
+      Object.keys(instance.depthToLayer).forEach(function (eachDepth) {
+        if (instance.depthToLayer[eachDepth]) {
+          result.push(instance.depthToLayer[eachDepth]);
+        }
+      });
+    } else {
+      depths.forEach(function (eachDepth) {
+        if (instance.depthToLayer[eachDepth]) {
+          result.push(instance.depthToLayer[eachDepth]);
+        }
+      });
+    }
+    return result;
   };
 
   return instance;

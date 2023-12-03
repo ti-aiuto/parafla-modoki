@@ -38,7 +38,18 @@ const Component = function (
   };
 
   instance.eraseLayers = function (depths) {
+    // 各種購読中イベントの解除
+    instance.screenObjectsManager
+      .findLayersByDepths(depths)
+      .forEach(function (layer) {
+        if (layer.object) {
+          instance.rootController.unregisterClickAction(
+            layer.object.fullObjectId
+          );
+        }
+      });
     instance.screenObjectsManager.eraseLayers(depths);
+    instance.render();
   };
 
   instance.gotoAndPlay = function (destination) {
