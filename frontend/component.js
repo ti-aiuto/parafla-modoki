@@ -174,7 +174,6 @@ const Component = function (
             fullObjectId: instance.generateFullObjectId(
               scheduledFrameEvent.objectId
             ),
-            rendered: false,
           };
         } else if (event.type === "putText") {
           objectBase = {
