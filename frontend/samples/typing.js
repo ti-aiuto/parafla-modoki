@@ -44,13 +44,18 @@ window.frameEventsTyping = [
         content: `
         const currentUtsumoji = context.getComponentUserVariable('currentUtsumoji');
           if (!currentUtsumoji) {
-            return; // セット前
+            return true; // セット前
           }
           const cursor = context.getComponentUserVariable('cursor');
           const currentChar = currentUtsumoji[cursor];
 
           // TODO: ここでヘボン式など他の入力方法の考慮
-          if (currentChar === args.key) {
+          if (args.key === "Escape") {
+            // やりなおし
+            context.unregisterGlobalKeydownListener('タイピング画面キー押下リスナー');
+            context.clearUserTimer('時間制限タイマー');
+            context.gotoAndPlay('説明画面') 
+          } else  if (currentChar === args.key) {
             // 打った文字が正しい場合
 
             // ここまでに打った位置を一つ進める
@@ -78,6 +83,7 @@ window.frameEventsTyping = [
           } else {
             context.incrementComponentUserVariable('wrongCount');
           }
+          return true;
         `,
       },
     },
