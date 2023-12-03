@@ -228,27 +228,23 @@ window.frameEventsTyping = [
         context.setComponentUserVariable('currentUtsumoji', null);
         context.setComponentUserVariable('cursor', 0);
         context.setComponentUserVariable('saraCount', 0);
-
-        // このイベント内でしか使わない変数は通常のJSの変数
-        let nokoriJikan = 5;
-        let correctCount = 0;
-        let wrongCount = 0;
+        context.setComponentUserVariable('correctCount', 0);
+        context.setComponentUserVariable('wrongCount', 0);
+        context.setComponentUserVariable('nokoriJikan', 5);
 
         function updateNokoriJikan() {
-          context.setTextValue('nokorijikan', nokoriJikan);
+          context.setTextValue('nokorijikan', '{{nokoriJikan}}');
         }
         updateNokoriJikan();
 
         const countDownTimerId = setInterval(function() { 
-          nokoriJikan -= 1;
+          const nokoriJikan = context.decrementComponentUserVariable('nokoriJikan');
           updateNokoriJikan();
           
           if (nokoriJikan <= 0) {
             clearInterval(countDownTimerId);
             document.onkeydown = null;
 
-            context.setComponentUserVariable('correctCount', correctCount);
-            context.setComponentUserVariable('wrongCount', wrongCount);
             context.gotoAndPlay('結果画面') 
           }
         }, 1000);
@@ -266,21 +262,22 @@ window.frameEventsTyping = [
           const cursor = context.getComponentUserVariable('cursor');
           const currentChar = currentUtsumoji[cursor];
 
+          // TODO: ここでヘボン式など他の入力方法の考慮
           if (currentChar === event.key) {
             // 打った文字が正しい場合
-            // TODO: ここでヘボン式など他の入力方法の考慮
 
-            // どこまで打ったかを記憶
-            context.setComponentUserVariable('cursor', cursor + 1);
+            // ここまでに打った位置を一つ進める
+            const nextCursor = context.incrementComponentUserVariable('cursor');
 
             // ここまでで打った文字の表示
-            context.setTextValue('uttamoji', currentUtsumoji.slice(0, cursor + 1));  
+            context.setTextValue('uttamoji', currentUtsumoji.slice(0, nextCursor));  
 
-            correctCount += 1;
-            if (cursor + 1 === currentUtsumoji.length) {
-              // 全部打ち終わった場合
-              const currentSaraCount = context.getComponentUserVariable('saraCount');
-              const nextSaraCount = currentSaraCount + 1;
+            // 正しく打った個数の更新
+            context.incrementComponentUserVariable('correctCount');
+
+            if (nextCursor === currentUtsumoji.length) {
+              // 全部の文字を打ち終わった場合
+              const nextSaraCount = context.incrementComponentUserVariable('saraCount');
               updateSaramaisu();
               // context.gotoAndPlay('寿司を流す');
               if (nextSaraCount === 1) {
@@ -290,10 +287,9 @@ window.frameEventsTyping = [
               } else if (nextSaraCount === 3) {
                 context.gotoAndPlay('皿3枚目');
               } // TODO: 4枚目以降も要考慮 
-              context.setComponentUserVariable('saraCount', currentSaraCount);
             }
           } else {
-            wrongCount += 1;
+            context.incrementComponentUserVariable('wrongCount');
           }
         }
         
@@ -346,7 +342,7 @@ window.frameEventsTyping = [
         // これまでに打った文字を空にする
         context.setTextValue('uttamoji', '');  
         // 現在何問目か
-        context.setComponentUserVariable('nagashitaSushiCount', nagashitaSushiCount + 1);
+        context.incrementComponentUserVariable('nagashitaSushiCount');
       `,
       },
     },
