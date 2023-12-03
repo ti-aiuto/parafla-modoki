@@ -234,7 +234,7 @@ const Component = function (
           depth: event.depth,
           layoutOptions: event.layoutOptions,
           lastKeyFrame: event.lastKeyFrame,
-          frameCount: scheduledFrameEvent.frameCount,
+          frameCount: scheduledFrameEvent.event.frameCount,
           frameCountIndex: scheduledFrameEvent.frameCountInEvent,
           objectId: scheduledFrameEvent.objectId,
         };
