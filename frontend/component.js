@@ -101,6 +101,69 @@ const Component = function (
     } else if (action.type === "executeScript") {
       const func = new Function("context", action.executeScript.content);
       func(context);
+    } else if (action.type === "putObject") {
+      let objectBase = null;
+      const putObject = action["putObject"];
+      // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
+      if (putObject.type === "image") {
+        objectBase = {
+          type: "image",
+          image: structuredClone(
+            instance.findAssetById(putObject.image.resourceId)["image"]
+          ),
+          // onClickAction: event.onClickAction,
+          fullObjectId: instance.generateFullObjectId(putObject.objectId),
+        };
+      } else if (event.type === "putText") {
+        objectBase = {
+          type: "text",
+          text: structuredClone(
+            instance.findAssetById(putObject.text.resourceId)["text"]
+          ),
+          // onClickAction: event.onClickAction,
+          fullObjectId: instance.generateFullObjectId(putObject.objectId),
+        };
+      }
+
+      const depth = putObject.depth;
+      if (putObject.frameCountIndex <= 1) {
+        // 0または1
+        // TODO: ここでdepthあるかの判定
+        instance.screenObjectsManager.depthToLayer[depth] = {
+          object: {
+            ...objectBase,
+            layoutOptions: putObject.layoutOptions,
+          },
+        };
+      } else {
+        const before = putObject.layoutOptions;
+        const after = putObject.lastKeyFrame.layoutOptions;
+
+        // TODO: ここでdepthあるかの判定
+        instance.screenObjectsManager.depthToLayer[depth] = {
+          object: {
+            ...objectBase,
+            layoutOptions: {
+              x:
+                before.x +
+                (putObject.frameCountIndex * (after.x - before.x)) /
+                  putObject.frameCount,
+              y:
+                before.y +
+                (putObject.frameCountIndex * (after.y - before.y)) /
+                  putObject.frameCount,
+              width:
+                before.width +
+                (putObject.frameCountIndex * (after.width - before.width)) /
+                  putObject.frameCount,
+              height:
+                before.height +
+                (putObject.frameCountIndex * (after.height - before.height)) /
+                  putObject.frameCount,
+            },
+          },
+        };
+      }
     }
   };
 
@@ -167,73 +230,32 @@ const Component = function (
       }
 
       if (event.type === "putImage" || event.type === "putText") {
-        let objectBase = null;
-        // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
+        const putObjectBase = {
+          depth: event.depth,
+          layoutOptions: event.layoutOptions,
+          lastKeyFrame: event.lastKeyFrame,
+          frameCount: scheduledFrameEvent.frameCount,
+          frameCountIndex: scheduledFrameEvent.frameCountInEvent,
+          objectId: scheduledFrameEvent.objectId,
+        };
         if (event.type === "putImage") {
-          objectBase = {
-            type: "image",
-            image: structuredClone(
-              instance.findAssetById(event.putImage.resourceId)["image"]
-            ),
-            onClickAction: event.onClickAction,
-            fullObjectId: instance.generateFullObjectId(
-              scheduledFrameEvent.objectId
-            ),
-          };
+          instance.handleAction({
+            type: "putObject",
+            putObject: {
+              ...putObjectBase,
+              type: "image",
+              image: event.putImage,
+            },
+          });
         } else if (event.type === "putText") {
-          objectBase = {
-            type: "text",
-            text: structuredClone(
-              instance.findAssetById(event.putText.resourceId)["text"]
-            ),
-            onClickAction: event.onClickAction,
-            fullObjectId: instance.generateFullObjectId(
-              scheduledFrameEvent.objectId
-            ),
-          };
-        }
-
-        if (scheduledFrameEvent.frameCountInEvent <= 1) {
-          // 0または1
-          // TODO: ここでdepthあるかの判定
-          instance.screenObjectsManager.depthToLayer[depth] = {
-            object: {
-              ...objectBase,
-              layoutOptions: event.layoutOptions,
+          instance.handleAction({
+            type: "putObject",
+            putObject: {
+              ...putObjectBase,
+              type: "text",
+              image: event.putText,
             },
-          };
-        } else {
-          const before = event.layoutOptions;
-          const after = event.lastKeyFrame.layoutOptions;
-
-          // TODO: ここでdepthあるかの判定
-          instance.screenObjectsManager.depthToLayer[depth] = {
-            object: {
-              ...objectBase,
-              layoutOptions: {
-                x:
-                  before.x +
-                  (scheduledFrameEvent.frameCountInEvent *
-                    (after.x - before.x)) /
-                    event.frameCount,
-                y:
-                  before.y +
-                  (scheduledFrameEvent.frameCountInEvent *
-                    (after.y - before.y)) /
-                    event.frameCount,
-                width:
-                  before.width +
-                  (scheduledFrameEvent.frameCountInEvent *
-                    (after.width - before.width)) /
-                    event.frameCount,
-                height:
-                  before.height +
-                  (scheduledFrameEvent.frameCountInEvent *
-                    (after.height - before.height)) /
-                    event.frameCount,
-              },
-            },
-          };
+          });
         }
       }
 
