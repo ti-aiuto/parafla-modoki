@@ -107,7 +107,7 @@ const Component = function (
           // onClickAction: event.onClickAction,
           fullObjectId: instance.generateFullObjectId(putObject.objectId),
         };
-      } else if (event.type === "putText") {
+      } else if (putObject.type === "text") {
         objectBase = {
           type: "text",
           text: structuredClone(
@@ -246,7 +246,7 @@ const Component = function (
             putObject: {
               ...putObjectBase,
               type: "text",
-              image: event.putText,
+              text: event.putText,
             },
           });
         }
