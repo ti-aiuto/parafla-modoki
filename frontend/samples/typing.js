@@ -227,12 +227,12 @@ window.frameEventsTyping = [
         context.setComponentUserVariable('nagashitaSushiCount', 0);
         context.setComponentUserVariable('currentUtsumoji', null);
         context.setComponentUserVariable('cursor', 0);
+        context.setComponentUserVariable('saraCount', 0);
 
         // このイベント内でしか使わない変数は通常のJSの変数
         let nokoriJikan = 5;
         let correctCount = 0;
         let wrongCount = 0;
-        let saraCount = 0;
 
         function updateNokoriJikan() {
           context.setTextValue('nokorijikan', nokoriJikan);
@@ -249,13 +249,12 @@ window.frameEventsTyping = [
 
             context.setComponentUserVariable('correctCount', correctCount);
             context.setComponentUserVariable('wrongCount', wrongCount);
-            context.setComponentUserVariable('saraCount', saraCount);
             context.gotoAndPlay('結果画面') 
           }
         }, 1000);
 
         function updateSaramaisu() {
-          context.setTextValue('saramaisuu', '打った皿の枚数:' + saraCount);
+          context.setTextValue('saramaisuu', '打った皿の枚数:{{saraCount}}');
         }
         updateSaramaisu();
 
@@ -280,16 +279,18 @@ window.frameEventsTyping = [
             correctCount += 1;
             if (cursor + 1 === currentUtsumoji.length) {
               // 全部打ち終わった場合
-              saraCount += 1;
+              const currentSaraCount = context.getComponentUserVariable('saraCount');
+              const nextSaraCount = currentSaraCount + 1;
               updateSaramaisu();
               // context.gotoAndPlay('寿司を流す');
-              if (saraCount === 1) {
+              if (nextSaraCount === 1) {
                 context.gotoAndPlay('皿1枚目');
-              } else if (saraCount === 2) {
+              } else if (nextSaraCount === 2) {
                 context.gotoAndPlay('皿2枚目');
-              } else if (saraCount === 3) {
+              } else if (nextSaraCount === 3) {
                 context.gotoAndPlay('皿3枚目');
               } // TODO: 4枚目以降も要考慮 
+              context.setComponentUserVariable('saraCount', currentSaraCount);
             }
           } else {
             wrongCount += 1;
