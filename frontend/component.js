@@ -89,12 +89,12 @@ const Component = function (
     instance.componentUserFunctions[name] = content;
   };
 
-  instance.callComponentUserFunction = function (name) {
+  instance.callComponentUserFunction = function (name, args = {}) {
     console.debug("ユーザ関数呼び出し", name);
     const content = instance.componentUserFunctions[name];
-    const func = new Function("context", content);
+    const func = new Function("context", "arguments", content);
     const context = instance.createContext();
-    func(context);
+    return func(context, args || {});
   };
 
   instance.createContext = function () {
@@ -117,8 +117,8 @@ const Component = function (
       defineComponentUserFunction(name, content) {
         instance.defineComponentUserFunction(name, content);
       },
-      callComponentUserFunction(name) {
-        instance.callComponentUserFunction(name);
+      callComponentUserFunction(name, args = {}) {
+        return instance.callComponentUserFunction(name, args);
       },
       incrementComponentUserVariable(key) {
         const nextValue = instance.getComponentUserVariable(key) + 1;
@@ -168,7 +168,10 @@ const Component = function (
         action.defineComponentUserFunction.content
       );
     } else if (action.type === "callComponentUserFunction") {
-      context.callComponentUserFunction(action.callComponentUserFunction.name);
+      context.callComponentUserFunction(
+        action.callComponentUserFunction.name,
+        action.callComponentUserFunction.args
+      );
     } else if (action.type === "putObject") {
       let objectBase = null;
       const putObject = action["putObject"];

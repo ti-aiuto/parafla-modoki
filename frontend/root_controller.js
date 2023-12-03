@@ -1,6 +1,7 @@
 const RootController = function () {
   const instance = {};
   instance.clickActions = {};
+  instance.timers = {};
 
   document.addEventListener("click", function (event) {
     const clickedFullObjectIds = [];
@@ -39,8 +40,24 @@ const RootController = function () {
   instance.registerMousedownEvent = function () {};
   instance.unregisterMousedownEvent = function () {};
 
-  instance.registerTimer = function () {};
-  instance.unregisterTimer = function () {};
+  instance.registerTimer = function (
+    listenerId,
+    component,
+    componentUserFunctionName
+  ) {
+    let tickCount = 0;
+    const timerId = setInterval(function () {
+      tickCount++;
+      component.callComponentUserFunction(componentUserFunctionName, {
+        tickCount,
+      });
+    }, interval);
+    instance.timers[listenerId] = { timerId };
+  };
+  instance.unregisterTimer = function (listenerId) {
+    clearInterval(instance.timers[listenerId]?.timerId);
+    instance.timers[listenerId] = undefined;
+  };
 
   instance.defineUserVariable = function () {};
   instance.setUserVariable = function () {};
