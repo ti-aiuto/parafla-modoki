@@ -4,19 +4,6 @@ window.frameEventsTyping = [
     executeAction: {
       type: "defineComponentUserFunction",
       defineComponentUserFunction: {
-        name: "準備画面の表示時",
-        content: `// スペースキーが押されたらプレイ画面にいく処理
-        context.registerGlobalKeydownListener('準備画面リスナー', '準備画面のキー押下時');
-        `,
-      },
-    },
-    frameCount: 0,
-  },
-  {
-    type: "executeAction",
-    executeAction: {
-      type: "defineComponentUserFunction",
-      defineComponentUserFunction: {
         name: "準備画面のキー押下時",
         content: `// スペースキーが押されたらプレイ画面にいく処理
         if (args.key === ' ') {
@@ -257,9 +244,10 @@ window.frameEventsTyping = [
     type: "executeAction",
     frameCount: 0,
     executeAction: {
-      type: "callComponentUserFunction",
-      callComponentUserFunction: {
-        name: "準備画面の表示時",
+      type: "registerGlobalKeydownListener",
+      registerGlobalKeydownListener: {
+        listenerId: "準備画面リスナー",
+        componentUserFunctionName: '準備画面のキー押下時'
       },
     },
   },
