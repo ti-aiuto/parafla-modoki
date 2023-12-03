@@ -223,7 +223,6 @@ window.frameEventsTyping = [
         // タイピング画面の準備(キー操作の検知とカウントダウンの設定など)
 
         // 変数初期化
-        // 他のイベントと共用の変数はユーザ定義変数にしておく
         context.setComponentUserVariable('nagashitaSushiCount', 0);
         context.setComponentUserVariable('currentUtsumoji', null);
         context.setComponentUserVariable('cursor', 0);
