@@ -337,8 +337,7 @@ window.frameEventsTyping = [
         const nagashitaSushiCount = context.getComponentUserVariable('nagashitaSushiCount', 0);
         // これから出題する単語
         context.setComponentUserVariable('currentUtsumoji', ['misonikomi', 'kishimen', 'ebifurya'][nagashitaSushiCount]);
-        const currentUtsumoji = context.getComponentUserVariable('currentUtsumoji');
-        context.setTextValue("utsumoji", currentUtsumoji);
+        context.setTextValue("utsumoji", '{{currentUtsumoji}}');
 
         // 何文字目まで打ったかをリセットする
         context.setComponentUserVariable('cursor', 0);
@@ -552,12 +551,8 @@ window.frameEventsTyping = [
     executeAction: {
       type: "executeScript",
       executeScript: {
-        content: `// 覚えているスコア情報を取り出して画面に表示する
-        const correctCount = context.getComponentUserVariable('correctCount');
-        const wrongCount = context.getComponentUserVariable('wrongCount');
-        const saraCount = context.getComponentUserVariable('saraCount');
-
-        context.setTextValue('seiseki', \`正解キー数: \${correctCount} 間違えたキー数: \${wrongCount} 正答数: \${saraCount} \`);  
+        content: `
+        context.setTextValue('seiseki', '正解キー数: {{correctCount}} 間違えたキー数: {{wrongCount}} 正答数: {{saraCount}}');  
       `,
       },
     },
