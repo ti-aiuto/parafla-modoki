@@ -7,12 +7,6 @@ const ComponentSource = function (scheduledEvents, labelToFrameNumber) {
   return instance;
 };
 
-const ScreenObjectsManager = function () {
-  const instance = {};
-  instance.depthToLayer = {};
-  return instance;
-};
-
 const Compiler = function () {
   const instance = {};
   const range = (start, end) => [...Array(end + 1).keys()].slice(start);

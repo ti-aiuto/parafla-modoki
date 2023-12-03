@@ -37,17 +37,10 @@ const Component = function (
     return `${instance.rootInstanceId}_${objectId}`;
   };
 
-  // instance.eraseLayers = function (depths) {
-  //   if (depths.includes("all")) {
-  //     Object.keys(instance.depthToLayer).forEach(function (eachDepth) {
-  //       instance.depthToLayer[eachDepth] = undefined;
-  //     });
-  //   } else {
-  //     depths.forEach(function (eachDepth) {
-  //       instance.depthToLayer[eachDepth] = undefined;
-  //     });
-  //   }
-  // };
+  instance.eraseLayers = function (depths) {
+    instance.screenObjectsManager.eraseLayers(depths);
+  };
+
   // instance.gotoAndPlay = function (destination) {
   //   // TODO: 本当はここでバリデーションが必要
   //   if (typeof destination === "string") {

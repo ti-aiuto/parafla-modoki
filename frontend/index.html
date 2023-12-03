@@ -2,6 +2,7 @@
 <html>
   <head>
     <script type="text/javascript" src="root_controller.js"></script>
+    <script type="text/javascript" src="screen_objects_manager.js"></script>
     <script type="text/javascript" src="compiler.js"></script>
     <script type="text/javascript" src="component.js"></script>
     <script type="text/javascript" src="renderer.js"></script>
@@ -51,7 +52,7 @@
         const rootController = RootController();
         const component = Component(
           rootController,
-          compiler.compile(window.frameEventsMotionTween),
+          compiler.compile(window.frameEventsDepth),
           ScreenObjectsManager(),
           renderer,
           assetsManager
