@@ -197,6 +197,21 @@ const Component = function (
   };
 
   instance.setTextValue = function (objectId, value) {
+    // 変数の埋め込み処理
+    const valueRemovedWhiteSpaces = (value + "").replace(
+      /{{\s*(\w+?)\s}}/g,
+      "{{$1}}"
+    );
+    const variableNames = [...valueRemovedWhiteSpaces.matchAll(/{{(\w+?)}}/g)];
+    let valueWithVariables = valueRemovedWhiteSpaces;
+    variableNames.forEach(function (variableNameRow) {
+      const variableName = variableNameRow[1];
+      valueWithVariables = valueWithVariables.replace(
+        new RegExp(`{{${variableName}}}`, "g"),
+        instance.getComponentUserVariable(variableName)
+      );
+    });
+
     for ({ object } of Object.values(
       instance.screenObjectsManager.depthToLayer
     )) {
@@ -204,7 +219,7 @@ const Component = function (
         continue;
       }
       if (object.fullObjectId === instance.generateFullObjectId(objectId)) {
-        object.text.content = value;
+        object.text.content = valueWithVariables;
         break;
       }
     }
