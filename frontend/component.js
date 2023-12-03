@@ -41,17 +41,17 @@ const Component = function (
     instance.screenObjectsManager.eraseLayers(depths);
   };
 
-  // instance.gotoAndPlay = function (destination) {
-  //   // TODO: 本当はここでバリデーションが必要
-  //   if (typeof destination === "string") {
-  //     const label = instance.labelToFrameCount[destination];
-  //     console.log("ラベル解決", destination, label);
-  //     instance.jumpToFrameCount = Number(label);
-  //   } else {
-  //     instance.jumpToFrameCount = destination;
-  //   }
-  //   instance.play();
-  // };
+  instance.gotoAndPlay = function (destination) {
+    // TODO: 本当はここでバリデーションが必要
+    if (typeof destination === "string") {
+      const label = instance.componentSource.labelToFrameNumber[destination];
+      console.log("ラベル解決", destination, label);
+      instance.jumpToFrameCount = Number(label);
+    } else {
+      instance.jumpToFrameCount = destination;
+    }
+    instance.play();
+  };
 
   instance.handleAction = function (action) {
     const context = {
@@ -81,8 +81,6 @@ const Component = function (
       },
     };
 
-    // stop, gotoAndPlayはframeCountが1になる
-    // defineLabel, eraseLayersはframeCountは0
     if (action.type === "eraseLayers") {
       context.eraseLayers(action.eraseLayers.depths);
     } else if (action.type === "stop") {
@@ -97,6 +95,7 @@ const Component = function (
     } else if (action.type === "putObject") {
       let objectBase = null;
       const putObject = action["putObject"];
+      const fullObjectId = instance.generateFullObjectId(putObject.objectId);
       // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
       if (putObject.type === "image") {
         objectBase = {
@@ -104,8 +103,7 @@ const Component = function (
           image: structuredClone(
             instance.findAssetById(putObject.image.resourceId)["image"]
           ),
-          // onClickAction: event.onClickAction,
-          fullObjectId: instance.generateFullObjectId(putObject.objectId),
+          fullObjectId,
         };
       } else if (putObject.type === "text") {
         objectBase = {
@@ -113,8 +111,7 @@ const Component = function (
           text: structuredClone(
             instance.findAssetById(putObject.text.resourceId)["text"]
           ),
-          // onClickAction: event.onClickAction,
-          fullObjectId: instance.generateFullObjectId(putObject.objectId),
+          fullObjectId,
         };
       }
 
@@ -156,6 +153,15 @@ const Component = function (
             },
           },
         };
+      }
+      instance.render();
+
+      if (putObject["onClickAction"]) {
+        instance.rootController.registerClickAction(
+          fullObjectId,
+          instance,
+          putObject["onClickAction"]
+        );
       }
     }
   };
@@ -215,7 +221,6 @@ const Component = function (
       }
 
       const event = scheduledFrameEvent.event;
-      const depth = event.depth;
 
       if (event.type === "executeAction") {
         console.log("executeAction", event.executeAction);
@@ -253,8 +258,6 @@ const Component = function (
           });
         }
       }
-
-      instance.render();
     });
 
     instance.currentFrameCount += 1;
