@@ -27,7 +27,6 @@ window.frameEventsTyping = [
         
         if (nokoriJikan <= 0) {
           context.unregisterGlobalKeydownListener('タイピング画面キー押下リスナー');
-
           context.clearUserTimer('時間制限タイマー');
           context.gotoAndPlay('結果画面') 
         }
@@ -192,15 +191,6 @@ window.frameEventsTyping = [
       },
     },
   },
-  // {
-  //   type: "executeAction",
-  //   executeAction: {
-  //     type: "gotoAndPlay",
-  //     gotoAndPlay: {
-  //       destination: "プレイ画面",
-  //     },
-  //   },
-  // },
   {
     type: "executeAction",
     frameCount: 1,
