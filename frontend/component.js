@@ -230,7 +230,9 @@ const Component = function (
           frameCount: scheduledFrameEvent.event.frameCount,
           frameCountIndex: scheduledFrameEvent.frameCountInEvent,
           objectId: scheduledFrameEvent.objectId,
+          onClickAction: scheduledFrameEvent.event.onClickAction,
         };
+
         if (event.type === "putImage") {
           instance.handleAction({
             type: "putObject",
