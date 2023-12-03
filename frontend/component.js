@@ -131,7 +131,7 @@ const Component = function (
         objectBase = {
           type: "image",
           image: structuredClone(
-            instance.findAssetById(putObject.image.resourceId)["image"]
+            instance.findAssetById(putObject.image.assetId)["image"]
           ),
           fullObjectId,
         };
@@ -139,7 +139,7 @@ const Component = function (
         objectBase = {
           type: "text",
           text: structuredClone(
-            instance.findAssetById(putObject.text.resourceId)["text"]
+            instance.findAssetById(putObject.text.assetId)["text"]
           ),
           fullObjectId,
         };
