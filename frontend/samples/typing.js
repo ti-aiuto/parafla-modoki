@@ -233,7 +233,7 @@ window.frameEventsTyping = [
         context.setComponentUserVariable('nokoriJikan', 5);
 
         function updateNokoriJikan() {
-          context.setTextValue('nokorijikan', '{{nokoriJikan}}');
+          context.setTextValue('nokorijikan', '{{nokoriJikan}}秒');
         }
         updateNokoriJikan();
 
@@ -333,7 +333,7 @@ window.frameEventsTyping = [
         content: `// 次にタイプするお題を設定して、寿司を流し始める処理
         const nagashitaSushiCount = context.getComponentUserVariable('nagashitaSushiCount', 0);
         // これから出題する単語
-        context.setComponentUserVariable('currentUtsumoji', ['misonikomi', 'kishimen', 'ebifurya'][nagashitaSushiCount]);
+        context.setComponentUserVariable('currentUtsumoji', ['misonikomi', 'kishimen', 'ebifurya', 'ebisen', 'motsunabe'][nagashitaSushiCount]);
         context.setTextValue("utsumoji", '{{currentUtsumoji}}');
 
         // 何文字目まで打ったかをリセットする
