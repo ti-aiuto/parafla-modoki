@@ -545,11 +545,10 @@ window.frameEventsTyping = [
     type: "executeAction",
     frameCount: 0,
     executeAction: {
-      type: "executeScript",
-      executeScript: {
-        content: `
-        context.setTextValue('seiseki', '正解キー数: {{correctCount}} 間違えたキー数: {{wrongCount}} 正答数: {{saraCount}}');  
-      `,
+      type: "setTextValue",
+      setTextValue: {
+        objectId: 'seiseki', 
+        value: '正解キー数: {{correctCount}} 間違えたキー数: {{wrongCount}} 正答数: {{saraCount}}',
       },
     },
   },

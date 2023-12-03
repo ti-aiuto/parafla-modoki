@@ -132,6 +132,8 @@ const Component = function (
     } else if (action.type === "executeScript") {
       const func = new Function("context", action.executeScript.content);
       func(context);
+    } else if (action.type === "setTextValue") {
+      context.setTextValue(action.setTextValue.objectId, action.setTextValue.value);
     } else if (action.type === "putObject") {
       let objectBase = null;
       const putObject = action["putObject"];
