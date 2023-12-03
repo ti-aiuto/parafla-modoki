@@ -97,8 +97,17 @@ const Component = function (
     return func(context, args || {});
   };
 
-  instance.startUserTimer = function (listenerId, componentUserFunctionName, interval) {
-    console.debug("ユーザタイマー開始", listenerId, componentUserFunctionName, interval);
+  instance.startUserTimer = function (
+    listenerId,
+    componentUserFunctionName,
+    interval
+  ) {
+    console.debug(
+      "ユーザタイマー開始",
+      listenerId,
+      componentUserFunctionName,
+      interval
+    );
     instance.rootController.startUserTimer(
       listenerId,
       instance,
@@ -174,7 +183,11 @@ const Component = function (
         return instance.getTextValue(objectId);
       },
       startUserTimer(listenerId, componentUserFunctionName, interval) {
-        instance.startUserTimer(listenerId, componentUserFunctionName, interval);
+        instance.startUserTimer(
+          listenerId,
+          componentUserFunctionName,
+          interval
+        );
       },
       clearUserTimer(listenerId) {
         instance.clearUserTimer(listenerId);
@@ -220,6 +233,23 @@ const Component = function (
       context.callComponentUserFunction(
         action.callComponentUserFunction.name,
         action.callComponentUserFunction.args
+      );
+    } else if (action.type === "startUserTimer") {
+      context.startUserTimer(
+        action.registerGlobalKeydownListener.listenerId,
+        action.registerGlobalKeydownListener.componentUserFunctionName,
+        action.registerGlobalKeydownListener.interval
+      );
+    } else if (action.type === "clearUserTimer") {
+      context.clearUserTimer(action.clearUserTimer.listenerId);
+    } else if (action.type === "registerGlobalKeydownListener") {
+      context.registerGlobalKeydownListener(
+        action.registerGlobalKeydownListener.listenerId,
+        action.registerGlobalKeydownListener.componentUserFunctionName
+      );
+    } else if (action.type === "unregisterGlobalKeydownListener") {
+      context.registerGlobalKeydownListener(
+        action.unregisterGlobalKeydownListener.listenerId
       );
     } else if (action.type === "putObject") {
       let objectBase = null;
