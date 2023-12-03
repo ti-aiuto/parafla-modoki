@@ -20,6 +20,7 @@ const Component = function (
   );
   instance.rootInstanceId = "rootDummyHoge";
   instance.renderer = renderer;
+  instance.componentUserVariables = {};
 
   instance.findAssetById = function (id) {
     return instance.assetsManager.find(id);
@@ -64,6 +65,24 @@ const Component = function (
     instance.play();
   };
 
+  instance.setComponentUserVariable = function (key, value) {
+    instance.componentUserVariables[key] = JSON.stringify(value);
+    console.log("ユーザ変数設定", key, instance.userVariables[key]);
+  };
+  instance.getComponentUserVariable = function (key, defaultValue = undefined) {
+    console.log(
+      "ユーザ変数取得",
+      key,
+      instance.componentUserVariables[key],
+      defaultValue
+    );
+    if (instance.componentUserVariables[key] !== undefined) {
+      return JSON.parse(instance.componentUserVariables[key]);
+    } else {
+      return defaultValue;
+    }
+  };
+
   instance.handleAction = function (action) {
     const context = {
       play() {
@@ -78,11 +97,11 @@ const Component = function (
       eraseLayers(depths) {
         instance.eraseLayers(depths);
       },
-      setUserVariable(key, value, updateBinding = true) {
-        instance.setUserVariable(key, value);
+      setComponentUserVariable(key, value, updateBinding = true) {
+        instance.setComponentUserVariable(key, value);
       },
-      getUserVariable(key, defaultValue) {
-        return instance.getUserVariable(key, defaultValue);
+      getComponentUserVariable(key, defaultValue) {
+        return instance.getComponentUserVariable(key, defaultValue);
       },
       setTextValue(objectId, value) {
         instance.setTextValue(objectId, value);
@@ -177,34 +196,34 @@ const Component = function (
     }
   };
 
-  // instance.setTextValue = function (objectId, value) {
-  //   for ({ object } of Object.values(instance.depthToLayer)) {
-  //     if (!object) {
-  //       continue;
-  //     }
-  //     if (
-  //       object.fullObjectId === instance.generateFullObjectId(objectId)
-  //     ) {
-  //       object.text.content = value;
-  //       break;
-  //     }
-  //   }
-  //   instance.render();
-  // };
+  instance.setTextValue = function (objectId, value) {
+    for ({ object } of Object.values(
+      instance.screenObjectsManager.depthToLayer
+    )) {
+      if (!object) {
+        continue;
+      }
+      if (object.fullObjectId === instance.generateFullObjectId(objectId)) {
+        object.text.content = value;
+        break;
+      }
+    }
+    instance.render();
+  };
 
-  // instance.getTextValue = function (objectId) {
-  //   for ({ object } of Object.values(instance.depthToLayer)) {
-  //     if (!object) {
-  //       continue;
-  //     }
-  //     if (
-  //       object.fullObjectId === instance.generateFullObjectId(objectId)
-  //     ) {
-  //       return object.text.content;
-  //     }
-  //   }
-  //   return undefined;
-  // };
+  instance.getTextValue = function (objectId) {
+    for ({ object } of Object.values(
+      instance.screenObjectsManager.depthToLayer
+    )) {
+      if (!object) {
+        continue;
+      }
+      if (object.fullObjectId === instance.generateFullObjectId(objectId)) {
+        return object.text.content;
+      }
+    }
+    return undefined;
+  };
 
   instance.render = function () {
     instance.renderer.render(instance.screenObjectsManager);
