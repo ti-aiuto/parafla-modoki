@@ -21,6 +21,27 @@ window.frameEventsTyping = [
     executeAction: {
       type: "defineComponentUserFunction",
       defineComponentUserFunction: {
+        name: "カウントダウンのタイマーtick",
+        content: `
+        const nokoriJikan = context.decrementComponentUserVariable('nokoriJikan');
+        context.setTextValue('nokorijikan', '{{nokoriJikan}}秒');
+        
+        if (nokoriJikan <= 0) {
+          document.onkeydown = null;
+
+          context.clearUserTimer('時間制限タイマー');
+          context.gotoAndPlay('結果画面') 
+        }
+        `,
+      },
+    },
+    frameCount: 0,
+  },
+  {
+    type: "executeAction",
+    executeAction: {
+      type: "defineComponentUserFunction",
+      defineComponentUserFunction: {
         name: "タイピング画面を開いたとき",
         content: `
         // タイピング画面の準備(キー操作の検知とカウントダウンの設定など)
@@ -34,22 +55,10 @@ window.frameEventsTyping = [
         context.setComponentUserVariable('wrongCount', 0);
         context.setComponentUserVariable('nokoriJikan', 5);
 
-        function updateNokoriJikan() {
-          context.setTextValue('nokorijikan', '{{nokoriJikan}}秒');
-        }
-        updateNokoriJikan();
+        // 表示初期化
+        context.setTextValue('nokorijikan', '{{nokoriJikan}}秒');
 
-        const countDownTimerId = setInterval(function() { 
-          const nokoriJikan = context.decrementComponentUserVariable('nokoriJikan');
-          updateNokoriJikan();
-          
-          if (nokoriJikan <= 0) {
-            clearInterval(countDownTimerId);
-            document.onkeydown = null;
-
-            context.gotoAndPlay('結果画面') 
-          }
-        }, 1000);
+        context.startUserTimer('時間制限タイマー', 'カウントダウンのタイマーtick', 1000);
 
         function updateSaramaisu() {
           context.setTextValue('saramaisuu', '打った皿の枚数:{{saraCount}}');

@@ -44,7 +44,8 @@ const RootController = function () {
   instance.startUserTimer = function (
     listenerId,
     component,
-    componentUserFunctionName
+    componentUserFunctionName,
+    interval
   ) {
     let tickCount = 0;
     const timerId = setInterval(function () {

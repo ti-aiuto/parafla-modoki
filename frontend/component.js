@@ -97,12 +97,13 @@ const Component = function (
     return func(context, args || {});
   };
 
-  instance.startUserTimer = function (listenerId, componentUserFunctionName) {
-    console.debug("ユーザタイマー開始", listenerId, componentUserFunctionName);
+  instance.startUserTimer = function (listenerId, componentUserFunctionName, interval) {
+    console.debug("ユーザタイマー開始", listenerId, componentUserFunctionName, interval);
     instance.rootController.startUserTimer(
       listenerId,
       instance,
-      componentUserFunctionName
+      componentUserFunctionName,
+      interval
     );
   };
   instance.clearUserTimer = function (listenerId) {
@@ -172,8 +173,8 @@ const Component = function (
       getTextValue(objectId) {
         return instance.getTextValue(objectId);
       },
-      startUserTimer(listenerId, componentUserFunctionName) {
-        instance.startUserTimer(listenerId, componentUserFunctionName);
+      startUserTimer(listenerId, componentUserFunctionName, interval) {
+        instance.startUserTimer(listenerId, componentUserFunctionName, interval);
       },
       clearUserTimer(listenerId) {
         instance.clearUserTimer(listenerId);
