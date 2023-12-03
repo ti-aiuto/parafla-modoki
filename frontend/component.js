@@ -97,6 +97,39 @@ const Component = function (
     return func(context, args || {});
   };
 
+  instance.startUserTimer = function (listenerId, componentUserFunctionName) {
+    console.debug("ユーザタイマー開始", listenerId, componentUserFunctionName);
+    instance.rootController.startUserTimer(
+      listenerId,
+      instance,
+      componentUserFunctionName
+    );
+  };
+  instance.clearUserTimer = function (listenerId) {
+    console.debug("ユーザタイマー解除", listenerId);
+    instance.rootController.clearUserTimer(listenerId);
+  };
+
+  instance.registerGlobalKeydownListener = function (
+    listenerId,
+    componentUserFunctionName
+  ) {
+    console.debug(
+      "グローバルキー押下リスナー登録",
+      listenerId,
+      componentUserFunctionName
+    );
+    instance.rootController.registerGlobalKeydownListener(
+      listenerId,
+      instance,
+      componentUserFunctionName
+    );
+  };
+  instance.unregisterGlobalKeydownListener = function (listenerId) {
+    console.debug("グローバルキー押下リスナー解除", listenerId);
+    instance.rootController.unregisterGlobalKeydownListener(listenerId);
+  };
+
   instance.createContext = function () {
     const context = {
       play() {
@@ -138,6 +171,21 @@ const Component = function (
       },
       getTextValue(objectId) {
         return instance.getTextValue(objectId);
+      },
+      startUserTimer(listenerId, componentUserFunctionName) {
+        instance.startUserTimer(listenerId, componentUserFunctionName);
+      },
+      clearUserTimer(listenerId) {
+        instance.clearUserTimer(listenerId);
+      },
+      registerGlobalKeydownListener(listenerId, componentUserFunctionName) {
+        instance.registerGlobalKeydownListener(
+          listenerId,
+          componentUserFunctionName
+        );
+      },
+      unregisterGlobalKeydownListener(listenerId) {
+        instance.unregisterGlobalKeydownListener(listenerId);
       },
     };
     return context;
