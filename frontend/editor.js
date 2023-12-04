@@ -77,11 +77,26 @@ function initEditor() {
           return "#FFEEFF";
         }
       },
+      assetRowCss(assetId) {
+        if (assetId === this.selectedAssetId) {
+          return {'color': '#fff', 'background-color': '#0000cd'};
+        }
+      },
+      selectAsset(assetId) {
+        this.selectedAssetId = assetId;
+        this.selectedFrameIndex = null;
+      }, 
+      selectFrameEvent(index) {
+        this.selectedAssetId = null;
+        this.selectedFrameIndex = index;
+      }
     },
     data: {
       frameEvents: null,
       started: false,
       assetsManager: assetsManager,
+      selectedAssetId: null,
+      selectedFrameIndex: null
     },
     mounted() {
       this.selectStory();
