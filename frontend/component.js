@@ -3,8 +3,7 @@ const Component = function (
   componentSource,
   screenObjectsManager,
   renderer,
-  assetsManager,
-  componentUserFunctions
+  assetsManager
 ) {
   const instance = {};
 
@@ -22,7 +21,8 @@ const Component = function (
   instance.rootInstanceId = "rootDummyHoge";
   instance.renderer = renderer;
   instance.componentUserVariables = {};
-  instance.componentUserFunctions = instance.componentSource.componentUserFunctions;
+  instance.componentUserFunctions =
+    instance.componentSource.componentUserFunctions;
 
   instance.findAssetById = function (id) {
     return instance.assetsManager.find(id);
