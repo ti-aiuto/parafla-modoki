@@ -69,15 +69,19 @@ function initEditor() {
         return null;
         // return userResources[resourceId]["text"]["content"];
       },
-      rowBackgroundColor(row) {
+      frameEventRowStyle(row, index) {
+        if (index === this.selectedFrameIndex) {
+          return {'color': '#fff', 'background-color': '#0000cd'};
+        }
+
         if (row["type"] === "defineLabel") {
-          return "#E6FFE9";
+          return {'background-color': "#E6FFE9"};
         }
         if (row["onClickAction"]) {
-          return "#FFEEFF";
+          return {'background-color': "#FFEEFF"};
         }
-      },
-      assetRowCss(assetId) {
+      }, 
+      assetRowStyle(assetId) {
         if (assetId === this.selectedAssetId) {
           return {'color': '#fff', 'background-color': '#0000cd'};
         }

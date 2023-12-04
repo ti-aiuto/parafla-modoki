@@ -71,7 +71,7 @@
                   <th>アセット名</th>
                   <th>種別</th>
                 </tr>
-                <tr v-for="assetId in assetsManager.findAllIds()" @click="selectAsset(assetId)" :style="assetRowCss(assetId)">
+                <tr v-for="assetId in assetsManager.findAllIds()" @click="selectAsset(assetId)" :style="assetRowStyle(assetId)">
                   <td class="asset_table_td">{{assetId}}</td>
                   <td class="asset_table_td">{{assetsManager.find(assetId).name}}</td>
                   <td class="asset_table_td">{{assetsManager.find(assetId).type === 'image' ? '画像' : 'テキスト'}}</td>
@@ -89,12 +89,11 @@
                   <th>イベント<br />種別</th>
                   <th>深度</th>
                   <th>アクション<br />の動作</th>
-                  <th>表示内容</th>
                   <th>クリック時の動作</th>
                 </tr>
                 <tr
                   v-for="(rowItem, index) in frameEvents"
-                  :style="{backgroundColor: rowBackgroundColor(rowItem)}"
+                  :style="frameEventRowStyle(rowItem, index)"
                   @click="selectFrameEvent(index)"
                 >
                   <td class="frame_events_table_td">{{rowItem['scheduledFrameNumber']}}</td>
@@ -111,17 +110,6 @@
       {{rowItem['executeAction']['executeScript']['content']}}</textarea
                         >
                       </template>
-                    </template>
-                  </td>
-                  <td class="frame_events_table_td">
-                    <template v-if="rowItem['type'] === 'putImage'">
-                      <img
-                        :src="resourcePreviewImage(rowItem['putImage']['resourceId'])"
-                        style="width: 150px"
-                      />
-                    </template>
-                    <template v-else-if="rowItem['type'] === 'putText'">
-                      {{ resourcePreviewText(rowItem['putText']['resourceId']) }}
                     </template>
                   </td>
                   <td class="frame_events_table_td">
