@@ -38,10 +38,12 @@ function initEditor() {
           content += `\n「${event["defineComponentUserFunction"]["name"]}」`;
         } else if (event.type === "putImage" || event.type === "putText") {
           if (event.lastKeyFrame) {
-            content += '\n※アニメーションあり';
+            content += "\n※アニメーションあり";
           }
           if (event.objectId) {
-            content += `\n(オブジェクトID: ${event.objectId} アセットID: ${event.putImage?.assetId || event.putText?.assetId})`;
+            content += `\n(オブジェクトID: ${event.objectId} アセットID: ${
+              event.putImage?.assetId || event.putText?.assetId
+            })`;
           }
         }
         return content;
@@ -52,7 +54,7 @@ function initEditor() {
         }
         let content = actionTypeTable[action.type];
         if (action["type"] === "eraseLayers") {
-          content += `\n(深度: ${action["eraseLayers"]["depths"].join(',')})`;
+          content += `\n(深度: ${action["eraseLayers"]["depths"].join(",")})`;
         } else if (action["type"] === "gotoAndPlay") {
           content += `\n(行先: 「${action["gotoAndPlay"]["destination"]}」)`;
         } else if (action["type"] === "setTextValue") {
@@ -70,39 +72,52 @@ function initEditor() {
       },
       frameEventRowStyle(row, index) {
         if (index === this.selectedFrameIndex) {
-          return {'color': '#fff', 'background-color': '#0000cd'};
+          return { color: "#fff", "background-color": "#0000cd" };
         }
 
         if (row["type"] === "defineLabel") {
-          return {'background-color': "#E6FFE9"};
+          return { "background-color": "#E6FFE9" };
         }
         if (row["onClickAction"]) {
-          return {'background-color': "#FFEEFF"};
+          return { "background-color": "#FFEEFF" };
         }
-      }, 
+      },
       assetRowStyle(assetId) {
         if (assetId === this.selectedAssetId) {
-          return {'color': '#fff', 'background-color': '#0000cd'};
+          return { color: "#fff", "background-color": "#0000cd" };
         }
       },
       selectAsset(assetId) {
         this.selectedAssetId = assetId;
         this.selectedFrameIndex = null;
-      }, 
+      },
       selectFrameEvent(index) {
         this.selectedAssetId = null;
         this.selectedFrameIndex = index;
-      }
+      },
+      openPreview() {
+        const iframe = document.createElement("iframe");
+        iframe.src = "about:blank";
+        iframe.onload = function () {
+          const ifdoc = iframe.contentDocument;
+          iframe.contentDocument.open();
+          iframe.contentDocument.close();
+          iframe.frameEvents = structuredClone(this.frameEvents);
+          ifdoc.body.innerHTML = `<script type="text/javascript">alert(123)</script>`;
+        };
+
+        document.body.appendChild(iframe);
+      },
     },
     data: {
       frameEvents: null,
       started: false,
       assetsManager: assetsManager,
       selectedAssetId: null,
-      selectedFrameIndex: null
+      selectedFrameIndex: null,
     },
     mounted() {
       this.selectStory();
-    }
+    },
   });
 }
