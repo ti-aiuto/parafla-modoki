@@ -253,12 +253,14 @@ const Component = function (
           hoverImage: putObject.image.hoverImage,
           activeImage: putObject.image.activeImage,
           fullObjectId,
+          onClickAction: putObject["onClickAction"],
         };
       } else if (putObject.type === "text") {
         objectBase = {
           type: "text",
           text: putObject.text.text,
           fullObjectId,
+          onClickAction: putObject["onClickAction"],
         };
       }
 

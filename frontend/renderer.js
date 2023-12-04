@@ -96,6 +96,15 @@ const Renderer = function () {
             targetElement = document.createElement("div");
           }
         }
+
+        if (object.onClickAction) {
+          targetElement.style.cursor = 'pointer';
+        } else {
+          if (!object.text?.editable) {
+            targetElement.style.cursor = 'default';
+          }
+        }
+
         targetElement.dataset.fullObjectId = object.fullObjectId;
         targetElement.style.zIndex = depth;
         wrapper.appendChild(targetElement);
