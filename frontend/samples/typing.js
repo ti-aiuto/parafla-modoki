@@ -1,147 +1,132 @@
 window.frameEventsTyping = [
   {
-    type: "executeAction",
-    executeAction: {
-      type: "defineComponentUserFunction",
-      defineComponentUserFunction: {
-        name: "準備画面のキー押下時",
-        content: `// スペースキーが押されたらプレイ画面にいく処理
-        if (args.key === ' ') {
-          context.unregisterGlobalKeydownListener('準備画面リスナー');
-          context.gotoAndPlay('プレイ画面');
-          return true;
-        }
-        `,
-      },
+    type: "defineComponentUserFunction",
+    defineComponentUserFunction: {
+      name: "準備画面のキー押下時",
+      content: `// スペースキーが押されたらプレイ画面にいく処理
+      if (args.key === ' ') {
+        context.unregisterGlobalKeydownListener('準備画面リスナー');
+        context.gotoAndPlay('プレイ画面');
+        return true;
+      }
+      `,
     },
     frameCount: 0,
   },
   {
-    type: "executeAction",
-    executeAction: {
-      type: "defineComponentUserFunction",
-      defineComponentUserFunction: {
-        name: "カウントダウンのタイマーtick",
-        content: `const nokoriJikan = context.decrementComponentUserVariable('nokoriJikan');
-        context.setTextValue('nokorijikan', '{{nokoriJikan}}秒');
-        
-        if (nokoriJikan <= 0) {
+    type: "defineComponentUserFunction",
+    defineComponentUserFunction: {
+      name: "カウントダウンのタイマーtick",
+      content: `const nokoriJikan = context.decrementComponentUserVariable('nokoriJikan');
+      context.setTextValue('nokorijikan', '{{nokoriJikan}}秒');
+      
+      if (nokoriJikan <= 0) {
+        context.unregisterGlobalKeydownListener('タイピング画面キー押下リスナー');
+        context.clearUserTimer('時間制限タイマー');
+        context.gotoAndPlay('結果画面') 
+      }
+      `,
+    },
+    frameCount: 0,
+  },
+  {
+    type: "defineComponentUserFunction",
+    defineComponentUserFunction: {
+      name: "タイピング中のキー押下時",
+      content: `
+      const currentUtsumoji = context.getComponentUserVariable('currentUtsumoji');
+        if (!currentUtsumoji) {
+          return true; // セット前
+        }
+        const cursor = context.getComponentUserVariable('cursor');
+        const currentChar = currentUtsumoji[cursor];
+
+        // TODO: ここでヘボン式など他の入力方法の考慮
+        if (args.key === "Escape") {
+          // やりなおし
           context.unregisterGlobalKeydownListener('タイピング画面キー押下リスナー');
           context.clearUserTimer('時間制限タイマー');
-          context.gotoAndPlay('結果画面') 
+          context.gotoAndPlay('説明画面') 
+        } else  if (currentChar === args.key) {
+          // 打った文字が正しい場合
+
+          // ここまでに打った位置を一つ進める
+          const nextCursor = context.incrementComponentUserVariable('cursor');
+
+          // ここまでで打った文字の表示
+          context.setTextValue('uttamoji', currentUtsumoji.slice(0, nextCursor));  
+
+          // 正しく打った個数の更新
+          context.incrementComponentUserVariable('correctCount');
+
+          if (nextCursor === currentUtsumoji.length) {
+            // 全部の文字を打ち終わった場合
+            const nextSaraCount = context.incrementComponentUserVariable('saraCount');
+            context.setTextValue('saramaisuu', '打った皿の枚数:{{saraCount}}');
+
+            if (nextSaraCount === 1) {
+              context.gotoAndPlay('皿1枚目');
+            } else if (nextSaraCount === 2) {
+              context.gotoAndPlay('皿2枚目');
+            } else if (nextSaraCount === 3) {
+              context.gotoAndPlay('皿3枚目');
+            } // TODO: 4枚目以降も要考慮 
+          }
+        } else {
+          context.incrementComponentUserVariable('wrongCount');
         }
-        `,
-      },
-    },
-    frameCount: 0,
-  },
-  {
-    type: "executeAction",
-    executeAction: {
-      type: "defineComponentUserFunction",
-      defineComponentUserFunction: {
-        name: "タイピング中のキー押下時",
-        content: `
-        const currentUtsumoji = context.getComponentUserVariable('currentUtsumoji');
-          if (!currentUtsumoji) {
-            return true; // セット前
-          }
-          const cursor = context.getComponentUserVariable('cursor');
-          const currentChar = currentUtsumoji[cursor];
-
-          // TODO: ここでヘボン式など他の入力方法の考慮
-          if (args.key === "Escape") {
-            // やりなおし
-            context.unregisterGlobalKeydownListener('タイピング画面キー押下リスナー');
-            context.clearUserTimer('時間制限タイマー');
-            context.gotoAndPlay('説明画面') 
-          } else  if (currentChar === args.key) {
-            // 打った文字が正しい場合
-
-            // ここまでに打った位置を一つ進める
-            const nextCursor = context.incrementComponentUserVariable('cursor');
-
-            // ここまでで打った文字の表示
-            context.setTextValue('uttamoji', currentUtsumoji.slice(0, nextCursor));  
-
-            // 正しく打った個数の更新
-            context.incrementComponentUserVariable('correctCount');
-
-            if (nextCursor === currentUtsumoji.length) {
-              // 全部の文字を打ち終わった場合
-              const nextSaraCount = context.incrementComponentUserVariable('saraCount');
-              context.setTextValue('saramaisuu', '打った皿の枚数:{{saraCount}}');
-
-              if (nextSaraCount === 1) {
-                context.gotoAndPlay('皿1枚目');
-              } else if (nextSaraCount === 2) {
-                context.gotoAndPlay('皿2枚目');
-              } else if (nextSaraCount === 3) {
-                context.gotoAndPlay('皿3枚目');
-              } // TODO: 4枚目以降も要考慮 
-            }
-          } else {
-            context.incrementComponentUserVariable('wrongCount');
-          }
-          return true;
-        `,
-      },
-    },
-    frameCount: 0,
-  },
-  {
-    type: "executeAction",
-    executeAction: {
-      type: "defineComponentUserFunction",
-      defineComponentUserFunction: {
-        name: "タイピング画面を開いたとき",
-        content: `
-        // タイピング画面の準備(キー操作の検知とカウントダウンの設定など)
-
-        // 変数初期化
-        context.setComponentUserVariable('nagashitaSushiCount', 0);
-        context.setComponentUserVariable('currentUtsumoji', null);
-        context.setComponentUserVariable('cursor', 0);
-        context.setComponentUserVariable('saraCount', 0);
-        context.setComponentUserVariable('correctCount', 0);
-        context.setComponentUserVariable('wrongCount', 0);
-        context.setComponentUserVariable('nokoriJikan', 5);
-
-        // 表示初期化
-        context.setTextValue('nokorijikan', '{{nokoriJikan}}秒');
-        context.setTextValue('saramaisuu', '打った皿の枚数:{{saraCount}}');
-
-        context.startUserTimer('時間制限タイマー', 'カウントダウンのタイマーtick', 1000);
-        context.registerGlobalKeydownListener('タイピング画面キー押下リスナー', 'タイピング中のキー押下時');
-        
-        // 最初の一問目
-        context.gotoAndPlay('寿司を流す');
+        return true;
       `,
-      },
     },
     frameCount: 0,
   },
   {
-    type: "executeAction",
-    executeAction: {
-      type: "defineComponentUserFunction",
-      defineComponentUserFunction: {
-        name: "次に打つ単語を設定する",
-        content: `// 次にタイプするお題を設定して、寿司を流し始める処理
-        const nagashitaSushiCount = context.getComponentUserVariable('nagashitaSushiCount', 0);
-        // これから出題する単語
-        context.setComponentUserVariable('currentUtsumoji', ['misonikomi', 'kishimen', 'ebifurya', 'ebisen', 'motsunabe'][nagashitaSushiCount]);
-        context.setTextValue("utsumoji", '{{currentUtsumoji}}');
+    type: "defineComponentUserFunction",
+    defineComponentUserFunction: {
+      name: "タイピング画面を開いたとき",
+      content: `
+      // タイピング画面の準備(キー操作の検知とカウントダウンの設定など)
 
-        // 何文字目まで打ったかをリセットする
-        context.setComponentUserVariable('cursor', 0);
+      // 変数初期化
+      context.setComponentUserVariable('nagashitaSushiCount', 0);
+      context.setComponentUserVariable('currentUtsumoji', null);
+      context.setComponentUserVariable('cursor', 0);
+      context.setComponentUserVariable('saraCount', 0);
+      context.setComponentUserVariable('correctCount', 0);
+      context.setComponentUserVariable('wrongCount', 0);
+      context.setComponentUserVariable('nokoriJikan', 5);
 
-        // これまでに打った文字を空にする
-        context.setTextValue('uttamoji', '');  
-        // 現在何問目か
-        context.incrementComponentUserVariable('nagashitaSushiCount');
-        `,
-      },
+      // 表示初期化
+      context.setTextValue('nokorijikan', '{{nokoriJikan}}秒');
+      context.setTextValue('saramaisuu', '打った皿の枚数:{{saraCount}}');
+
+      context.startUserTimer('時間制限タイマー', 'カウントダウンのタイマーtick', 1000);
+      context.registerGlobalKeydownListener('タイピング画面キー押下リスナー', 'タイピング中のキー押下時');
+      
+      // 最初の一問目
+      context.gotoAndPlay('寿司を流す');
+    `,
+    },
+    frameCount: 0,
+  },
+  {
+    type: "defineComponentUserFunction",
+    defineComponentUserFunction: {
+      name: "次に打つ単語を設定する",
+      content: `// 次にタイプするお題を設定して、寿司を流し始める処理
+      const nagashitaSushiCount = context.getComponentUserVariable('nagashitaSushiCount', 0);
+      // これから出題する単語
+      context.setComponentUserVariable('currentUtsumoji', ['misonikomi', 'kishimen', 'ebifurya', 'ebisen', 'motsunabe'][nagashitaSushiCount]);
+      context.setTextValue("utsumoji", '{{currentUtsumoji}}');
+
+      // 何文字目まで打ったかをリセットする
+      context.setComponentUserVariable('cursor', 0);
+
+      // これまでに打った文字を空にする
+      context.setTextValue('uttamoji', '');  
+      // 現在何問目か
+      context.incrementComponentUserVariable('nagashitaSushiCount');
+      `,
     },
     frameCount: 0,
   },
