@@ -1,48 +1,30 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="vue.js" type="text/javascript"></script>
+
     <script type="text/javascript" src="root_controller.js"></script>
     <script type="text/javascript" src="screen_objects_manager.js"></script>
     <script type="text/javascript" src="compiler.js"></script>
     <script type="text/javascript" src="component.js"></script>
     <script type="text/javascript" src="renderer.js"></script>
 
-    <script
-      type="text/javascript"
-      src="./samples/slideshowloop.js"
-    ></script>
-    <script
-      src="./samples/slideshowstop.js"
-      type="text/javascript"
-    ></script>
-    <script
-      src="./samples/slideshowlabel.js"
-      type="text/javascript"
-    ></script>
-    <script
-      src="./samples/motiontween.js"
-      type="text/javascript"
-    ></script>
+    <script type="text/javascript" src="./samples/slideshowloop.js"></script>
+    <script src="./samples/slideshowstop.js" type="text/javascript"></script>
+    <script src="./samples/slideshowlabel.js" type="text/javascript"></script>
+    <script src="./samples/motiontween.js" type="text/javascript"></script>
     <script src="./samples/depth.js" type="text/javascript"></script>
-    <script
-      src="./samples/inputtext.js"
-      type="text/javascript"
-    ></script>
-    <script
-      src="./samples/typing.js"
-      type="text/javascript"
-    ></script>
+    <script src="./samples/inputtext.js" type="text/javascript"></script>
+    <script src="./samples/typing.js" type="text/javascript"></script>
 
     <script type="text/javascript" src="assets.js"></script>
     <script type="text/javascript">
       window.onload = function () {
         const AssetsManager = function () {
           const instance = {};
-
           instance.find = function (id) {
             return window.dummyAssets[id];
           };
-
           return instance;
         };
 
@@ -54,16 +36,27 @@
           rootController,
           compiler.compile(window.frameEventsTyping),
           ScreenObjectsManager(),
-          renderer,
+          renderer
         );
         component.play();
         console.debug(component);
       };
     </script>
-    <style></style>
+    <style>
+      .player_root {
+        width: 640px;
+        height: 480px;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, 0);
+        background-color: white;
+        box-shadow: rgba(0, 0, 0, 0.2) 0 0 30px;
+      }
+    </style>
   </head>
   <body>
-    <div id="frame_count">フレーム番号:</div>
-    <div id="root" style="width: 640px; height: 480px"></div>
+    <div id="vue_root"></div>
+
+    <div id="root" class="player_root"></div>
   </body>
 </html>
