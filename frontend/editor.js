@@ -81,6 +81,7 @@ function initEditor() {
     data: {
       frameEvents: null,
       started: false,
+      assetsManager: assetsManager,
     },
     mounted() {
       this.selectStory();

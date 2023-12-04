@@ -2,6 +2,8 @@ const Renderer = function () {
   const instance = {};
   const depthToLayerWrapper = {};
 
+  instance.objectBuilder = ObjectBuilder();
+
   function setLayoutOptionsToElement(element, layoutOptions) {
     element.style.position = "absolute";
     element.style.width = `${layoutOptions.width}px`;
@@ -114,32 +116,7 @@ const Renderer = function () {
       if (object.type === "image") {
         // 画像の入れ替えは対応しない
       } else if (object.type === "text") {
-        if (object.text.editable) {
-          if (targetElement.value !== object.text.content) {
-            targetElement.value = object.text.content;
-          }
-        } else {
-          if (targetElement.innerHTML !== object.text.content) {
-            targetElement.innerHTML = object.text.content; // XSS
-            object.text.content = targetElement.innerHTML; // ブラウザがinnerHTMLを補正する可能性がありそう
-          }
-        }
-        if (object.onClickAction) {
-          targetElement.style.cursor = "pointer";
-        }
-        // 全部デフォルト値を持った上で上書きしたほうがいい
-        if (object.text.borderWidth) {
-          targetElement.style.borderWidth = `${object.text.borderWidth}px`;
-        }
-        if (object.text.borderStyle) {
-          targetElement.style.borderStyle = object.text.borderStyle;
-        }
-        if (object.text.borderColor) {
-          targetElement.style.borderColor = object.text.borderColor;
-        }
-        if (object.text.backgroundColor) {
-          targetElement.style.backgroundColor = object.text.backgroundColor;
-        }
+        instance.objectBuilder.buildText(targetElement, object.text);
       }
     });
   };
