@@ -65,8 +65,27 @@ const Renderer = function () {
           // styleも削除
           wrapper.removeChild(wrapper.firstChild);
         }
+
+        const styleElement = document.createElement("style");
+        wrapper.appendChild(styleElement);
+
         if (object.type === "image") {
-          targetElement = document.createElement("img");
+          targetElement = document.createElement("div");
+
+          const hover = object.hoverImage?.source
+            ? `[data-full-object-id='${object.fullObjectId}']:hover { background-image: url("${object.hoverImage.source}"); }`
+            : "";
+          const active = object.activeImage?.source
+            ? `[data-full-object-id='${object.fullObjectId}']:active { background-image: url("${object.activeImage.source}"); }`
+            : "";
+
+          styleElement.innerText = `
+        [data-full-object-id='${object.fullObjectId}'] { background-image: url("${object.image.source}"); }
+        ${hover}
+        ${active}
+        `;
+          targetElement.style.backgroundRepeat = "no-repeat";
+          targetElement.style.backgroundSize = "100% 100%";
         } else if (object.type === "text") {
           if (object.text.editable) {
             targetElement = document.createElement("input");
@@ -79,26 +98,7 @@ const Renderer = function () {
         }
         targetElement.dataset.fullObjectId = object.fullObjectId;
         targetElement.style.zIndex = depth;
-        const styleElement = document.createElement("style");
         wrapper.appendChild(targetElement);
-        wrapper.appendChild(styleElement);
-
-        if (object.type === "image") {
-          const hover = object.hoverImage?.source
-            ? `[data-full-object-id='${object.fullObjectId}']:hover { background-image: url("${object.hoverImage.source}"); }`
-            : undefined;
-          const active = object.activeImage?.source
-            ? `[data-full-object-id='${object.fullObjectId}']:active { background-image: url("${object.activeImage.source}"); }`
-            : undefined;
-
-          styleElement.innerText = `
-          [data-full-object-id='${object.fullObjectId}'] { background-image: url("${object.image.source}"); }
-          ${hover}
-          ${active}
-          `;
-          targetElement.style.backgroundRepeat = "no-repeat";
-          targetElement.style.backgroundSize = "100% 100%";
-        }
       }
 
       const layoutOptions = object.layoutOptions;
