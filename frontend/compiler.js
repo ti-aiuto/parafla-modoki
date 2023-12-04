@@ -12,8 +12,10 @@ const ComponentSource = function (
   return instance;
 };
 
-const Compiler = function () {
+const Compiler = function (assetsManager) {
   const instance = {};
+  instance.assetsManager = assetsManager;
+
   const range = (start, end) => [...Array(end + 1).keys()].slice(start);
 
   instance.formetFrameEvents = function (frameEvents) {
@@ -36,7 +38,32 @@ const Compiler = function () {
     const absoluteFrameCountToScheduledFrameEvents = {};
     let currentFrameCount = 1;
 
-    frameEvents.forEach(function (frameEvent) {
+    frameEvents.forEach(function (rawFrameEvent) {
+      const frameEvent = structuredClone(rawFrameEvent);
+      if (frameEvent.type === "putText") {
+        frameEvent["putText"]["text"] = structuredClone(
+          instance.assetsManager.find(frameEvent["putText"].assetId)["text"]
+        );
+      } else if (frameEvent.type === "putImage") {
+        frameEvent["putImage"]["image"] = structuredClone(
+          instance.assetsManager.find(frameEvent["putImage"].assetId)["image"]
+        );
+        if (frameEvent["putImage"].hoverAssetId) {
+          frameEvent["putImage"]["hoverImage"] = structuredClone(
+            instance.assetsManager.find(frameEvent["putImage"].hoverAssetId)[
+              "image"
+            ]
+          );
+        }
+        if (frameEvent["putImage"].activeAssetId) {
+          frameEvent["putImage"]["activeImage"] = structuredClone(
+            instance.assetsManager.find(frameEvent["putImage"].activeAssetId)[
+              "image"
+            ]
+          );
+        }
+      }
+
       const objectId = frameEvent.objectId
         ? frameEvent.objectId
         : "auto" + Math.random(); // 値が未指定の場合もframeEvent内で一律で持てるとよい

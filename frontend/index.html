@@ -47,7 +47,7 @@
         };
 
         const assetsManager = AssetsManager();
-        const compiler = Compiler();
+        const compiler = Compiler(assetsManager);
         const renderer = Renderer();
         const rootController = RootController();
         const component = Component(
@@ -55,7 +55,6 @@
           compiler.compile(window.frameEventsTyping),
           ScreenObjectsManager(),
           renderer,
-          assetsManager,
         );
         component.play();
         console.debug(component);

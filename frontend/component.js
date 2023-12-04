@@ -3,14 +3,12 @@ const Component = function (
   componentSource,
   screenObjectsManager,
   renderer,
-  assetsManager
 ) {
   const instance = {};
 
   instance.rootController = rootController;
   instance.componentSource = componentSource;
   instance.screenObjectsManager = screenObjectsManager;
-  instance.assetsManager = assetsManager;
 
   instance.currentFrameCount = 1;
   instance.jumpToFrameCount = null;
@@ -22,11 +20,7 @@ const Component = function (
   instance.renderer = renderer;
   instance.componentUserVariables = {};
   instance.componentUserFunctions =
-    instance.componentSource.componentUserFunctions;
-
-  instance.findAssetById = function (id) {
-    return instance.assetsManager.find(id);
-  };
+  instance.componentSource.componentUserFunctions;
 
   instance.play = function () {
     instance.stop();
@@ -253,35 +247,17 @@ const Component = function (
       const fullObjectId = instance.generateFullObjectId(putObject.objectId);
       // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
       if (putObject.type === "image") {
-        let hoverImage = undefined;
-        if (putObject.image.hoverAssetId) {
-          hoverImage = structuredClone(
-            instance.findAssetById(putObject.image.hoverAssetId)["image"]
-          );
-        }
-
-        let activeImage = undefined;
-        if (putObject.image.activeAssetId) {
-          activeImage = structuredClone(
-            instance.findAssetById(putObject.image.activeAssetId)["image"]
-          );
-        }
-
         objectBase = {
           type: "image",
-          image: structuredClone(
-            instance.findAssetById(putObject.image.assetId)["image"]
-          ),
-          hoverImage,
-          activeImage,
+          image: putObject.image.image,
+          hoverImage: putObject.image.hoverImage,
+          activeImage: putObject.image.activeImage,
           fullObjectId,
         };
       } else if (putObject.type === "text") {
         objectBase = {
           type: "text",
-          text: structuredClone(
-            instance.findAssetById(putObject.text.assetId)["text"]
-          ),
+          text: putObject.text.text,
           fullObjectId,
         };
       }
