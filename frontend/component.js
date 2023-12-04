@@ -409,7 +409,7 @@ const Component = function (
       const event = scheduledFrameEvent.event;
 
       if (event.type === "executeAction") {
-        console.log("executeAction", event.executeAction);
+        console.debug("executeAction", event.executeAction);
         instance.handleAction(event.executeAction);
       }
 
