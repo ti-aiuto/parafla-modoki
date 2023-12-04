@@ -15,7 +15,6 @@ const Renderer = function () {
     const root = document.getElementById("root");
 
     // TODO: ここの設定値も外から持ってくる
-    root.style.border = "solid 1px #000";
     root.style.width = "640px";
     root.style.height = "480px";
     root.style.position = "relative";
