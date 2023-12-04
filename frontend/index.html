@@ -100,23 +100,8 @@
                   <td class="frame_events_table_td">{{rowItem['frameCount']}}</td>
                   <td class="frame_events_table_td">{{eventTypeI18n(rowItem)}}</td>
                   <td class="frame_events_table_td">{{rowItem['depth']}}</td>
-                  <td  class="frame_events_table_td">
-                    <template v-if="rowItem['executeAction']">
-                      {{actionI18n(rowItem['executeAction'])}}<br />
-                      <template v-if="rowItem['executeAction']['executeScript']">
-                        <textarea
-                          style="width: 250px; height: 200px; font-size: 12px"
-                        >
-      {{rowItem['executeAction']['executeScript']['content']}}</textarea
-                        >
-                      </template>
-                    </template>
-                  </td>
-                  <td class="frame_events_table_td">
-                    <template v-if="rowItem['onClickAction']">
-                      {{actionI18n(rowItem['onClickAction'])}}<br />
-                    </template>
-                  </td>
+                  <td  class="frame_events_table_td">{{actionI18n(rowItem['executeAction'])}}</td>
+                  <td class="frame_events_table_td">{{actionI18n(rowItem['onClickAction'])}}</td>
                 </tr>
               </table>
             </div>

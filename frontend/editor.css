@@ -88,6 +88,7 @@
   padding: 2px 4px;
   cursor: default;
   word-break: break-all;
+  white-space: pre-line;
 }
 .frame_events_table_td:last-of-type {
   border-right-width: 0;

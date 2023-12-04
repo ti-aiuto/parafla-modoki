@@ -33,31 +33,30 @@ function initEditor() {
       eventTypeI18n(event) {
         let content = eventTypeTable[event.type];
         if (event.type === "defineLabel") {
-          content += `(名前: 「${event["defineLabel"]["label"]}」)`;
+          content += `\n「${event["defineLabel"]["label"]}」`;
         } else if (event.type === "defineComponentUserFunction") {
-          content += `(名前: 「${event["defineComponentUserFunction"]["name"]}」)`;
+          content += `\n「${event["defineComponentUserFunction"]["name"]}」`;
         } else if (event.type === "putImage" || event.type === "putText") {
-          // content += `\n(表示位置: ${JSON.stringify(event["layoutOptions"])})`;
           if (event.lastKeyFrame) {
-            content += '※アニメーションあり';
-            // content += `\n(移動先位置: ${JSON.stringify(
-            //   event.lastKeyFrame["layoutOptions"]
-            // )})`;
+            content += '\n※アニメーションあり';
           }
           if (event.objectId) {
-            content += `(オブジェクトID: ${event.objectId})`;
+            content += `\n(オブジェクトID: ${event.objectId} アセットID: ${event.putImage?.assetId || event.putText?.assetId})`;
           }
         }
         return content;
       },
       actionI18n(action) {
+        if (!action) {
+          return undefined;
+        }
         let content = actionTypeTable[action.type];
         if (action["type"] === "eraseLayers") {
-          content += `(深度: ${action["eraseLayers"]["depths"]})`;
+          content += `\n(深度: ${action["eraseLayers"]["depths"].join(',')})`;
         } else if (action["type"] === "gotoAndPlay") {
-          content += `(行先: 「${action["gotoAndPlay"]["destination"]}」)`;
+          content += `\n(行先: 「${action["gotoAndPlay"]["destination"]}」)`;
         } else if (action["type"] === "setTextValue") {
-          content += `(対象: ${action["setTextValue"]["objectId"]})`;
+          content += `\n(対象: ${action["setTextValue"]["objectId"]})`;
         }
         return content;
       },
