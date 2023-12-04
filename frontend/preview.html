@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Preview</title>
+
+    <script type="text/javascript" src="root_controller.js"></script>
+    <script type="text/javascript" src="screen_objects_manager.js"></script>
+    <script type="text/javascript" src="compiler.js"></script>
+    <script type="text/javascript" src="component.js"></script>
+    <script type="text/javascript" src="object_builder.js"></script>
+    <script type="text/javascript" src="renderer.js"></script>
+
+    <script type="text/javascript" src="assets.js"></script>
+    <script type="text/javascript">
+      const AssetsManager = function () {
+        const instance = {};
+        instance.find = function (id) {
+          return window.dummyAssets[id];
+        };
+        instance.findAllIds = function () {
+          return Object.keys(window.dummyAssets);
+        };
+        return instance;
+      };
+      const assetsManager = AssetsManager();
+    </script>
+    <script type="text/javascript">
+      function load() {
+        const compiler = Compiler(assetsManager);
+        const renderer = Renderer();
+        const rootController = RootController();
+        const component = Component(
+          rootController,
+          compiler.compile(window.frameEvents),
+          ScreenObjectsManager(),
+          renderer
+        );
+        component.play();
+        console.debug(component);
+      }
+
+      let firstEvent = true;
+      window.addEventListener("message", function (e) {
+        if (firstEvent) {
+          window.frameEvents = JSON.parse(e.data);
+          load();
+        }
+        firstEvent = false;
+      });
+    </script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" class="player_root"></div>
+  </body>
+</html>

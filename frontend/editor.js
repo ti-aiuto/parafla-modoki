@@ -96,17 +96,16 @@ function initEditor() {
         this.selectedFrameIndex = index;
       },
       openPreview() {
-        const iframe = document.createElement("iframe");
-        iframe.src = "about:blank";
-        iframe.onload = function () {
-          const ifdoc = iframe.contentDocument;
-          iframe.contentDocument.open();
-          iframe.contentDocument.close();
-          iframe.frameEvents = structuredClone(this.frameEvents);
-          ifdoc.body.innerHTML = `<script type="text/javascript">alert(123)</script>`;
-        };
-
-        document.body.appendChild(iframe);
+        const previewWindow = open("./preview.html", "preview");
+        // 受け取れてるかわからないので繰り返し送信する
+        let count = 0;
+        const timerId = setInterval(() => {
+          previewWindow.postMessage(JSON.stringify(this.frameEvents), "*");
+          count++;
+          if (count >= 5) {
+            clearInterval(timerId);
+          }
+        }, 1000);
       },
     },
     data: {
