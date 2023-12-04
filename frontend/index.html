@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Editor</title>
     <script src="vue.js" type="text/javascript"></script>
 
     <script type="text/javascript" src="root_controller.js"></script>
@@ -57,7 +58,12 @@
     <div id="vue_root">
       <div class="editor_layout">
         <div class="editor_menu">
-          ここにメニュー
+          <button>イベントを追加</button>
+          <button>イベントを編集</button>
+          <button>イベントを削除</button>
+          <button>イベントを下に移動</button>
+          <button>イベントを上に移動</button>
+          <button>再生</button>
         </div>
         <div class="editor_columns">
           <div class="editor_left_column">
@@ -111,10 +117,7 @@
         </div>
       </div>
 
-
       <div style="display: none;;">
-        <button onclick="window.location.reload()">リロード</button>
-        <button @click="start" :disabled="!frameEvents || started">再生</button>
         <ul>
           <li>
             <button
