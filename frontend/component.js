@@ -206,9 +206,6 @@ const Component = function (
       context.play();
     } else if (action.type === "gotoAndPlay") {
       context.gotoAndPlay(action.gotoAndPlay.destination);
-    } else if (action.type === "executeScript") {
-      const func = new Function("context", action.executeScript.content);
-      func(context);
     } else if (action.type === "setTextValue") {
       context.setTextValue(
         action.setTextValue.objectId,

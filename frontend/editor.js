@@ -1,6 +1,7 @@
 function initEditor() {
   const eventTypeTable = {
     defineLabel: "ラベルを定義",
+    defineComponentUserFunction: "ユーザ関数を定義",
     executeAction: "アクションを実行",
     putImage: "画像を表示",
     putText: "テキストを表示",
@@ -8,9 +9,9 @@ function initEditor() {
   };
   const actionTypeTable = {
     eraseLayers: "指定深度を消去",
-    executeScript: "スクリプトを実行",
     stop: "停止",
-    gotoAndPlay: "指定フレームorラベルにジャンプして再生",
+    gotoAndPlay: "指定位置にジャンプして再生",
+    setTextValue: "テキストの表示内容を更新",
   };
 
   new Vue({
@@ -32,16 +33,19 @@ function initEditor() {
       eventTypeI18n(event) {
         let content = eventTypeTable[event.type];
         if (event.type === "defineLabel") {
-          content += `\n(ラベル名: 「${event["defineLabel"]["label"]}」)`;
+          content += `(名前: 「${event["defineLabel"]["label"]}」)`;
+        } else if (event.type === "defineComponentUserFunction") {
+          content += `(名前: 「${event["defineComponentUserFunction"]["name"]}」)`;
         } else if (event.type === "putImage" || event.type === "putText") {
-          content += `\n(表示位置: ${JSON.stringify(event["layoutOptions"])})`;
+          // content += `\n(表示位置: ${JSON.stringify(event["layoutOptions"])})`;
           if (event.lastKeyFrame) {
-            content += `\n(移動先位置: ${JSON.stringify(
-              event.lastKeyFrame["layoutOptions"]
-            )})`;
+            content += '※アニメーションあり';
+            // content += `\n(移動先位置: ${JSON.stringify(
+            //   event.lastKeyFrame["layoutOptions"]
+            // )})`;
           }
           if (event.objectId) {
-            content += `\n(オブジェクトID: ${event.objectId})`;
+            content += `(オブジェクトID: ${event.objectId})`;
           }
         }
         return content;
@@ -49,11 +53,11 @@ function initEditor() {
       actionI18n(action) {
         let content = actionTypeTable[action.type];
         if (action["type"] === "eraseLayers") {
-          content += `\n(深度: ${action["eraseLayers"]["depths"]})`;
+          content += `(深度: ${action["eraseLayers"]["depths"]})`;
         } else if (action["type"] === "gotoAndPlay") {
-          content += `\n(行先: 「${action["gotoAndPlay"]["destination"]}」)`;
-        } else if (action["type"] === "executeScript") {
-          content += `(スクリプトの内容: )`;
+          content += `(行先: 「${action["gotoAndPlay"]["destination"]}」)`;
+        } else if (action["type"] === "setTextValue") {
+          content += `(対象: ${action["setTextValue"]["objectId"]})`;
         }
         return content;
       },
