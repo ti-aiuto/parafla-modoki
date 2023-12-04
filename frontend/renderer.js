@@ -39,6 +39,10 @@ const Renderer = function () {
         if (wrapper.firstChild) {
           wrapper.removeChild(wrapper.firstChild);
         }
+        if (wrapper.firstChild) {
+          // styleも削除
+          wrapper.removeChild(wrapper.firstChild);
+        }
         return;
       }
 
@@ -56,6 +60,10 @@ const Renderer = function () {
         if (wrapper.firstChild) {
           wrapper.removeChild(wrapper.firstChild);
         }
+        if (wrapper.firstChild) {
+          // styleも削除
+          wrapper.removeChild(wrapper.firstChild);
+        }
         if (object.type === "image") {
           targetElement = document.createElement("img");
         } else if (object.type === "text") {
@@ -70,13 +78,33 @@ const Renderer = function () {
         }
         targetElement.dataset.fullObjectId = object.fullObjectId;
         targetElement.style.zIndex = depth;
+        const styleElement = document.createElement("style");
+        targetElement.dataset.associatedFullObjectId = object.fullObjectId;
         wrapper.appendChild(targetElement);
+        wrapper.appendChild(styleElement);
+
+        if (object.type === "image") {
+          const hover = object.hoverImage?.source
+            ? `[data-full-object-id='${object.fullObjectId}']:hover { background-image: url("${object.hoverImage.source}"); }`
+            : undefined;
+          const active = object.activeImage?.source
+            ? `[data-full-object-id='${object.fullObjectId}']:active { background-image: url("${object.activeImage.source}"); }`
+            : undefined;
+
+          styleElement.innerText = `
+          [data-full-object-id='${object.fullObjectId}'] { background-image: url("${object.image.source}"); }
+          ${hover}
+          ${active}
+          `;
+          styleElement.style.backgroundRepeat = "no-repeat";
+          styleElement.style.backgroundSize = "100% 100%";
+        }
       }
 
       const layoutOptions = object.layoutOptions;
       setLayoutOptionsToElement(targetElement, layoutOptions);
       if (object.type === "image") {
-        targetElement.src = object.image.source;
+        // 画像の入れ替えは対応しない
       } else if (object.type === "text") {
         if (object.text.editable) {
           if (targetElement.value !== object.text.content) {
