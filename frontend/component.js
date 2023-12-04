@@ -2,7 +2,7 @@ const Component = function (
   rootController,
   componentSource,
   screenObjectsManager,
-  renderer,
+  renderer
 ) {
   const instance = {};
 
@@ -20,7 +20,7 @@ const Component = function (
   instance.renderer = renderer;
   instance.componentUserVariables = {};
   instance.componentUserFunctions =
-  instance.componentSource.componentUserFunctions;
+    instance.componentSource.componentUserFunctions;
 
   instance.play = function () {
     instance.stop();
