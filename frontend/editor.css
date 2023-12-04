@@ -1,0 +1,94 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.player_root {
+  width: 640px;
+  height: 480px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 0 30px;
+}
+
+#vue_root {
+  height: 100vh;
+}
+
+.editor_layout {
+  flex-direction: column;
+  height: 100vh;
+}
+
+.editor_menu {
+  height: 40px;
+  border-bottom: solid 3px #aaa;
+  box-sizing: border-box;
+}
+
+.editor_columns {
+  display: flex;
+  height: calc(100% - 40px);
+}
+.editor_left_column {
+  width: 350px;
+  border-right: solid 3px #aaa;
+  display: flex;
+  flex-direction: column;
+}
+.editor_left_column_top {
+  height: 200px;
+  border-bottom: solid 3px #aaa;
+  flex-shrink: 0;
+}
+.editor_left_column_bottom {
+  flex: 1;
+  overflow: auto;
+}
+
+.editor_right_column {
+  flex: 1;
+  overflow: auto;
+}
+
+.asset_table {
+  width: 100%;
+  font-size: 12px;
+  border-collapse: collapse;
+  color: #333;
+}
+.asset_table_th {
+  font-size: 10px;
+  border-bottom: solid 1px #aaa;
+}
+.asset_table_td {
+  border-bottom: solid 1px #dadada;
+  border-right: solid 1px #dadada;
+  padding: 2px 4px;
+  cursor: default;
+}
+.asset_table_td:last-of-type {
+  border-right-width: 0;
+}
+
+.frame_events_table {
+  width: 100%;
+  font-size: 12px;
+  border-collapse: collapse;
+  color: #333;
+}
+.frame_events_table_th {
+  font-size: 10px;
+  border-bottom: solid 1px #aaa;
+}
+.frame_events_table_td {
+  border-bottom: solid 1px #dadada;
+  border-right: solid 1px #dadada;
+  padding: 2px 4px;
+  cursor: default;
+  word-break: break-all;
+}
+.frame_events_table_td:last-of-type {
+  border-right-width: 0;
+}
