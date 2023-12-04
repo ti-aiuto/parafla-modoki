@@ -69,8 +69,19 @@
       }
 
       .editor_layout {
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      .editor_menu{
+        height: 40px;
+        border-bottom: solid 3px #aaa;
+        box-sizing: border-box;
+      }
+      
+      .editor_columns {
         display: flex;
-        height: 100%;;
+        height: calc(100% - 40px);
       }
       .editor_left_column {
         width: 350px;
@@ -79,11 +90,13 @@
         flex-direction: column;
       }
       .editor_left_column_top {
-        height: 300px;
-        border-bottom: solid 3px #aaa;;
+        height: 200px;
+        border-bottom: solid 3px #aaa;
+        flex-shrink: 0;
       }
       .editor_left_column_bottom {
-        
+        flex: 1;
+        overflow: auto;;
       }
 
       .editor_right_column {
@@ -118,85 +131,91 @@
 
     <div id="vue_root">
       <div class="editor_layout">
-        <div class="editor_left_column">
-          <div class="editor_left_column_top">
-
-          </div>
-          <div class="editor_left_column_bottom">
-            <table class="asset_table">
-              <tr class="asset_table_th">
-                <th style="width: 45px;">アセットID</th>
-                <th>アセット名</th>
-                <th>種別</th>
-              </tr>
-              <tr v-for="assetId in assetsManager.findAllIds()">
-                <td class="asset_table_td">{{assetId}}</td>
-                <td class="asset_table_td">{{assetsManager.find(assetId).name}}</td>
-                <td class="asset_table_td">{{assetsManager.find(assetId).type === 'image' ? '画像' : 'テキスト'}}</td>
-              </tr>    
-            </table>
-          </div>
+        <div class="editor_menu">
+          ここにメニュー
         </div>
-        <div class="editor_right_column">
-          
-          <div v-if="frameEvents">
-            <table style="font-size: 14px; white-space: pre-line">
-              <tr>
-                <th>フレーム<br />番号</th>
-                <th>フレーム<br />カウント</th>
-                <th>イベント<br />種別</th>
-                <th>深度</th>
-                <th>アクション<br />の動作</th>
-                <th>表示内容</th>
-                <th>クリック時の動作</th>
-              </tr>
-              <tr
-                v-for="(rowItem, index) in frameEvents"
-                :style="{backgroundColor: rowBackgroundColor(rowItem)}"
-              >
-                <td>{{rowItem['scheduledFrameNumber']}}</td>
-                <td>{{rowItem['frameCount']}}</td>
-                <td style="word-break: break-all">{{eventTypeI18n(rowItem)}}</td>
-                <td>{{rowItem['depth']}}</td>
-                <td style="word-break: break-all">
-                  <template v-if="rowItem['executeAction']">
-                    {{actionI18n(rowItem['executeAction'])}}<br />
-                    <template v-if="rowItem['executeAction']['executeScript']">
-                      <textarea
-                        style="width: 250px; height: 200px; font-size: 12px"
-                      >
-    {{rowItem['executeAction']['executeScript']['content']}}</textarea
-                      >
-                    </template>
-                  </template>
-                </td>
-                <td>
-                  <template v-if="rowItem['type'] === 'putImage'">
-                    <img
-                      :src="resourcePreviewImage(rowItem['putImage']['resourceId'])"
-                      style="width: 150px"
-                    />
-                  </template>
-                  <template v-else-if="rowItem['type'] === 'putText'">
-                    {{ resourcePreviewText(rowItem['putText']['resourceId']) }}
-                  </template>
-                </td>
-                <td>
-                  <template v-if="rowItem['onClickAction']">
-                    {{actionI18n(rowItem['onClickAction'])}}<br />
-                    <template v-if="rowItem['onClickAction']['executeScript']">
-                      <textarea
-                        style="width: 300px; height: 200px; font-size: 12px"
-                      >
-    {{rowItem['onClickAction']['executeScript']['content']}}</textarea
-                      >
-                    </template>
-                  </template>
-                </td>
-              </tr>
-            </table>
+        <div class="editor_columns">
+          <div class="editor_left_column">
+            <div class="editor_left_column_top">
+  
+            </div>
+            <div class="editor_left_column_bottom">
+              <table class="asset_table">
+                <tr class="asset_table_th">
+                  <th style="width: 45px;">アセットID</th>
+                  <th>アセット名</th>
+                  <th>種別</th>
+                </tr>
+                <tr v-for="assetId in assetsManager.findAllIds()">
+                  <td class="asset_table_td">{{assetId}}</td>
+                  <td class="asset_table_td">{{assetsManager.find(assetId).name}}</td>
+                  <td class="asset_table_td">{{assetsManager.find(assetId).type === 'image' ? '画像' : 'テキスト'}}</td>
+                </tr>    
+              </table>
+            </div>
           </div>
-    
+          <div class="editor_right_column">
+            
+            <div v-if="frameEvents">
+              <table style="font-size: 14px; white-space: pre-line">
+                <tr>
+                  <th>フレーム<br />番号</th>
+                  <th>フレーム<br />カウント</th>
+                  <th>イベント<br />種別</th>
+                  <th>深度</th>
+                  <th>アクション<br />の動作</th>
+                  <th>表示内容</th>
+                  <th>クリック時の動作</th>
+                </tr>
+                <tr
+                  v-for="(rowItem, index) in frameEvents"
+                  :style="{backgroundColor: rowBackgroundColor(rowItem)}"
+                >
+                  <td>{{rowItem['scheduledFrameNumber']}}</td>
+                  <td>{{rowItem['frameCount']}}</td>
+                  <td style="word-break: break-all">{{eventTypeI18n(rowItem)}}</td>
+                  <td>{{rowItem['depth']}}</td>
+                  <td style="word-break: break-all">
+                    <template v-if="rowItem['executeAction']">
+                      {{actionI18n(rowItem['executeAction'])}}<br />
+                      <template v-if="rowItem['executeAction']['executeScript']">
+                        <textarea
+                          style="width: 250px; height: 200px; font-size: 12px"
+                        >
+      {{rowItem['executeAction']['executeScript']['content']}}</textarea
+                        >
+                      </template>
+                    </template>
+                  </td>
+                  <td>
+                    <template v-if="rowItem['type'] === 'putImage'">
+                      <img
+                        :src="resourcePreviewImage(rowItem['putImage']['resourceId'])"
+                        style="width: 150px"
+                      />
+                    </template>
+                    <template v-else-if="rowItem['type'] === 'putText'">
+                      {{ resourcePreviewText(rowItem['putText']['resourceId']) }}
+                    </template>
+                  </td>
+                  <td>
+                    <template v-if="rowItem['onClickAction']">
+                      {{actionI18n(rowItem['onClickAction'])}}<br />
+                      <template v-if="rowItem['onClickAction']['executeScript']">
+                        <textarea
+                          style="width: 300px; height: 200px; font-size: 12px"
+                        >
+      {{rowItem['onClickAction']['executeScript']['content']}}</textarea
+                        >
+                      </template>
+                    </template>
+                  </td>
+                </tr>
+              </table>
+            </div>
+      
+          </div>
+      
         </div>
       </div>
 
