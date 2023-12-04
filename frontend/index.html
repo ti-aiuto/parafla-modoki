@@ -16,8 +16,10 @@
     <script src="./samples/depth.js" type="text/javascript"></script>
     <script src="./samples/inputtext.js" type="text/javascript"></script>
     <script src="./samples/typing.js" type="text/javascript"></script>
-
     <script type="text/javascript" src="assets.js"></script>
+
+    <script src="editor.js" type="text/javascript"></script>
+
     <script type="text/javascript">
       window.onload = function () {
         const AssetsManager = function () {
@@ -40,9 +42,15 @@
         );
         component.play();
         console.debug(component);
+
+        initEditor();
       };
     </script>
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
       .player_root {
         width: 640px;
         height: 480px;
@@ -55,8 +63,128 @@
     </style>
   </head>
   <body>
-    <div id="vue_root"></div>
+    <div id="root" class="player_root" style="display: none;"></div>
 
-    <div id="root" class="player_root"></div>
-  </body>
+    <div id="vue_root">
+      <div style="display: none;;">
+        <button onclick="window.location.reload()">リロード</button>
+        <button @click="start" :disabled="!frameEvents || started">再生</button>
+        <ul>
+          <li>
+            <button
+              @click="selectStory('frameEventsSlideshowLoop')"
+              :disabled="started"
+            >
+              スライドショーループ
+            </button>
+          </li>
+          <li>
+            <button
+              @click="selectStory('frameEventsSlideshowStop')"
+              :disabled="started"
+            >
+              スライドショー停止
+            </button>
+          </li>
+          <li>
+            <button
+              @click="selectStory('frameEventsSlideshowLabel')"
+              :disabled="started"
+            >
+              スライドショーラベル
+            </button>
+          </li>
+          <li>
+            <button
+              @click="selectStory('frameEventsMotionTween')"
+              :disabled="started"
+            >
+              モーショントゥイーン
+            </button>
+          </li>
+          <li>
+            <button
+              @click="selectStory('frameEventsDepth')"
+              :disabled="started"
+            >
+              深度
+            </button>
+          </li>
+          <li>
+            <button
+              @click="selectStory('frameEventsInputText')"
+              :disabled="started"
+            >
+              テキスト入力
+            </button>
+          </li>
+          <li>
+            <button
+              @click="selectStory('frameEventsTyping')"
+              :disabled="started"
+            >
+              タイピング
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div v-if="frameEvents">
+        <table style="font-size: 14px; white-space: pre-line">
+          <tr>
+            <th>フレーム<br />番号</th>
+            <th>フレーム<br />カウント</th>
+            <th>イベント<br />種別</th>
+            <th>深度</th>
+            <th>アクション<br />の動作</th>
+            <th>表示内容</th>
+            <th>クリック時の動作</th>
+          </tr>
+          <tr
+            v-for="(rowItem, index) in frameEvents"
+            :style="{backgroundColor: rowBackgroundColor(rowItem)}"
+          >
+            <td>{{rowItem['scheduledFrameNumber']}}</td>
+            <td>{{rowItem['frameCount']}}</td>
+            <td style="word-break: break-all">{{eventTypeI18n(rowItem)}}</td>
+            <td>{{rowItem['depth']}}</td>
+            <td style="word-break: break-all">
+              <template v-if="rowItem['executeAction']">
+                {{actionI18n(rowItem['executeAction'])}}<br />
+                <template v-if="rowItem['executeAction']['executeScript']">
+                  <textarea
+                    style="width: 250px; height: 200px; font-size: 12px"
+                  >
+{{rowItem['executeAction']['executeScript']['content']}}</textarea
+                  >
+                </template>
+              </template>
+            </td>
+            <td>
+              <template v-if="rowItem['type'] === 'putImage'">
+                <img
+                  :src="resourcePreviewImage(rowItem['putImage']['resourceId'])"
+                  style="width: 150px"
+                />
+              </template>
+              <template v-else-if="rowItem['type'] === 'putText'">
+                {{ resourcePreviewText(rowItem['putText']['resourceId']) }}
+              </template>
+            </td>
+            <td>
+              <template v-if="rowItem['onClickAction']">
+                {{actionI18n(rowItem['onClickAction'])}}<br />
+                <template v-if="rowItem['onClickAction']['executeScript']">
+                  <textarea
+                    style="width: 300px; height: 200px; font-size: 12px"
+                  >
+{{rowItem['onClickAction']['executeScript']['content']}}</textarea
+                  >
+                </template>
+              </template>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+    </body>
 </html>
