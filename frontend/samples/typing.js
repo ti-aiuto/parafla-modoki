@@ -94,7 +94,7 @@ window.frameEventsTyping = [
       context.setComponentUserVariable('saraCount', 0);
       context.setComponentUserVariable('correctCount', 0);
       context.setComponentUserVariable('wrongCount', 0);
-      context.setComponentUserVariable('nokoriJikan', 5);
+      context.setComponentUserVariable('nokoriJikan', 10);
 
       // 表示初期化
       context.setTextValue('nokorijikan', '{{nokoriJikan}}秒');

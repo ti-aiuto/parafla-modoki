@@ -30,6 +30,7 @@ const Renderer = function () {
         // TODO: ここでposition: absolute, zindex, width, height設定
         root.appendChild(newWrapper);
         depthToLayerWrapper[depth] = newWrapper;
+        newWrapper.dataset.depth = depth;
       }
 
       const wrapper = depthToLayerWrapper[depth];
@@ -79,7 +80,6 @@ const Renderer = function () {
         targetElement.dataset.fullObjectId = object.fullObjectId;
         targetElement.style.zIndex = depth;
         const styleElement = document.createElement("style");
-        targetElement.dataset.associatedFullObjectId = object.fullObjectId;
         wrapper.appendChild(targetElement);
         wrapper.appendChild(styleElement);
 
@@ -96,8 +96,8 @@ const Renderer = function () {
           ${hover}
           ${active}
           `;
-          styleElement.style.backgroundRepeat = "no-repeat";
-          styleElement.style.backgroundSize = "100% 100%";
+          targetElement.style.backgroundRepeat = "no-repeat";
+          targetElement.style.backgroundSize = "100% 100%";
         }
       }
 
