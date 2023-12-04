@@ -3,7 +3,8 @@ const Component = function (
   componentSource,
   screenObjectsManager,
   renderer,
-  assetsManager
+  assetsManager,
+  componentUserFunctions
 ) {
   const instance = {};
 
@@ -21,7 +22,7 @@ const Component = function (
   instance.rootInstanceId = "rootDummyHoge";
   instance.renderer = renderer;
   instance.componentUserVariables = {};
-  instance.componentUserFunctions = {};
+  instance.componentUserFunctions = instance.componentSource.componentUserFunctions;
 
   instance.findAssetById = function (id) {
     return instance.assetsManager.find(id);
@@ -82,11 +83,6 @@ const Component = function (
     } else {
       return defaultValue;
     }
-  };
-
-  instance.defineComponentUserFunction = function (name, content) {
-    console.debug("ユーザ関数定義", name, content);
-    instance.componentUserFunctions[name] = content;
   };
 
   instance.callComponentUserFunction = function (name, args = {}) {

@@ -1,8 +1,13 @@
-const ComponentSource = function (scheduledEvents, labelToFrameNumber) {
+const ComponentSource = function (
+  scheduledEvents,
+  labelToFrameNumber,
+  componentUserFunctions
+) {
   const instance = {};
 
   instance.scheduledEvents = scheduledEvents;
   instance.labelToFrameNumber = labelToFrameNumber;
+  instance.componentUserFunctions = componentUserFunctions;
 
   return instance;
 };
@@ -98,12 +103,24 @@ const Compiler = function () {
     return labelToFrameCount;
   };
 
+  instance.extractComponentUserFunctions = function (frameEvents) {
+    const componentUserFunctions = {};
+    frameEvents.forEach(function (frameEvent) {
+      if (frameEvent.type === "defineComponentUserFunction") {
+        componentUserFunctions[frameEvent.defineComponentUserFunction.name] =
+          frameEvent.defineComponentUserFunction.content;
+      }
+    });
+    return componentUserFunctions;
+  };
+
   instance.compile = function (frameEvents) {
     instance.formetFrameEvents(frameEvents);
 
     const componentSource = ComponentSource(
       instance.generateScheduledEvents(frameEvents),
-      instance.generateLabelToFrameNumber(frameEvents)
+      instance.generateLabelToFrameNumber(frameEvents),
+      instance.extractComponentUserFunctions(frameEvents)
     );
     return componentSource;
   };
