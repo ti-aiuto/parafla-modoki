@@ -101,19 +101,18 @@
 
       .editor_right_column {
         flex: 1;
-        padding: 0 8px;
         overflow: auto;;
       }
 
       .asset_table {
         width: 100%;
-        font-size: 13px;
+        font-size: 12px;
         border-collapse: collapse;
+        color: #333;
       }
       .asset_table_th {
-        font-size: 11px;
-        border-bottom: solid 1px #aaa;
-       
+        font-size: 10px;
+        border-bottom: solid 1px #aaa;       
       }
       .asset_table_td {
         border-bottom: solid 1px #dadada;
@@ -124,7 +123,28 @@
       .asset_table_td:last-of-type {
         border-right-width: 0;
       }
-    </style>
+
+      .frame_events_table {
+        width: 100%;
+        font-size: 12px;
+        border-collapse: collapse;
+        color: #333;
+      }
+      .frame_events_table_th {
+        font-size: 10px;
+        border-bottom: solid 1px #aaa;
+      }
+      .frame_events_table_td {
+        border-bottom: solid 1px #dadada;
+        border-right: solid 1px #dadada;
+        padding: 2px 4px;
+        cursor: default;
+        word-break: break-all;
+      }      
+      .frame_events_table_td:last-of-type {
+        border-right-width: 0;
+      }
+</style>
   </head>
   <body>
     <div id="root" class="player_root" style="display: none;"></div>
@@ -157,8 +177,8 @@
           <div class="editor_right_column">
             
             <div v-if="frameEvents">
-              <table style="font-size: 14px; white-space: pre-line">
-                <tr>
+              <table class="frame_events_table">
+                <tr class="frame_events_table_th">
                   <th>フレーム<br />番号</th>
                   <th>フレーム<br />カウント</th>
                   <th>イベント<br />種別</th>
@@ -171,11 +191,11 @@
                   v-for="(rowItem, index) in frameEvents"
                   :style="{backgroundColor: rowBackgroundColor(rowItem)}"
                 >
-                  <td>{{rowItem['scheduledFrameNumber']}}</td>
-                  <td>{{rowItem['frameCount']}}</td>
-                  <td style="word-break: break-all">{{eventTypeI18n(rowItem)}}</td>
-                  <td>{{rowItem['depth']}}</td>
-                  <td style="word-break: break-all">
+                  <td class="frame_events_table_td">{{rowItem['scheduledFrameNumber']}}</td>
+                  <td class="frame_events_table_td">{{rowItem['frameCount']}}</td>
+                  <td class="frame_events_table_td">{{eventTypeI18n(rowItem)}}</td>
+                  <td class="frame_events_table_td">{{rowItem['depth']}}</td>
+                  <td  class="frame_events_table_td">
                     <template v-if="rowItem['executeAction']">
                       {{actionI18n(rowItem['executeAction'])}}<br />
                       <template v-if="rowItem['executeAction']['executeScript']">
@@ -187,7 +207,7 @@
                       </template>
                     </template>
                   </td>
-                  <td>
+                  <td class="frame_events_table_td">
                     <template v-if="rowItem['type'] === 'putImage'">
                       <img
                         :src="resourcePreviewImage(rowItem['putImage']['resourceId'])"
@@ -198,16 +218,9 @@
                       {{ resourcePreviewText(rowItem['putText']['resourceId']) }}
                     </template>
                   </td>
-                  <td>
+                  <td class="frame_events_table_td">
                     <template v-if="rowItem['onClickAction']">
                       {{actionI18n(rowItem['onClickAction'])}}<br />
-                      <template v-if="rowItem['onClickAction']['executeScript']">
-                        <textarea
-                          style="width: 300px; height: 200px; font-size: 12px"
-                        >
-      {{rowItem['onClickAction']['executeScript']['content']}}</textarea
-                        >
-                      </template>
                     </template>
                   </td>
                 </tr>
