@@ -70,7 +70,11 @@ window.frameEventsTyping = [
               context.gotoAndPlay('皿2枚目');
             } else if (nextSaraCount === 3) {
               context.gotoAndPlay('皿3枚目');
-            } // TODO: 4枚目以降も要考慮 
+            } else if (nextSaraCount === 4) {
+              context.gotoAndPlay('皿4枚目');
+            } else if (nextSaraCount === 5) {
+              context.gotoAndPlay('皿5枚目');
+            } 
           }
         } else {
           context.incrementComponentUserVariable('wrongCount');
@@ -94,7 +98,7 @@ window.frameEventsTyping = [
       context.setComponentUserVariable('saraCount', 0);
       context.setComponentUserVariable('correctCount', 0);
       context.setComponentUserVariable('wrongCount', 0);
-      context.setComponentUserVariable('nokoriJikan', 10);
+      context.setComponentUserVariable('nokoriJikan', 7);
 
       // 表示初期化
       context.setTextValue('nokorijikan', '{{nokoriJikan}}秒');
@@ -507,6 +511,70 @@ window.frameEventsTyping = [
     },
   },
 
+  
+  {
+    type: "defineLabel",
+    defineLabel: {
+      label: "皿4枚目",
+    },
+    frameCount: 0,
+  },
+  {
+    type: "putImage",
+    putImage: {
+      assetId: 36,
+    },
+    depth: 24,
+    frameCount: 0,
+    layoutOptions: {
+      x: 30,
+      y: 250,
+      width: 150,
+      height: 50,
+    },
+  },
+
+  {
+    type: "executeAction",
+    executeAction: {
+      type: "gotoAndPlay",
+      gotoAndPlay: {
+        destination: "寿司を流す",
+      },
+    },
+  },
+  
+  {
+    type: "defineLabel",
+    defineLabel: {
+      label: "皿5枚目",
+    },
+    frameCount: 0,
+  },
+  {
+    type: "putImage",
+    putImage: {
+      assetId: 36,
+    },
+    depth: 25,
+    frameCount: 0,
+    layoutOptions: {
+      x: 30,
+      y: 200,
+      width: 150,
+      height: 50,
+    },
+  },
+
+  {
+    type: "executeAction",
+    executeAction: {
+      type: "gotoAndPlay",
+      gotoAndPlay: {
+        destination: "寿司を流す",
+      },
+    },
+  },
   {
     type: "defineLabel",
     defineLabel: {
