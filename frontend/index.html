@@ -257,7 +257,7 @@
                         ﾌﾚｰﾑｶｳﾝﾄ
                       </div>
     
-                      <input type="number" class="form_input_number" v-model="editingFrameEvent.frameCount" required min="0">
+                      <input type="number" class="form_input_number" v-model="editingFrameEvent.frameCount" required min="0" @input="onChangeFrameCount">
                     </div>
 
                     <div class="form_row">

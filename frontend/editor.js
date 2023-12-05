@@ -529,6 +529,11 @@ function initEditor() {
         const actionType = this.editingFrameEvent.onClickAction["type"];
         this.buildAction(this.editingFrameEvent.onClickAction, actionType);
       },
+      onChangeFrameCount() {
+        if (Number(this.editingFrameEvent.frameCount) < 2) {
+          this.onClickDisableAnimation();
+        }
+      }
     },
     data: {
       frameEvents: null,
