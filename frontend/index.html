@@ -130,6 +130,57 @@
                     <textarea class="form_textarea" v-model="editingFrameEvent.defineComponentUserFunction.content"></textarea>
                   </div>  
                 </template>
+                
+                <template v-if="editingFrameEvent.type === 'putText' || editingFrameEvent.type === 'putImage'">
+                  <div class="form_row">
+                    <div class="form_row_label">
+                      深度
+                    </div>
+  
+                    <input type="text" class="form_input_text" v-model="editingFrameEvent.depth">
+                  </div>
+
+                  <div class="form_row">
+                    <div class="form_row_label">
+                      オブジェクトID
+                    </div>
+  
+                    <input type="text" class="form_input_text" v-model="editingFrameEvent.objectId">
+                  </div>
+
+                  <div class="form_row">
+                    <div class="form_row_label">
+                      フレームカウント
+                    </div>
+  
+                    <input type="text" class="form_input_text" v-model="editingFrameEvent.frameCount">
+                  </div>
+                </template>
+
+                <template v-if="editingFrameEvent.type === 'putImage' && editingFrameEvent.putImage">
+                  <div class="form_row">
+                    <div class="form_row_label">
+                      アセットID
+                    </div>
+  
+                    <input type="text" class="form_input_text" v-model="editingFrameEvent.putImage.assetId">
+                  </div>
+                  
+                  <div class="form_row">
+                    <div class="form_row_label">
+                      ホバー時アセットID
+                    </div>
+  
+                    <input type="text" class="form_input_text" v-model="editingFrameEvent.putImage.hoverAssetId">
+                  </div>
+                  <div class="form_row">
+                    <div class="form_row_label">
+                      アクティブ時アセットID
+                    </div>
+  
+                    <input type="text" class="form_input_text" v-model="editingFrameEvent.putImage.activeAssetId">
+                  </div>
+                </template>
               </div>
   
               <div class="modal_bottom_control">
