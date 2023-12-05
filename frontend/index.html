@@ -160,14 +160,42 @@
     
                       <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.unregisterGlobalKeydownListener.listenerId">
                     </div>
+                  </template>
+
+                  <template v-if="editingFrameEvent.executeAction.type === 'startUserTimer' && editingFrameEvent.executeAction.startUserTimer">
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        リスナーID
+                      </div>
+    
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.startUserTimer.listenerId">
+                    </div>
 
                     <div class="form_row">
                       <div class="form_row_label">
                         ユーザ関数名
                       </div>
     
-                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.unregisterGlobalKeydownListener.componentUserFunctionName">
-                    </div>  
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.startUserTimer.componentUserFunctionName">
+                    </div>
+                    
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        間隔(1000で1秒)
+                      </div>
+    
+                      <input type="number" class="form_input_number" v-model="editingFrameEvent.executeAction.startUserTimer.componentUserFunctionName">
+                    </div>
+                  </template>
+
+                  <template v-if="editingFrameEvent.executeAction.type === 'clearUserTimer' && editingFrameEvent.executeAction.clearUserTimer">
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        リスナーID
+                      </div>
+    
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.clearUserTimer.listenerId">
+                    </div>
                   </template>
                 </template>
 
