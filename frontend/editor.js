@@ -12,6 +12,10 @@ function initEditor() {
     stop: "停止",
     gotoAndPlay: "指定ラベルにジャンプして再生",
     setTextValue: "テキストの表示内容を更新",
+    registerGlobalKeydownListener: "キー押下リスナーを登録",
+    unregisterGlobalKeydownListener: "キー押下リスナーを登録解除",
+    startUserTimer: "タイマーを開始",
+    clearUserTimer: "タイマーを解除",
   };
 
   new Vue({
@@ -111,12 +115,16 @@ function initEditor() {
         if (!this.selectedFrameEvent) {
           return;
         }
-        this.editingTargetFrameEvent = this.selectedFrameEvent;
-        this.editingFrameEvent = structuredClone(this.selectedFrameEvent);
+        setTimeout(() => {
+          this.editingTargetFrameEvent = this.selectedFrameEvent;
+          this.editingFrameEvent = structuredClone(this.selectedFrameEvent);  
+        }, 50);
       },
-      clickCancelEditing() {
-        this.editingTargetFrameEvent = null;
-        this.editingFrameEvent = null;
+      clickCancelEditing() {        
+        setTimeout(() => {
+          this.editingTargetFrameEvent = null;
+          this.editingFrameEvent = null;
+        }, 50);
       }
     },
     data: {
