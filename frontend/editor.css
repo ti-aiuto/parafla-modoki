@@ -134,7 +134,7 @@
   width: 500px;
   border-right: solid 1px #aaa;
   overflow: auto;;
-  padding: 8px;
+  padding: 12px;
   box-sizing: border-box;
 }
 
@@ -145,13 +145,20 @@
   display: flex;
   align-items: center;
   font-size: 14px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .form_row_label {
-  padding: 0 8px 0 4px;
+  padding: 0 12px 0 4px;
 }
 
 .form_select {
-  padding: 2px 4px;
+  padding: 2px;
+}
+
+.form_button {
+  line-height: 28px;
+  font-size: 14px;
+  box-sizing: border-box;
+  padding: 0 8px;
 }
