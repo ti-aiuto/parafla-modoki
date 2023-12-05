@@ -195,6 +195,53 @@ function initEditor() {
       onFrameEventActionTypeChanged() {},
       onSubmit() {
         setTimeout(() => {
+          // TODO: ここでいらないプロパティを消せるとよい
+          const rawUpdatedFrameEvent = this.editingFrameEvent;
+          const updatedFrameEvent = { type: rawUpdatedFrameEvent["type"] };
+          if (
+            ["putImage", "putObject", "doNothing"].includes(
+              this.editingFrameEvent.type
+            )
+          ) {
+            updatedFrameEvent["frameCount"] = Number(
+              rawUpdatedFrameEvent["frameCount"]
+            );
+          }
+          if (["putImage", "putObject"].includes(this.editingFrameEvent.type)) {
+            updatedFrameEvent["depth"] = Number(rawUpdatedFrameEvent["depth"]);
+            updatedFrameEvent["objectId"] = Number(
+              rawUpdatedFrameEvent["objectId"]
+            );
+            updatedFrameEvent["layoutOptions"] = structuredClone(
+              rawUpdatedFrameEvent["layoutOptions"]
+            );
+            if (
+              Number(rawUpdatedFrameEvent["frameCount"]) >= 2 &&
+              rawUpdatedFrameEvent["lastKeyFrame"]
+            ) {
+              updatedFrameEvent["lastKeyFrame"] = structuredClone(
+                rawUpdatedFrameEvent["lastKeyFrame"]["layoutOptions"]
+              );
+            }
+          }
+          if (["defineLabel"].includes(this.editingFrameEvent.type)) {
+            updatedFrameEvent["defineLabel"] = {
+              destination: rawUpdatedFrameEvent["defineLabel"]["destination"],
+            };
+          }
+          if (
+            ["defineComponentUserFunction"].includes(
+              this.editingFrameEvent.type
+            )
+          ) {
+            updatedFrameEvent["defineComponentUserFunction"] = {
+              name: rawUpdatedFrameEvent["defineComponentUserFunction"]["name"],
+              content:
+                rawUpdatedFrameEvent["defineComponentUserFunction"]["content"],
+            };
+          }
+          // TODO: アクションを実行
+
           if (this.editingTargetFrameEvent) {
             const index = this.frameEvents.indexOf(
               this.editingTargetFrameEvent
@@ -205,18 +252,16 @@ function initEditor() {
               );
             }
 
-            // TODO: ここでいらないプロパティを消せるとよい
-            const updatedFrameEvent = this.editingFrameEvent;
             this.$set(this.frameEvents, index, updatedFrameEvent);
 
             this.selectedAssetId = null;
-            this.selectedFrameEvent = updatedFrameEvent; // 編集中は選択中なので選択中の参照も入れ替える
           } else {
-            this.frameEvents.push(this.editingFrameEvent);
+            this.frameEvents.push(updatedFrameEvent);
           }
           this.updateFrameNumbers();
           this.editingTargetFrameEvent = null;
           this.editingFrameEvent = null;
+          this.selectedFrameEvent = updatedFrameEvent; // 編集中は選択中なので選択中の参照も入れ替える
         }, UI_WAIT_TIME);
       },
     },
