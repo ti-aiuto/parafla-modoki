@@ -15,6 +15,7 @@ function initEditor() {
     stop: "停止",
     gotoAndPlay: "指定ラベルにジャンプして再生",
     setTextValue: "テキストの表示内容を更新",
+    callComponentUserFunction: 'ユーザ関数を呼び出し',
     registerGlobalKeydownListener: "キー押下リスナーを登録",
     unregisterGlobalKeydownListener: "キー押下リスナーを登録解除",
     startUserTimer: "タイマーを開始",
@@ -67,6 +68,16 @@ function initEditor() {
           content += `\n(行先: 「${action["gotoAndPlay"]["destination"]}」)`;
         } else if (action["type"] === "setTextValue") {
           content += `\n(対象: ${action["setTextValue"]["objectId"]})`;
+        } else if (action["type"] === "callComponentUserFunction") {
+          content += `\n(ユーザ関数名: ${action["callComponentUserFunction"]["name"]})`;
+        } else if (action["type"] === "registerGlobalKeydownListener") {
+          content += `\n(リスナーID: ${action["registerGlobalKeydownListener"]["listenerId"]})`;
+        } else if (action["type"] === "unregisterGlobalKeydownListener") {
+          content += `\n(リスナーID: ${action["unregisterGlobalKeydownListener"]["listenerId"]})`;
+        } else if (action["type"] === "startUserTimer") {
+          content += `\n(リスナーID: ${action["startUserTimer"]["listenerId"]})`;
+        } else if (action["type"] === "clearUserTimer") {
+          content += `\n(リスナーID: ${action["clearUserTimer"]["listenerId"]})`;
         }
         return content;
       },
