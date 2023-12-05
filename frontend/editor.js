@@ -274,42 +274,43 @@ function initEditor() {
         }
 
         if (actionType === "play") {
-          this.editingFrameEvent.executeAction["play"] = {};
+          this.$set(this.editingFrameEvent.executeAction, "play", {});
         } else if (actionType === "stop") {
-          this.editingFrameEvent.executeAction["stop"] = {};
+          this.$set(this.editingFrameEvent.executeAction, "stop", {});
         } else if (actionType === "eraseLayers") {
-          this.editingFrameEvent.executeAction["eraseLayers"] = { depths: [] };
+          this.$set(this.editingFrameEvent.executeAction, "eraseLayers", { depths: [] });
         } else if (actionType === "gotoAndPlay") {
-          this.editingFrameEvent.executeAction["gotoAndPlay"] = {
+          this.$set(this.editingFrameEvent.executeActiont, "gotoAndPlay", {
             destination: null,
-          };
+          });
         } else if (actionType === "setTextValue") {
-          this.editingFrameEvent.executeAction["setTextValue"] = {
+          this.$set(this.editingFrameEvent.executeAction, "setTextValue", {
             objectId: null,
             value: null,
-          };
+          });
         } else if (actionType === "registerGlobalKeydownListener") {
-          this.editingFrameEvent.executeAction[
-            "registerGlobalKeydownListener"
-          ] = { componentUserFunctionName: null, listenerId: null };
+          this.$set(this.editingFrameEvent.executeAction, "registerGlobalKeydownListener", {
+            componentUserFunctionName: null,
+            listenerId: null,
+          });
         } else if (actionType === "unregisterGlobalKeydownListener") {
-          this.editingFrameEvent.executeAction[
-            "unregisterGlobalKeydownListener"
-          ] = { listenerId: null };
+          this.$set(this.editingFrameEvent.executeAction, "unregisterGlobalKeydownListener", {
+            listenerId: null,
+          });
         } else if (actionType === "startUserTimer") {
-          this.editingFrameEvent.executeAction["startUserTimer"] = {
+          this.$set(this.editingFrameEvent.executeAction, "startUserTimer", {
             componentUserFunctionName: null,
             listenerId: null,
             interval: null,
-          };
+          });
         } else if (actionType === "clearUserTimer") {
-          this.editingFrameEvent.executeAction["clearUserTimer"] = {
+          this.$set(this.editingFrameEvent.executeAction, "clearUserTimer", {
             listenerId: null,
-          };
+          });
         } else if (actionType === "callComponentUserFunction") {
-          this.editingFrameEvent.executeAction["callComponentUserFunction"] = {
+          this.$set(this.editingFrameEvent.executeAction, "callComponentUserFunction", {
             componentUserFunctionName: null,
-          };
+          });
         }
       },
       onSubmit() {
@@ -378,13 +379,15 @@ function initEditor() {
           if (["executeAction"].includes(this.editingFrameEvent.type)) {
             const rawUpdatedExecuteAction =
               this.editingFrameEvent.executeAction;
+            const actionType = rawUpdatedExecuteAction["type"];
             const updatedExecuteAction = {
-              type: rawUpdatedExecuteAction["type"],
+              type: actionType,
             };
             if (actionType === "play") {
-              thupdatedExecuteAction["play"] = {};
+              updatedExecuteAction["play"] = {};
             } else if (actionType === "stop") {
               updatedExecuteAction["stop"] = {};
+              updatedFrameEvent['frameCount'] = 1;
             } else if (actionType === "eraseLayers") {
               if (rawUpdatedExecuteAction["depths"][0] === "all") {
                 updatedExecuteAction["eraseLayers"] = { depths: ["all"] };
@@ -399,6 +402,7 @@ function initEditor() {
                 destination:
                   rawUpdatedExecuteAction["gotoAndPlay"]["destination"],
               };
+              updatedFrameEvent['frameCount'] = 1;
             } else if (actionType === "setTextValue") {
               updatedExecuteAction["setTextValue"] = {
                 objectId: rawUpdatedExecuteAction["setTextValue"]["objectId"],
