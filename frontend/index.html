@@ -86,24 +86,54 @@
                   </select>
                 </div>
     
-                <div class="form_row" v-if="editingFrameEvent.type === 'executeAction' && editingFrameEvent.executeAction" @change="onFrameEventActionTypeChanged">
-                  <div class="form_row_label">
-                    アクションの種別
+                <template v-if="editingFrameEvent.type === 'executeAction' && editingFrameEvent.executeAction">
+                  <div class="form_row">
+                    <div class="form_row_label">
+                      アクションの種別
+                    </div>
+      
+                    <select class="form_select" v-model="editingFrameEvent.executeAction.type" @change="onFrameEventActionTypeChanged">
+                      <option value="eraseLayers">指定深度を消去</option>
+                      <option value="play">再生</option>
+                      <option value="stop">停止</option>
+                      <option value="gotoAndPlay">指定ラベルへジャンプして再生</option>
+                      <option value="setTextValue">テキストの表示内容を更新</option>
+                      <option value="callComponentUserFunction">ユーザ関数を呼び出し</option>
+                      <option value="registerGlobalKeydownListener">キー押下リスナーを登録</option>
+                      <option value="unregisterGlobalKeydownListener">キー押下リスナーを登録解除</option>
+                      <option value="startUserTimer">タイマーを開始</option>
+                      <option value="clearUserTimer">タイマーを解除</option>
+                    </select>
                   </div>
+                  
+                  <template v-if="editingFrameEvent.executeAction.type === 'gotoAndPlay' && editingFrameEvent.executeAction.gotoAndPlay">
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        ジャンプ先
+                      </div>
     
-                  <select class="form_select" v-model="editingFrameEvent.executeAction.type">
-                    <option value="eraseLayers">指定深度を消去</option>
-                    <option value="play">再生</option>
-                    <option value="stop">停止</option>
-                    <option value="gotoAndPlay">指定ラベルへジャンプして再生</option>
-                    <option value="setTextValue">テキストの表示内容を更新</option>
-                    <option value="callComponentUserFunction">ユーザ関数を呼び出し</option>
-                    <option value="registerGlobalKeydownListener">キー押下リスナーを登録</option>
-                    <option value="unregisterGlobalKeydownListener">キー押下リスナーを登録解除</option>
-                    <option value="startUserTimer">タイマーを開始</option>
-                    <option value="clearUserTimer">タイマーを解除</option>
-                  </select>
-                </div>
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.gotoAndPlay.destination">
+                    </div>  
+                  </template>
+                  
+                  <template v-if="editingFrameEvent.executeAction.type === 'setTextValue' && editingFrameEvent.executeAction.setTextValue">
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        オブジェクトID
+                      </div>
+    
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.setTextValue.objectId">
+                    </div>
+
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        表示内容
+                      </div>
+    
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.setTextValue.value">
+                    </div>  
+                  </template>
+                </template>
 
                 <div class="form_row" v-if="editingFrameEvent.type === 'defineLabel' && editingFrameEvent.defineLabel">
                   <div class="form_row_label">
