@@ -131,9 +131,8 @@ function initEditor() {
       },
       clickNewFrameEvent() {
         setTimeout(() => {
-          const editingFrameEvent = {};
-          this.editingTargetFrameEvent = editingFrameEvent;
-          this.editingFrameEvent = structuredClone(editingFrameEvent);
+          this.editingTargetFrameEvent = null;
+          this.editingFrameEvent = { type: null };
         }, UI_WAIT_TIME);
       },
       clickRemoveFrameEvent() {},
@@ -141,7 +140,9 @@ function initEditor() {
       clickMoveDownwardFrameEvent() {},
       onFrameEventTypeChanged() {
         const frameEventType = this.editingFrameEvent.type;
-        const found = this.editingTargetFrameEvent[frameEventType];
+        const found =
+          this.editingTargetFrameEvent &&
+          this.editingTargetFrameEvent[frameEventType];
         if (found) {
           this.editingFrameEvent[frameEventType] = structuredClone(found);
           return;
@@ -150,8 +151,8 @@ function initEditor() {
         const layoutOptions = {
           x: 0,
           y: 0,
-          width: 0,
-          height: 0,
+          width: 640,
+          height: 480,
         };
 
         if (frameEventType === "defineLabel") {
@@ -171,10 +172,20 @@ function initEditor() {
           });
           this.$set(this.editingFrameEvent, "frameCount", 0);
           this.$set(this.editingFrameEvent, "depth", 1);
+          this.$set(
+            this.editingFrameEvent,
+            "layoutOptions",
+            structuredClone(layoutOptions)
+          );
         } else if (frameEventType === "putText") {
           this.$set(this.editingFrameEvent, "putText", { assetId: null });
           this.$set(this.editingFrameEvent, "frameCount", 0);
           this.$set(this.editingFrameEvent, "depth", 1);
+          this.$set(
+            this.editingFrameEvent,
+            "layoutOptions",
+            structuredClone(layoutOptions)
+          );
         } else if (frameEventType === "doNothing") {
           this.$set(this.editingFrameEvent, "doNothing", {});
           this.$set(this.editingFrameEvent, "frameCount", 1);
@@ -183,8 +194,31 @@ function initEditor() {
       },
       onFrameEventActionTypeChanged() {},
       onSubmit() {
-        alert('submit');
-      }
+        setTimeout(() => {
+          if (this.editingTargetFrameEvent) {
+            const index = this.frameEvents.indexOf(
+              this.editingTargetFrameEvent
+            );
+            if (index === -1) {
+              return alert(
+                "エラー：入れ替え対象のイベント定義が見つかりません"
+              );
+            }
+
+            // TODO: ここでいらないプロパティを消せるとよい
+            const updatedFrameEvent = this.editingFrameEvent;
+            this.$set(this.frameEvents, index, updatedFrameEvent);
+
+            this.selectedAssetId = null;
+            this.selectedFrameEvent = updatedFrameEvent; // 編集中は選択中なので選択中の参照も入れ替える
+          } else {
+            this.frameEvents.push(this.editingFrameEvent);
+          }
+          this.updateFrameNumbers();
+          this.editingTargetFrameEvent = null;
+          this.editingFrameEvent = null;
+        }, UI_WAIT_TIME);
+      },
     },
     data: {
       frameEvents: null,
