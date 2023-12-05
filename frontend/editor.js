@@ -140,29 +140,64 @@ function initEditor() {
           return;
         }
         setTimeout(() => {
-          if (confirm('選択されたイベントを削除します')) {
+          if (confirm("選択されたイベントを削除します")) {
             const index = this.frameEvents.indexOf(this.selectedFrameEvent);
             if (index !== -1) {
               this.selectedFrameEvent = null;
-              this.frameEvents.splice(index, 1);  
+              this.frameEvents.splice(index, 1);
               this.updateFrameNumbers();
             }
           }
         }, UI_WAIT_TIME);
       },
-      clickMoveUpwardFrameEvent() {},
-      clickMoveDownwardFrameEvent() {},
+      clickMoveUpwardFrameEvent() {
+        setTimeout(() => {
+          if (!this.canMoveUpwardSelected()) {
+            return;
+          }
+          const selectedIndex = this.frameEvents.indexOf(
+            this.selectedFrameEvent
+          );
+          const prevItem = this.frameEvents[selectedIndex - 1];
+          this.$set(
+            this.frameEvents,
+            selectedIndex - 1,
+            this.selectedFrameEvent
+          );
+          this.$set(this.frameEvents, selectedIndex, prevItem);
+        }, UI_WAIT_TIME);
+      },
+      clickMoveDownwardFrameEvent() {
+        setTimeout(() => {
+          if (!this.canMoveDownwardSelected()) {
+            return;
+          }
+          const selectedIndex = this.frameEvents.indexOf(
+            this.selectedFrameEvent
+          );
+          const nextItem = this.frameEvents[selectedIndex + 1];
+          this.$set(
+            this.frameEvents,
+            selectedIndex + 1,
+            this.selectedFrameEvent
+          );
+          this.$set(this.frameEvents, selectedIndex, nextItem);
+        }, UI_WAIT_TIME);
+      },
       canMoveUpwardSelected() {
-        if (this.frameEvents.length <= 1) {
+        if (!this.selectedFrameEvent || this.frameEvents.length <= 1) {
           return false;
         }
         return this.frameEvents.indexOf(this.selectedFrameEvent) >= 1;
       },
       canMoveDownwardSelected() {
-        if (this.frameEvents.length <= 1) {
+        if (!this.selectedFrameEvent || this.frameEvents.length <= 1) {
           return false;
         }
-        return this.frameEvents[this.frameEvents.length - 1] !== this.selectedFrameEvent;
+        return (
+          this.frameEvents[this.frameEvents.length - 1] !==
+          this.selectedFrameEvent
+        );
       },
       onFrameEventTypeChanged() {
         const frameEventType = this.editingFrameEvent.type;
@@ -223,7 +258,10 @@ function initEditor() {
         setTimeout(() => {
           // TODO: ここでいらないプロパティを消せるとよい
           const rawUpdatedFrameEvent = this.editingFrameEvent;
-          const updatedFrameEvent = { type: rawUpdatedFrameEvent["type"], frameCount: 0 };
+          const updatedFrameEvent = {
+            type: rawUpdatedFrameEvent["type"],
+            frameCount: 0,
+          };
           if (
             ["putImage", "putObject", "doNothing"].includes(
               this.editingFrameEvent.type
