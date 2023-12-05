@@ -65,6 +65,7 @@ input[type="number"] {
   font-size: 12px;
   border-collapse: collapse;
   color: #333;
+  user-select: none;;
 }
 .asset_table_th {
   font-size: 10px;
@@ -85,6 +86,7 @@ input[type="number"] {
   font-size: 12px;
   border-collapse: collapse;
   color: #333;
+  user-select: none;;
 }
 .frame_events_table_th {
   font-size: 10px;

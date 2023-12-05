@@ -430,6 +430,7 @@
                   v-for="(rowItem, index) in frameEvents"
                   :style="frameEventRowStyle(rowItem, index)"
                   @click="selectFrameEvent(rowItem)"
+                  @dblclick="clickEditFrameEvent"
                 >
                   <td class="frame_events_table_td">{{rowItem['scheduledFrameNumber']}}</td>
                   <td class="frame_events_table_td">{{rowItem['frameCount']}}</td>
