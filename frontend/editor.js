@@ -127,9 +127,10 @@ function initEditor() {
           this.editingFrameEvent = null;
         }, 50);
       },
-      clickNewFrameEvent() {
-
-      },
+      clickNewFrameEvent() {},
+      clickRemoveFrameEvent() {},
+      clickMoveUpwardFrameEvent() {},
+      clickMoveDownwardFrameEvent() {},
       onFrameEventTypeChanged() {},
       onFrameEventActionTypeChanged() {},
     },

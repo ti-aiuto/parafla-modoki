@@ -376,11 +376,11 @@
       
       <div class="editor_layout">
         <div class="editor_menu">
-          <button>イベントを追加</button>
+          <button @click="clickNewFrameEvent">イベントを追加</button>
           <button @click="clickEditFrameEvent">イベントを編集</button>
-          <button>イベントを削除</button>
-          <button>イベントを下に移動</button>
-          <button>イベントを上に移動</button>
+          <button @click="clickRemoveFrameEvent">イベントを削除</button>
+          <button @click="clickMoveUpwardFrameEvent">イベントを上に移動</button>
+          <button @click="clickMoveDownwardFrameEvent">イベントを下に移動</button>
           <button @click="openPreview()">プレビュー</button>
         </div>
         <div class="editor_columns">
