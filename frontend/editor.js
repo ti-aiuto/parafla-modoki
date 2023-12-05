@@ -11,6 +11,7 @@ function initEditor() {
   };
   const actionTypeTable = {
     eraseLayers: "指定深度を消去",
+    play: "再生",
     stop: "停止",
     gotoAndPlay: "指定ラベルにジャンプして再生",
     setTextValue: "テキストの表示内容を更新",
@@ -205,7 +206,11 @@ function initEditor() {
           this.editingTargetFrameEvent &&
           this.editingTargetFrameEvent[frameEventType];
         if (found) {
-          this.editingFrameEvent[frameEventType] = structuredClone(found);
+          this.$set(
+            this.editingFrameEvent,
+            frameEventType,
+            structuredClone(found)
+          );
           return;
         }
 
@@ -253,7 +258,60 @@ function initEditor() {
           this.$set(this.editingFrameEvent, "depth", 1);
         }
       },
-      onFrameEventActionTypeChanged() {},
+      onFrameEventActionTypeChanged() {
+        const actionType = this.editingFrameEvent.executeAction.type;
+        const found =
+          this.editingTargetFrameEvent &&
+          this.editingTargetFrameEvent["executeAction"] &&
+          this.editingTargetFrameEvent["executeAction"][actionType];
+        if (found) {
+          this.$set(
+            this.editingFrameEvent.executeAction,
+            actionType,
+            structuredClone(found)
+          );
+          return;
+        }
+
+        if (actionType === "play") {
+          this.editingFrameEvent.executeAction["play"] = {};
+        } else if (actionType === "stop") {
+          this.editingFrameEvent.executeAction["stop"] = {};
+        } else if (actionType === "eraseLayers") {
+          this.editingFrameEvent.executeAction["eraseLayers"] = { depths: [] };
+        } else if (actionType === "gotoAndPlay") {
+          this.editingFrameEvent.executeAction["gotoAndPlay"] = {
+            destination: null,
+          };
+        } else if (actionType === "setTextValue") {
+          this.editingFrameEvent.executeAction["setTextValue"] = {
+            objectId: null,
+            value: null,
+          };
+        } else if (actionType === "registerGlobalKeydownListener") {
+          this.editingFrameEvent.executeAction[
+            "registerGlobalKeydownListener"
+          ] = { componentUserFunctionName: null, listenerId: null };
+        } else if (actionType === "unregisterGlobalKeydownListener") {
+          this.editingFrameEvent.executeAction[
+            "unregisterGlobalKeydownListener"
+          ] = { listenerId: null };
+        } else if (actionType === "startUserTimer") {
+          this.editingFrameEvent.executeAction["startUserTimer"] = {
+            componentUserFunctionName: null,
+            listenerId: null,
+            interval: null,
+          };
+        } else if (actionType === "clearUserTimer") {
+          this.editingFrameEvent.executeAction["clearUserTimer"] = {
+            listenerId: null,
+          };
+        } else if (actionType === "callComponentUserFunction") {
+          this.editingFrameEvent.executeAction["callComponentUserFunction"] = {
+            componentUserFunctionName: null,
+          };
+        }
+      },
       onSubmit() {
         setTimeout(() => {
           // TODO: ここでいらないプロパティを消せるとよい

@@ -129,6 +129,16 @@
                     </div>  
                   </template>
 
+                  <template v-if="editingFrameEvent.executeAction.type === 'callComponentUserFunction' && editingFrameEvent.executeAction.callComponentUserFunction">
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        ユーザ関数名
+                      </div>
+    
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.callComponentUserFunction.componentUserFunctionName" required>
+                    </div>  
+                  </template>
+
                   <template v-if="editingFrameEvent.executeAction.type === 'registerGlobalKeydownListener' && editingFrameEvent.executeAction.registerGlobalKeydownListener">
                     <div class="form_row">
                       <div class="form_row_label">
