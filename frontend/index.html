@@ -390,8 +390,8 @@
           <button @click="clickNewFrameEvent">イベントを追加</button>
           <button @click="clickEditFrameEvent" :disabled="!selectedFrameEvent">イベントを編集</button>
           <button @click="clickRemoveFrameEvent" :disabled="!selectedFrameEvent">イベントを削除</button>
-          <button @click="clickMoveUpwardFrameEvent" :disabled="!selectedFrameEvent">イベントを上に移動</button>
-          <button @click="clickMoveDownwardFrameEvent" :disabled="!selectedFrameEvent">イベントを下に移動</button>
+          <button @click="clickMoveDownwardFrameEvent" :disabled="!selectedFrameEvent || !canMoveDownwardSelected()">イベントを下に移動</button>
+          <button @click="clickMoveUpwardFrameEvent" :disabled="!selectedFrameEvent || !canMoveUpwardSelected()">イベントを上に移動</button>
           <button @click="openPreview()">プレビュー</button>
         </div>
         <div class="editor_columns">

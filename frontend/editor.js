@@ -152,6 +152,18 @@ function initEditor() {
       },
       clickMoveUpwardFrameEvent() {},
       clickMoveDownwardFrameEvent() {},
+      canMoveUpwardSelected() {
+        if (this.frameEvents.length <= 1) {
+          return false;
+        }
+        return this.frameEvents.indexOf(this.selectedFrameEvent) >= 1;
+      },
+      canMoveDownwardSelected() {
+        if (this.frameEvents.length <= 1) {
+          return false;
+        }
+        return this.frameEvents[this.frameEvents.length - 1] !== this.selectedFrameEvent;
+      },
       onFrameEventTypeChanged() {
         const frameEventType = this.editingFrameEvent.type;
         const found =
