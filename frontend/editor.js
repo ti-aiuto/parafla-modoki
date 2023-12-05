@@ -15,7 +15,7 @@ function initEditor() {
     stop: "停止",
     gotoAndPlay: "指定ラベルにジャンプして再生",
     setTextValue: "テキストの表示内容を更新",
-    callComponentUserFunction: 'ユーザ関数を呼び出し',
+    callComponentUserFunction: "ユーザ関数を呼び出し",
     registerGlobalKeydownListener: "キー押下リスナーを登録",
     unregisterGlobalKeydownListener: "キー押下リスナーを登録解除",
     startUserTimer: "タイマーを開始",
@@ -251,7 +251,69 @@ function initEditor() {
             name: null,
           });
         }
-      }, 
+      },
+      extractAction(updatedExecuteAction, actionType, rawUpdatedExecuteAction) {
+        if (actionType === "play") {
+          updatedExecuteAction["play"] = {};
+        } else if (actionType === "stop") {
+          updatedExecuteAction["stop"] = {};
+        } else if (actionType === "eraseLayers") {
+          if (rawUpdatedExecuteAction["eraseLayers"]["depths"][0] === "all") {
+            updatedExecuteAction["eraseLayers"] = { depths: ["all"] };
+          } else {
+            // TODO: 本当に数値かチェックしてもいいかも
+            updatedExecuteAction["eraseLayers"] = {
+              depths: [
+                Number(rawUpdatedExecuteAction["eraseLayers"]["depths"][0]),
+              ],
+            };
+          }
+        } else if (actionType === "gotoAndPlay") {
+          updatedExecuteAction["gotoAndPlay"] = {
+            destination: rawUpdatedExecuteAction["gotoAndPlay"]["destination"],
+          };
+        } else if (actionType === "setTextValue") {
+          updatedExecuteAction["setTextValue"] = {
+            objectId: rawUpdatedExecuteAction["setTextValue"]["objectId"],
+            value: rawUpdatedExecuteAction["setTextValue"]["value"],
+          };
+        } else if (actionType === "registerGlobalKeydownListener") {
+          updatedExecuteAction["registerGlobalKeydownListener"] = {
+            listenerId:
+              rawUpdatedExecuteAction["registerGlobalKeydownListener"][
+                "listenerId"
+              ],
+            componentUserFunctionName:
+              rawUpdatedExecuteAction["registerGlobalKeydownListener"][
+                "componentUserFunctionName"
+              ],
+          };
+        } else if (actionType === "unregisterGlobalKeydownListener") {
+          updatedExecuteAction["unregisterGlobalKeydownListener"] = {
+            listenerId:
+              rawUpdatedExecuteAction["unregisterGlobalKeydownListener"][
+                "listenerId"
+              ],
+          };
+        } else if (actionType === "startUserTimer") {
+          updatedExecuteAction["startUserTimer"] = {
+            listenerId: rawUpdatedExecuteAction["startUserTimer"]["listenerId"],
+            componentUserFunctionName:
+              rawUpdatedExecuteAction["startUserTimer"][
+                "componentUserFunctionName"
+              ],
+            interval: rawUpdatedExecuteAction["startUserTimer"]["interval"],
+          };
+        } else if (actionType === "clearUserTimer") {
+          updatedExecuteAction["clearUserTimer"] = {
+            listenerId: rawUpdatedExecuteAction["clearUserTimer"]["listenerId"],
+          };
+        } else if (actionType === "callComponentUserFunction") {
+          updatedExecuteAction["callComponentUserFunction"] = {
+            name: rawUpdatedExecuteAction["callComponentUserFunction"]["name"],
+          };
+        }
+      },
       onFrameEventTypeChanged() {
         const frameEventType = this.editingFrameEvent.type;
         const found =
@@ -281,7 +343,7 @@ function initEditor() {
             content: null,
           });
         } else if (frameEventType === "executeAction") {
-          this.$set(this.editingFrameEvent, "executeAction", {type: null});
+          this.$set(this.editingFrameEvent, "executeAction", { type: null });
         } else if (frameEventType === "putImage") {
           this.$set(this.editingFrameEvent, "putImage", {
             assetId: null,
@@ -397,72 +459,16 @@ function initEditor() {
             const updatedExecuteAction = {
               type: actionType,
             };
-            if (actionType === "play") {
-              updatedExecuteAction["play"] = {};
-            } else if (actionType === "stop") {
-              updatedExecuteAction["stop"] = {};
-              updatedFrameEvent['frameCount'] = 1;
-            } else if (actionType === "eraseLayers") {
-              if (rawUpdatedExecuteAction['eraseLayers']["depths"][0] === "all") {
-                updatedExecuteAction["eraseLayers"] = { depths: ["all"] };
-              } else {
-                // TODO: 本当に数値かチェックしてもいいかも
-                updatedExecuteAction["eraseLayers"] = {
-                  depths: [Number(rawUpdatedExecuteAction['eraseLayers']["depths"][0])],
-                };
-              }
-            } else if (actionType === "gotoAndPlay") {
-              updatedExecuteAction["gotoAndPlay"] = {
-                destination:
-                  rawUpdatedExecuteAction["gotoAndPlay"]["destination"],
-              };
-              updatedFrameEvent['frameCount'] = 1;
-            } else if (actionType === "setTextValue") {
-              updatedExecuteAction["setTextValue"] = {
-                objectId: rawUpdatedExecuteAction["setTextValue"]["objectId"],
-                value: rawUpdatedExecuteAction["setTextValue"]["value"],
-              };
-            } else if (actionType === "registerGlobalKeydownListener") {
-              updatedExecuteAction["registerGlobalKeydownListener"] = {
-                listenerId:
-                  rawUpdatedExecuteAction["registerGlobalKeydownListener"][
-                    "listenerId"
-                  ],
-                componentUserFunctionName:
-                  rawUpdatedExecuteAction["registerGlobalKeydownListener"][
-                    "componentUserFunctionName"
-                  ],
-              };
-            } else if (actionType === "unregisterGlobalKeydownListener") {
-              updatedExecuteAction["unregisterGlobalKeydownListener"] = {
-                listenerId:
-                  rawUpdatedExecuteAction["unregisterGlobalKeydownListener"][
-                    "listenerId"
-                  ],
-              };
-            } else if (actionType === "startUserTimer") {
-              updatedExecuteAction["startUserTimer"] = {
-                listenerId:
-                  rawUpdatedExecuteAction["startUserTimer"]["listenerId"],
-                componentUserFunctionName:
-                  rawUpdatedExecuteAction["startUserTimer"][
-                    "componentUserFunctionName"
-                  ],
-                interval: rawUpdatedExecuteAction["startUserTimer"]["interval"],
-              };
-            } else if (actionType === "clearUserTimer") {
-              updatedExecuteAction["clearUserTimer"] = {
-                listenerId:
-                  rawUpdatedExecuteAction["clearUserTimer"]["listenerId"],
-              };
-            } else if (actionType === "callComponentUserFunction") {
-              updatedExecuteAction["callComponentUserFunction"] = {
-                name:
-                  rawUpdatedExecuteAction["callComponentUserFunction"][
-                    "name"
-                  ],
-              };
+            this.extractAction(
+              updatedExecuteAction,
+              actionType,
+              rawUpdatedExecuteAction
+            );
+
+            if (["stop", "gotoAndPlay"].includes(actionType)) {
+              updatedFrameEvent["frameCount"] = 1;
             }
+
             updatedFrameEvent["executeAction"] = updatedExecuteAction;
           }
 
