@@ -40,17 +40,7 @@
       }
       window.onload = function () {
         const compiler = Compiler(assetsManager);
-        const renderer = Renderer();
-        const rootController = RootController();
-        const component = Component(
-          rootController,
-          compiler.compile(window.frameEventsTyping),
-          ScreenObjectsManager(),
-          renderer
-        );
-        component.play();
-        console.debug(component);
-
+        compiler.compile(window.frameEventsTyping);
         initEditor();
       };
     </script>

@@ -21,18 +21,19 @@ function initEditor() {
   new Vue({
     el: "#vue_root",
     methods: {
-      selectStory(key) {
-        this.frameEvents = structuredClone(window.frameEventsTyping);
-
+      updateFrameNumbers() {
         let frameNumber = 1;
         this.frameEvents.forEach(function (frameEvent) {
           frameEvent["scheduledFrameNumber"] = frameNumber;
           frameNumber += frameEvent.frameCount;
         });
       },
+      selectStory() {
+        // this.frameEvents = structuredClone(window.frameEventsTyping);
+        this.frameEvents = [];
+      },
       start() {
         this.started = true;
-        main(this.frameEvents);
       },
       eventTypeI18n(event) {
         let content = eventTypeTable[event.type];
