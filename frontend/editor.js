@@ -135,7 +135,21 @@ function initEditor() {
           this.editingFrameEvent = { type: null };
         }, UI_WAIT_TIME);
       },
-      clickRemoveFrameEvent() {},
+      clickRemoveFrameEvent() {
+        if (!this.selectedFrameEvent) {
+          return;
+        }
+        setTimeout(() => {
+          if (confirm('選択されたイベントを削除します')) {
+            const index = this.frameEvents.indexOf(this.selectedFrameEvent);
+            if (index !== -1) {
+              this.selectedFrameEvent = null;
+              this.frameEvents.splice(index, 1);  
+              this.updateFrameNumbers();
+            }
+          }
+        }, UI_WAIT_TIME);
+      },
       clickMoveUpwardFrameEvent() {},
       clickMoveDownwardFrameEvent() {},
       onFrameEventTypeChanged() {
