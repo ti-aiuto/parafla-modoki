@@ -259,16 +259,16 @@
     
                       <input type="number" class="form_input_number" v-model="editingFrameEvent.frameCount" required min="0">
                     </div>
+                    
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        ｵﾌﾞｼﾞｪｸﾄID
+                      </div>
+  
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.objectId" pattern="^\w+$">
+                    </div>  
                   </div>
                   
-                  <div class="form_row">
-                    <div class="form_row_label">
-                      ｵﾌﾞｼﾞｪｸﾄID
-                    </div>
-
-                    <input type="text" class="form_input_text" v-model="editingFrameEvent.objectId" pattern="^\w+$">
-                  </div>
-
                   <template v-if="editingFrameEvent.layoutOptions">
                     <div class="form_columns_row">
                       <div class="form_row">
@@ -304,6 +304,15 @@
                       </div>
                     </div>
                   </template>
+
+                  <div class="form_columns_row">
+                    <div class="form_row">
+                      <button class="form_button" type="button">アニメーションを有効化</button>
+                    </div>
+                    <div class="form_row">
+                      <button class="form_button" type="button">アニメーションを削除</button>
+                    </div>
+                  </div>
 
                   <template v-if="editingFrameEvent.lastKeyFrame && editingFrameEvent.lastKeyFrame.layoutOptions">
                     <div class="form_columns_row">
