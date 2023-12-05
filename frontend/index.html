@@ -132,53 +132,94 @@
                 </template>
                 
                 <template v-if="editingFrameEvent.type === 'putText' || editingFrameEvent.type === 'putImage'">
-                  <div class="form_row">
-                    <div class="form_row_label">
-                      深度
+                  <div class="form_columns_row">
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        深度
+                      </div>
+    
+                      <input type="text" class="form_input_number" v-model="editingFrameEvent.depth">
                     </div>
-  
-                    <input type="text" class="form_input_text" v-model="editingFrameEvent.depth">
-                  </div>
 
-                  <div class="form_row">
-                    <div class="form_row_label">
-                      オブジェクトID
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        ﾌﾚｰﾑｶｳﾝﾄ
+                      </div>
+    
+                      <input type="text" class="form_input_number" v-model="editingFrameEvent.frameCount">
                     </div>
-  
-                    <input type="text" class="form_input_text" v-model="editingFrameEvent.objectId">
-                  </div>
-
-                  <div class="form_row">
-                    <div class="form_row_label">
-                      フレームカウント
-                    </div>
-  
-                    <input type="text" class="form_input_text" v-model="editingFrameEvent.frameCount">
-                  </div>
-                </template>
-
-                <template v-if="editingFrameEvent.type === 'putImage' && editingFrameEvent.putImage">
-                  <div class="form_row">
-                    <div class="form_row_label">
-                      アセットID
-                    </div>
-  
-                    <input type="text" class="form_input_text" v-model="editingFrameEvent.putImage.assetId">
                   </div>
                   
                   <div class="form_row">
                     <div class="form_row_label">
-                      ホバー時アセットID
+                      ｵﾌﾞｼﾞｪｸﾄID
                     </div>
-  
-                    <input type="text" class="form_input_text" v-model="editingFrameEvent.putImage.hoverAssetId">
+
+                    <input type="text" class="form_input_text" v-model="editingFrameEvent.objectId">
                   </div>
-                  <div class="form_row">
-                    <div class="form_row_label">
-                      アクティブ時アセットID
+
+                  <template v-if="editingFrameEvent.layoutOptions">
+                    <div class="form_columns_row">
+                      <div class="form_row">
+                        <div class="form_row_label">
+                          X
+                        </div>
+      
+                        <input type="text" class="form_input_number" v-model="editingFrameEvent.layoutOptions.x">
+                      </div>
+                      
+                      <div class="form_row">
+                        <div class="form_row_label">
+                          Y
+                        </div>
+      
+                        <input type="text" class="form_input_number" v-model="editingFrameEvent.layoutOptions.y">
+                      </div>
+
+                      <div class="form_row">
+                        <div class="form_row_label">
+                          幅
+                        </div>
+      
+                        <input type="text" class="form_input_number" v-model="editingFrameEvent.layoutOptions.width">
+                      </div>
+                      
+                      <div class="form_row">
+                        <div class="form_row_label">
+                          高さ
+                        </div>
+      
+                        <input type="text" class="form_input_number" v-model="editingFrameEvent.layoutOptions.height">
+                      </div>
                     </div>
-  
-                    <input type="text" class="form_input_text" v-model="editingFrameEvent.putImage.activeAssetId">
+                  </template>
+                </template>
+
+                <template v-if="editingFrameEvent.type === 'putImage' && editingFrameEvent.putImage">
+                  <div class="form_columns_row">
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        ｱｾｯﾄID
+                      </div>
+    
+                      <input type="text" class="form_input_number" v-model="editingFrameEvent.putImage.assetId">
+                    </div>
+                    
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        ﾎﾊﾞｰ時ID
+                      </div>
+    
+                      <input type="text" class="form_input_number" v-model="editingFrameEvent.putImage.hoverAssetId">
+                    </div>
+
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        ｱｸﾃｨﾌﾞ時ID
+                      </div>
+    
+                      <input type="text" class="form_input_number" v-model="editingFrameEvent.putImage.activeAssetId">
+                    </div>
                   </div>
                 </template>
               </div>

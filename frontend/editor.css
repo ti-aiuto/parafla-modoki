@@ -163,6 +163,11 @@
   margin-bottom: 12px;
 }
 
+.form_columns_row {
+  display: flex;
+  gap: 12px;
+}
+
 .form_row_label {
   padding: 0 12px 0 4px;
 }
@@ -173,6 +178,14 @@
 
 .form_input_text {
   flex-grow: 1;
+  line-height: 28px;
+  font-size: 14px;
+  box-sizing: border-box;
+  padding: 0 4px;
+}
+
+.form_input_number {
+  width: 50px;
   line-height: 28px;
   font-size: 14px;
   box-sizing: border-box;
