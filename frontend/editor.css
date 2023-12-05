@@ -106,17 +106,36 @@
   z-index: 2;
   position: absolute;
   width: 900px;
-  height: 500px;
   background-color: #f9f9f9;
   top: 50px;
   right: 0;
   left: 0;
   margin: 0 auto;
   border-radius: 12px;
+  box-shadow: #222 0 0 20px;
 }
 
 .modal_title {
-    color: #333;
-    padding: 8px;
-    border-bottom: solid 1px #aaa;
+  color: #333;
+  padding: 0 8px;
+  border-bottom: solid 1px #aaa;
+  height: 40px;
+  line-height: 40px;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.modal_content {
+  display: flex;
+  height: 460px;
+}
+
+.modal_content_left{
+  width: 600px;
+  border-right: solid 1px #aaa;
+  overflow: auto;;
+}
+
+.modal_content_right{
+
 }
