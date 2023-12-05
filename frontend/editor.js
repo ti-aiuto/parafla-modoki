@@ -309,7 +309,7 @@ function initEditor() {
           });
         } else if (actionType === "callComponentUserFunction") {
           this.$set(this.editingFrameEvent.executeAction, "callComponentUserFunction", {
-            componentUserFunctionName: null,
+            name: null,
           });
         }
       },
@@ -443,9 +443,9 @@ function initEditor() {
               };
             } else if (actionType === "callComponentUserFunction") {
               updatedExecuteAction["callComponentUserFunction"] = {
-                componentUserFunctionName:
+                name:
                   rawUpdatedExecuteAction["callComponentUserFunction"][
-                    "componentUserFunctionName"
+                    "name"
                   ],
               };
             }
