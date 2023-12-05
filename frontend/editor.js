@@ -127,6 +127,9 @@ function initEditor() {
           this.editingFrameEvent = null;
         }, 50);
       },
+      clickNewFrameEvent() {
+
+      },
       onFrameEventTypeChanged() {},
       onFrameEventActionTypeChanged() {},
     },
