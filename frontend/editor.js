@@ -375,6 +375,79 @@ function initEditor() {
           }
           // TODO: アクションを実行
 
+          if (["executeAction"].includes(this.editingFrameEvent.type)) {
+            const rawUpdatedExecuteAction =
+              this.editingFrameEvent.executeAction;
+            const updatedExecuteAction = {
+              type: rawUpdatedExecuteAction["type"],
+            };
+            if (actionType === "play") {
+              thupdatedExecuteAction["play"] = {};
+            } else if (actionType === "stop") {
+              updatedExecuteAction["stop"] = {};
+            } else if (actionType === "eraseLayers") {
+              if (rawUpdatedExecuteAction["depths"][0] === "all") {
+                updatedExecuteAction["eraseLayers"] = { depths: ["all"] };
+              } else {
+                // TODO: 本当に数値かチェックしてもいいかも
+                updatedExecuteAction["eraseLayers"] = {
+                  depths: [Number(rawUpdatedExecuteAction["depths"][0])],
+                };
+              }
+            } else if (actionType === "gotoAndPlay") {
+              updatedExecuteAction["gotoAndPlay"] = {
+                destination:
+                  rawUpdatedExecuteAction["gotoAndPlay"]["destination"],
+              };
+            } else if (actionType === "setTextValue") {
+              updatedExecuteAction["setTextValue"] = {
+                objectId: rawUpdatedExecuteAction["setTextValue"]["objectId"],
+                value: rawUpdatedExecuteAction["setTextValue"]["value"],
+              };
+            } else if (actionType === "registerGlobalKeydownListener") {
+              updatedExecuteAction["registerGlobalKeydownListener"] = {
+                listenerId:
+                  rawUpdatedExecuteAction["registerGlobalKeydownListener"][
+                    "listenerId"
+                  ],
+                componentUserFunctionName:
+                  rawUpdatedExecuteAction["registerGlobalKeydownListener"][
+                    "componentUserFunctionName"
+                  ],
+              };
+            } else if (actionType === "unregisterGlobalKeydownListener") {
+              updatedExecuteAction["unregisterGlobalKeydownListener"] = {
+                listenerId:
+                  rawUpdatedExecuteAction["unregisterGlobalKeydownListener"][
+                    "listenerId"
+                  ],
+              };
+            } else if (actionType === "startUserTimer") {
+              updatedExecuteAction["startUserTimer"] = {
+                listenerId:
+                  rawUpdatedExecuteAction["startUserTimer"]["listenerId"],
+                componentUserFunctionName:
+                  rawUpdatedExecuteAction["startUserTimer"][
+                    "componentUserFunctionName"
+                  ],
+                interval: rawUpdatedExecuteAction["startUserTimer"]["interval"],
+              };
+            } else if (actionType === "clearUserTimer") {
+              updatedExecuteAction["clearUserTimer"] = {
+                listenerId:
+                  rawUpdatedExecuteAction["clearUserTimer"]["listenerId"],
+              };
+            } else if (actionType === "callComponentUserFunction") {
+              updatedExecuteAction["callComponentUserFunction"] = {
+                componentUserFunctionName:
+                  rawUpdatedExecuteAction["callComponentUserFunction"][
+                    "componentUserFunctionName"
+                  ],
+              };
+            }
+            updatedFrameEvent["executeAction"] = updatedExecuteAction;
+          }
+
           if (this.editingTargetFrameEvent) {
             const index = this.frameEvents.indexOf(
               this.editingTargetFrameEvent
@@ -384,7 +457,6 @@ function initEditor() {
                 "エラー：入れ替え対象のイベント定義が見つかりません"
               );
             }
-
             this.$set(this.frameEvents, index, updatedFrameEvent);
 
             this.selectedAssetId = null;
