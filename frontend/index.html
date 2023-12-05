@@ -180,7 +180,7 @@
                         間隔(1000で1秒)
                       </div>
     
-                      <input type="number" class="form_input_number" v-model="editingFrameEvent.executeAction.startUserTimer.componentUserFunctionName" required>
+                      <input type="number" class="form_input_number" v-model="editingFrameEvent.executeAction.startUserTimer.componentUserFunctionName" required min="0" max="99999">
                     </div>
                   </template>
 
@@ -240,7 +240,7 @@
                         深度
                       </div>
     
-                      <input type="number" class="form_input_number" v-model="editingFrameEvent.depth" required>
+                      <input type="number" class="form_input_number" v-model="editingFrameEvent.depth" required min="0" min="-255" max="255">
                     </div>
 
                     <div class="form_row">
@@ -248,7 +248,7 @@
                         ﾌﾚｰﾑｶｳﾝﾄ
                       </div>
     
-                      <input type="number" class="form_input_number" v-model="editingFrameEvent.frameCount" required>
+                      <input type="number" class="form_input_number" v-model="editingFrameEvent.frameCount" required min="0">
                     </div>
                   </div>
                   
@@ -283,7 +283,7 @@
                           幅
                         </div>
       
-                        <input type="number" class="form_input_number" v-model="editingFrameEvent.layoutOptions.width" required>
+                        <input type="number" class="form_input_number" v-model="editingFrameEvent.layoutOptions.width" required min="0">
                       </div>
                       
                       <div class="form_row">
@@ -291,7 +291,7 @@
                           高さ
                         </div>
       
-                        <input type="number" class="form_input_number" v-model="editingFrameEvent.layoutOptions.height" required>
+                        <input type="number" class="form_input_number" v-model="editingFrameEvent.layoutOptions.height" required min="0">
                       </div>
                     </div>
                   </template>
@@ -319,7 +319,7 @@
                           幅
                         </div>
       
-                        <input type="number" class="form_input_number" v-model="editingFrameEvent.lastKeyFrame.layoutOptions.width" required>
+                        <input type="number" class="form_input_number" v-model="editingFrameEvent.lastKeyFrame.layoutOptions.width" required min="0">
                       </div>
                       
                       <div class="form_row">
@@ -327,7 +327,7 @@
                           高さ
                         </div>
       
-                        <input type="number" class="form_input_number" v-model="editingFrameEvent.lastKeyFrame.layoutOptions.height" required>
+                        <input type="number" class="form_input_number" v-model="editingFrameEvent.lastKeyFrame.layoutOptions.height" required min="0">
                       </div>
                     </div>
                   </template>
