@@ -68,39 +68,43 @@
         <div class="modal_title">イベントの編集</div>
         <div class="modal_content">
           <div class="modal_content_left">
-            <div class="form_row">
-              <div class="form_row_label">
-                イベントの種別
+            <div class="modal_content_left_content">
+              <div class="form_row">
+                <div class="form_row_label">
+                  イベントの種別
+                </div>
+  
+                <select class="form_select">
+                  <option value="defineLabel">ラベルを定義</option>
+                  <option value="putImage">画像を配置</option>
+                  <option value="putText">テキストを配置</option>
+                  <option value="executeAction">アクションを実行</option>
+                  <option value="doNothing">何もしない</option>
+                  <option value="executeAction">停止</option>
+                  <option value="defineComponentUserFunction">ユーザ関数を定義</option>
+                </select>
               </div>
-
-              <select class="form_select">
-                <option value="defineLabel">ラベルを定義</option>
-                <option value="putImage">画像を配置</option>
-                <option value="putText">テキストを配置</option>
-                <option value="executeAction">アクションを実行</option>
-                <option value="doNothing">何もしない</option>
-                <option value="executeAction">停止</option>
-                <option value="defineComponentUserFunction">ユーザ関数を定義</option>
-              </select>
+  
+              <div class="form_row">
+                <div class="form_row_label">
+                  アクションの種別
+                </div>
+  
+                <select class="form_select">
+                  <option value="eraseLayers">指定深度を消去</option>
+                  <option value="play">再生</option>
+                  <option value="stop">停止</option>
+                  <option value="gotoAndPlay">指定ラベルへジャンプして再生</option>
+                  <option value="setTextValue">テキストの表示内容を更新</option>
+                  <option value="callComponentUserFunction">ユーザ関数を呼び出し</option>
+                </select>
+              </div>
             </div>
 
-            <div class="form_row">
-              <div class="form_row_label">
-                アクションの種別
-              </div>
-
-              <select class="form_select">
-                <option value="eraseLayers">指定深度を消去</option>
-                <option value="play">再生</option>
-                <option value="stop">停止</option>
-                <option value="gotoAndPlay">指定ラベルへジャンプして再生</option>
-                <option value="setTextValue">テキストの表示内容を更新</option>
-                <option value="callComponentUserFunction">ユーザ関数を呼び出し</option>
-              </select>
+            <div class="modal_bottom_control">
+              <button class="form_button">OK</button>
+              <button class="form_button">キャンセル</button>  
             </div>
-
-            <button class="form_button">OK</button>
-            <button class="form_button">キャンセル</button>
           </div>
           <div class="modal_content_right">
             right
