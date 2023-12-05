@@ -115,6 +115,16 @@
                       <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.gotoAndPlay.destination">
                     </div>  
                   </template>
+
+                  <template v-if="editingFrameEvent.executeAction.type === 'eraseLayers' && editingFrameEvent.executeAction.eraseLayers">
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        深度(全て消去の場合はallと入力)
+                      </div>
+    
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.eraseLayers.depths[0]">
+                    </div>  
+                  </template>
                   
                   <template v-if="editingFrameEvent.executeAction.type === 'setTextValue' && editingFrameEvent.executeAction.setTextValue">
                     <div class="form_row">
