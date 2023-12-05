@@ -193,6 +193,42 @@
                       </div>
                     </div>
                   </template>
+
+                  <template v-if="editingFrameEvent.lastKeyFrame && editingFrameEvent.lastKeyFrame.layoutOptions">
+                    <div class="form_columns_row">
+                      <div class="form_row">
+                        <div class="form_row_label">
+                          移動後X
+                        </div>
+      
+                        <input type="text" class="form_input_number" v-model="editingFrameEvent.lastKeyFrame.layoutOptions.x">
+                      </div>
+                      
+                      <div class="form_row">
+                        <div class="form_row_label">
+                          Y
+                        </div>
+      
+                        <input type="text" class="form_input_number" v-model="editingFrameEvent.lastKeyFrame.layoutOptions.y">
+                      </div>
+
+                      <div class="form_row">
+                        <div class="form_row_label">
+                          幅
+                        </div>
+      
+                        <input type="text" class="form_input_number" v-model="editingFrameEvent.lastKeyFrame.layoutOptions.width">
+                      </div>
+                      
+                      <div class="form_row">
+                        <div class="form_row_label">
+                          高さ
+                        </div>
+      
+                        <input type="text" class="form_input_number" v-model="editingFrameEvent.lastKeyFrame.layoutOptions.height">
+                      </div>
+                    </div>
+                  </template>
                 </template>
 
                 <template v-if="editingFrameEvent.type === 'putImage' && editingFrameEvent.putImage">
