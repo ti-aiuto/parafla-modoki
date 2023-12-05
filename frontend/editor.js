@@ -37,9 +37,9 @@ function initEditor() {
       eventTypeI18n(event) {
         let content = eventTypeTable[event.type];
         if (event.type === "defineLabel") {
-          content += `\n「${event["defineLabel"]["label"]}」`;
+          content += `「${event["defineLabel"]["label"]}」`;
         } else if (event.type === "defineComponentUserFunction") {
-          content += `\n「${event["defineComponentUserFunction"]["name"]}」`;
+          content += `「${event["defineComponentUserFunction"]["name"]}」`;
         } else if (event.type === "putImage" || event.type === "putText") {
           if (event.lastKeyFrame) {
             content += "\n※アニメーションあり";
