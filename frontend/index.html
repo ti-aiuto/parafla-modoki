@@ -130,7 +130,19 @@
                     <textarea class="form_textarea" v-model="editingFrameEvent.defineComponentUserFunction.content"></textarea>
                   </div>  
                 </template>
-                
+                                
+                <template v-if="editingFrameEvent.type === 'doNothing'">
+                  <div class="form_columns_row">
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        ﾌﾚｰﾑｶｳﾝﾄ
+                      </div>
+    
+                      <input type="number" class="form_input_number" v-model="editingFrameEvent.frameCount">
+                    </div>
+                  </div>
+                </template>
+
                 <template v-if="editingFrameEvent.type === 'putText' || editingFrameEvent.type === 'putImage'">
                   <div class="form_columns_row">
                     <div class="form_row">
