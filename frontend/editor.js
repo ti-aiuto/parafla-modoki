@@ -1,3 +1,5 @@
+const UI_WAIT_TIME = 50; // 気持ち遅らせたほうが違和感ないので待つ
+
 function initEditor() {
   const eventTypeTable = {
     defineLabel: "ラベルを定義",
@@ -119,19 +121,66 @@ function initEditor() {
         setTimeout(() => {
           this.editingTargetFrameEvent = this.selectedFrameEvent;
           this.editingFrameEvent = structuredClone(this.selectedFrameEvent);
-        }, 50);
+        }, UI_WAIT_TIME);
       },
       clickCancelEditing() {
         setTimeout(() => {
           this.editingTargetFrameEvent = null;
           this.editingFrameEvent = null;
-        }, 50);
+        }, UI_WAIT_TIME);
       },
-      clickNewFrameEvent() {},
+      clickNewFrameEvent() {
+        setTimeout(() => {
+          const editingFrameEvent = {};
+          this.editingTargetFrameEvent = editingFrameEvent;
+          this.editingFrameEvent = structuredClone(editingFrameEvent);
+        }, UI_WAIT_TIME);
+      },
       clickRemoveFrameEvent() {},
       clickMoveUpwardFrameEvent() {},
       clickMoveDownwardFrameEvent() {},
-      onFrameEventTypeChanged() {},
+      onFrameEventTypeChanged() {
+        const frameEventType = this.editingFrameEvent.type;
+        const found = this.editingTargetFrameEvent[frameEventType];
+        if (found) {
+          this.editingFrameEvent[frameEventType] = structuredClone(found);
+          return;
+        }
+
+        const layoutOptions = {
+          x: 0,
+          y: 0,
+          width: 0,
+          height: 0,
+        };
+
+        if (frameEventType === "defineLabel") {
+          this.$set(this.editingFrameEvent, "defineLabel", { label: null });
+        } else if (frameEventType === "defineComponentUserFunction") {
+          this.$set(this.editingFrameEvent, "defineComponentUserFunction", {
+            name: null,
+            content: null,
+          });
+        } else if (frameEventType === "executeAction") {
+          this.editingFrameEvent["executeAction"] = { label: null }; // TODO
+        } else if (frameEventType === "putImage") {
+          this.$set(this.editingFrameEvent, "putImage", {
+            assetId: null,
+            hoverAssetId: null,
+            activeAssetId: null,
+          });
+          this.$set(this.editingFrameEvent, "frameCount", 0);
+          this.$set(this.editingFrameEvent, "depth", 1);
+        } else if (frameEventType === "putText") {
+          this.$set(this.editingFrameEvent, "putText", { assetId: null });
+          this.$set(this.editingFrameEvent, "frameCount", 0);
+          this.$set(this.editingFrameEvent, "depth", 1);
+        } else if (frameEventType === "doNothing") {
+          this.$set(this.editingFrameEvent, "doNothing", {});
+          this.$set(this.editingFrameEvent, "frameCount", 1);
+          this.$set(this.editingFrameEvent, "depth", 1);
+        }
+      },
       onFrameEventActionTypeChanged() {},
     },
     data: {
