@@ -75,7 +75,7 @@
                     イベントの種別
                   </div>
     
-                  <select class="form_select" v-model="editingFrameEvent.type">
+                  <select class="form_select" v-model="editingFrameEvent.type" @change="onFrameEventTypeChanged">
                     <option value="defineLabel">ラベルを定義</option>
                     <option value="putImage">画像を配置</option>
                     <option value="putText">テキストを配置</option>
@@ -86,7 +86,7 @@
                   </select>
                 </div>
     
-                <div class="form_row" v-if="editingFrameEvent.type === 'executeAction' && editingFrameEvent.executeAction">
+                <div class="form_row" v-if="editingFrameEvent.type === 'executeAction' && editingFrameEvent.executeAction" @change="onFrameEventActionTypeChanged">
                   <div class="form_row_label">
                     アクションの種別
                   </div>

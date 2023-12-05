@@ -117,15 +117,17 @@ function initEditor() {
         }
         setTimeout(() => {
           this.editingTargetFrameEvent = this.selectedFrameEvent;
-          this.editingFrameEvent = structuredClone(this.selectedFrameEvent);  
+          this.editingFrameEvent = structuredClone(this.selectedFrameEvent);
         }, 50);
       },
-      clickCancelEditing() {        
+      clickCancelEditing() {
         setTimeout(() => {
           this.editingTargetFrameEvent = null;
           this.editingFrameEvent = null;
         }, 50);
-      }
+      },
+      onFrameEventTypeChanged() {},
+      onFrameEventActionTypeChanged() {},
     },
     data: {
       frameEvents: null,
