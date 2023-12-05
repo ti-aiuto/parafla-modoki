@@ -211,6 +211,47 @@ function initEditor() {
           this.selectedFrameEvent
         );
       },
+      buildAction(actionObject, actionType) {
+        if (actionType === "play") {
+          this.$set(actionObject, "play", {});
+        } else if (actionType === "stop") {
+          this.$set(actionObject, "stop", {});
+        } else if (actionType === "eraseLayers") {
+          this.$set(actionObject, "eraseLayers", { depths: [null] });
+        } else if (actionType === "gotoAndPlay") {
+          this.$set(actionObject, "gotoAndPlay", {
+            destination: null,
+          });
+        } else if (actionType === "setTextValue") {
+          this.$set(actionObject, "setTextValue", {
+            objectId: null,
+            value: null,
+          });
+        } else if (actionType === "registerGlobalKeydownListener") {
+          this.$set(actionObject, "registerGlobalKeydownListener", {
+            componentUserFunctionName: null,
+            listenerId: null,
+          });
+        } else if (actionType === "unregisterGlobalKeydownListener") {
+          this.$set(actionObject, "unregisterGlobalKeydownListener", {
+            listenerId: null,
+          });
+        } else if (actionType === "startUserTimer") {
+          this.$set(actionObject, "startUserTimer", {
+            componentUserFunctionName: null,
+            listenerId: null,
+            interval: null,
+          });
+        } else if (actionType === "clearUserTimer") {
+          this.$set(actionObject, "clearUserTimer", {
+            listenerId: null,
+          });
+        } else if (actionType === "callComponentUserFunction") {
+          this.$set(actionObject, "callComponentUserFunction", {
+            name: null,
+          });
+        }
+      }, 
       onFrameEventTypeChanged() {
         const frameEventType = this.editingFrameEvent.type;
         const found =
@@ -284,45 +325,7 @@ function initEditor() {
           return;
         }
 
-        if (actionType === "play") {
-          this.$set(this.editingFrameEvent.executeAction, "play", {});
-        } else if (actionType === "stop") {
-          this.$set(this.editingFrameEvent.executeAction, "stop", {});
-        } else if (actionType === "eraseLayers") {
-          this.$set(this.editingFrameEvent.executeAction, "eraseLayers", { depths: [null] });
-        } else if (actionType === "gotoAndPlay") {
-          this.$set(this.editingFrameEvent.executeAction, "gotoAndPlay", {
-            destination: null,
-          });
-        } else if (actionType === "setTextValue") {
-          this.$set(this.editingFrameEvent.executeAction, "setTextValue", {
-            objectId: null,
-            value: null,
-          });
-        } else if (actionType === "registerGlobalKeydownListener") {
-          this.$set(this.editingFrameEvent.executeAction, "registerGlobalKeydownListener", {
-            componentUserFunctionName: null,
-            listenerId: null,
-          });
-        } else if (actionType === "unregisterGlobalKeydownListener") {
-          this.$set(this.editingFrameEvent.executeAction, "unregisterGlobalKeydownListener", {
-            listenerId: null,
-          });
-        } else if (actionType === "startUserTimer") {
-          this.$set(this.editingFrameEvent.executeAction, "startUserTimer", {
-            componentUserFunctionName: null,
-            listenerId: null,
-            interval: null,
-          });
-        } else if (actionType === "clearUserTimer") {
-          this.$set(this.editingFrameEvent.executeAction, "clearUserTimer", {
-            listenerId: null,
-          });
-        } else if (actionType === "callComponentUserFunction") {
-          this.$set(this.editingFrameEvent.executeAction, "callComponentUserFunction", {
-            name: null,
-          });
-        }
+        this.buildAction(this.editingFrameEvent.executeAction, actionType);
       },
       onSubmit() {
         setTimeout(() => {
