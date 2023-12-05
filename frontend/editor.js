@@ -229,7 +229,7 @@ function initEditor() {
             content: null,
           });
         } else if (frameEventType === "executeAction") {
-          this.editingFrameEvent["executeAction"] = { label: null }; // TODO
+          this.$set(this.editingFrameEvent, "executeAction", {type: null});
         } else if (frameEventType === "putImage") {
           this.$set(this.editingFrameEvent, "putImage", {
             assetId: null,
@@ -278,9 +278,9 @@ function initEditor() {
         } else if (actionType === "stop") {
           this.$set(this.editingFrameEvent.executeAction, "stop", {});
         } else if (actionType === "eraseLayers") {
-          this.$set(this.editingFrameEvent.executeAction, "eraseLayers", { depths: [] });
+          this.$set(this.editingFrameEvent.executeAction, "eraseLayers", { depths: [null] });
         } else if (actionType === "gotoAndPlay") {
-          this.$set(this.editingFrameEvent.executeActiont, "gotoAndPlay", {
+          this.$set(this.editingFrameEvent.executeAction, "gotoAndPlay", {
             destination: null,
           });
         } else if (actionType === "setTextValue") {
@@ -389,12 +389,12 @@ function initEditor() {
               updatedExecuteAction["stop"] = {};
               updatedFrameEvent['frameCount'] = 1;
             } else if (actionType === "eraseLayers") {
-              if (rawUpdatedExecuteAction["depths"][0] === "all") {
+              if (rawUpdatedExecuteAction['eraseLayers']["depths"][0] === "all") {
                 updatedExecuteAction["eraseLayers"] = { depths: ["all"] };
               } else {
                 // TODO: 本当に数値かチェックしてもいいかも
                 updatedExecuteAction["eraseLayers"] = {
-                  depths: [Number(rawUpdatedExecuteAction["depths"][0])],
+                  depths: [Number(rawUpdatedExecuteAction['eraseLayers']["depths"][0])],
                 };
               }
             } else if (actionType === "gotoAndPlay") {
