@@ -420,6 +420,17 @@ function initEditor() {
                 rawUpdatedFrameEvent["lastKeyFrame"]["layoutOptions"]
               );
             }
+
+            if (rawUpdatedFrameEvent["onClickAction"]) {
+              updatedFrameEvent["onClickAction"] = {
+                type: rawUpdatedFrameEvent["onClickAction"]["type"],
+              };
+              this.extractAction(
+                updatedFrameEvent["onClickAction"],
+                rawUpdatedFrameEvent["onClickAction"]["type"],
+                rawUpdatedFrameEvent["onClickAction"]
+              );
+            }
           }
           if (["putImage"].includes(this.editingFrameEvent.type)) {
             updatedFrameEvent["putImage"] = {
@@ -515,9 +526,9 @@ function initEditor() {
         this.$set(this.editingFrameEvent, "onClickAction", undefined);
       },
       onOnClickActionTypeChanged() {
-        const actionType = this.editingFrameEvent.onClickAction['type'];
+        const actionType = this.editingFrameEvent.onClickAction["type"];
         this.buildAction(this.editingFrameEvent.onClickAction, actionType);
-      }
+      },
     },
     data: {
       frameEvents: null,
