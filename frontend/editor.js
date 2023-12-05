@@ -10,7 +10,7 @@ function initEditor() {
   const actionTypeTable = {
     eraseLayers: "指定深度を消去",
     stop: "停止",
-    gotoAndPlay: "指定位置にジャンプして再生",
+    gotoAndPlay: "指定ラベルにジャンプして再生",
     setTextValue: "テキストの表示内容を更新",
   };
 

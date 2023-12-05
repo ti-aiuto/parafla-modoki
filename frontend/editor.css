@@ -105,7 +105,7 @@
 .modal {
   z-index: 2;
   position: absolute;
-  width: 900px;
+  width: 800px;
   background-color: #f9f9f9;
   top: 50px;
   right: 0;
@@ -131,11 +131,27 @@
 }
 
 .modal_content_left{
-  width: 600px;
+  width: 500px;
   border-right: solid 1px #aaa;
   overflow: auto;;
+  padding: 8px;
+  box-sizing: border-box;
 }
 
 .modal_content_right{
+}
 
+.form_row{
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.form_row_label {
+  padding: 0 8px 0 4px;
+}
+
+.form_select {
+  padding: 2px 4px;
 }
