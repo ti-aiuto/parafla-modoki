@@ -70,8 +70,8 @@ function initEditor() {
         return null;
         // return userResources[resourceId]["text"]["content"];
       },
-      frameEventRowStyle(row, index) {
-        if (index === this.selectedFrameIndex) {
+      frameEventRowStyle(row) {
+        if (row === this.selectedFrameEvent) {
           return { color: "#fff", "background-color": "#0000cd" };
         }
 
@@ -91,9 +91,9 @@ function initEditor() {
         this.selectedAssetId = assetId;
         this.selectedFrameIndex = null;
       },
-      selectFrameEvent(index) {
+      selectFrameEvent(frameEvent) {
         this.selectedAssetId = null;
-        this.selectedFrameIndex = index;
+        this.selectedFrameEvent = frameEvent;
       },
       openPreview() {
         const previewWindow = open("./preview.html", "preview");
@@ -107,13 +107,26 @@ function initEditor() {
           }
         }, 1000);
       },
+      clickEditFrameEvent() {
+        if (!this.selectedFrameEvent) {
+          return;
+        }
+        this.editingTargetFrameEvent = this.selectedFrameEvent;
+        this.editingFrameEvent = structuredClone(this.selectedFrameEvent);
+      },
+      clickCancelEditing() {
+        this.editingTargetFrameEvent = null;
+        this.editingFrameEvent = null;
+      }
     },
     data: {
       frameEvents: null,
       started: false,
       assetsManager: assetsManager,
       selectedAssetId: null,
-      selectedFrameIndex: null,
+      selectedFrameEvent: null,
+      editingTargetFrameEvent: null,
+      editingFrameEvent: null,
     },
     mounted() {
       this.selectStory();
