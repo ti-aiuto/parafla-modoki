@@ -133,6 +133,42 @@
                       <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.setTextValue.value">
                     </div>  
                   </template>
+
+                  <template v-if="editingFrameEvent.executeAction.type === 'registerGlobalKeydownListener' && editingFrameEvent.executeAction.registerGlobalKeydownListener">
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        リスナーID
+                      </div>
+    
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.registerGlobalKeydownListener.listenerId">
+                    </div>
+
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        ユーザ関数名
+                      </div>
+    
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.registerGlobalKeydownListener.componentUserFunctionName">
+                    </div>  
+                  </template>
+
+                  <template v-if="editingFrameEvent.executeAction.type === 'unregisterGlobalKeydownListener' && editingFrameEvent.executeAction.unregisterGlobalKeydownListener">
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        リスナーID
+                      </div>
+    
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.unregisterGlobalKeydownListener.listenerId">
+                    </div>
+
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        ユーザ関数名
+                      </div>
+    
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.unregisterGlobalKeydownListener.componentUserFunctionName">
+                    </div>  
+                  </template>
                 </template>
 
                 <div class="form_row" v-if="editingFrameEvent.type === 'defineLabel' && editingFrameEvent.defineLabel">
