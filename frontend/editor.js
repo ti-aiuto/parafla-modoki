@@ -182,6 +182,9 @@ function initEditor() {
         }
       },
       onFrameEventActionTypeChanged() {},
+      onSubmit() {
+        alert('submit');
+      }
     },
     data: {
       frameEvents: null,

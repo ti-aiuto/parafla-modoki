@@ -53,7 +53,7 @@
   
         <div class="modal">
           <div class="modal_title">イベントの編集</div>
-          <div class="modal_content">
+          <form class="modal_content" @submit.prevent="onSubmit">
             <div class="modal_content_left">
               <div class="modal_content_left_content">
                 <div class="form_row">
@@ -61,8 +61,8 @@
                     イベントの種別
                   </div>
     
-                  <select class="form_select" v-model="editingFrameEvent.type" @change="onFrameEventTypeChanged">
-                    <option value="defineLabel">ラベルを定義</option>
+                  <select class="form_select" v-model="editingFrameEvent.type" @change="onFrameEventTypeChanged" required>
+                    <option value="defineLabel" required>ラベルを定義</option>
                     <option value="putImage">画像を配置</option>
                     <option value="putText">テキストを配置</option>
                     <option value="executeAction">アクションを実行</option>
@@ -78,7 +78,7 @@
                       アクションの種別
                     </div>
       
-                    <select class="form_select" v-model="editingFrameEvent.executeAction.type" @change="onFrameEventActionTypeChanged">
+                    <select class="form_select" v-model="editingFrameEvent.executeAction.type" @change="onFrameEventActionTypeChanged" required>
                       <option value="eraseLayers">指定深度を消去</option>
                       <option value="play">再生</option>
                       <option value="stop">停止</option>
@@ -98,7 +98,7 @@
                         ジャンプ先
                       </div>
     
-                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.gotoAndPlay.destination">
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.gotoAndPlay.destination" required>
                     </div>  
                   </template>
 
@@ -108,7 +108,7 @@
                         深度(全て消去の場合はallと入力)
                       </div>
     
-                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.eraseLayers.depths[0]">
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.eraseLayers.depths[0]" required pattern="^[0-9]+$|^all$">
                     </div>  
                   </template>
                   
@@ -118,7 +118,7 @@
                         オブジェクトID
                       </div>
     
-                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.setTextValue.objectId">
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.setTextValue.objectId" required pattern="^\w+$">
                     </div>
 
                     <div class="form_row">
@@ -136,7 +136,7 @@
                         リスナーID
                       </div>
     
-                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.registerGlobalKeydownListener.listenerId">
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.registerGlobalKeydownListener.listenerId" required>
                     </div>
 
                     <div class="form_row">
@@ -144,7 +144,7 @@
                         ユーザ関数名
                       </div>
     
-                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.registerGlobalKeydownListener.componentUserFunctionName">
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.registerGlobalKeydownListener.componentUserFunctionName" required>
                     </div>  
                   </template>
 
@@ -154,7 +154,7 @@
                         リスナーID
                       </div>
     
-                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.unregisterGlobalKeydownListener.listenerId">
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.unregisterGlobalKeydownListener.listenerId" required>
                     </div>
                   </template>
 
@@ -164,7 +164,7 @@
                         リスナーID
                       </div>
     
-                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.startUserTimer.listenerId">
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.startUserTimer.listenerId" required>
                     </div>
 
                     <div class="form_row">
@@ -172,7 +172,7 @@
                         ユーザ関数名
                       </div>
     
-                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.startUserTimer.componentUserFunctionName">
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.startUserTimer.componentUserFunctionName" required>
                     </div>
                     
                     <div class="form_row">
@@ -180,7 +180,7 @@
                         間隔(1000で1秒)
                       </div>
     
-                      <input type="number" class="form_input_number" v-model="editingFrameEvent.executeAction.startUserTimer.componentUserFunctionName">
+                      <input type="number" class="form_input_number" v-model="editingFrameEvent.executeAction.startUserTimer.componentUserFunctionName" required>
                     </div>
                   </template>
 
@@ -190,7 +190,7 @@
                         リスナーID
                       </div>
     
-                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.clearUserTimer.listenerId">
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.clearUserTimer.listenerId" required>
                     </div>
                   </template>
                 </template>
@@ -200,7 +200,7 @@
                     ラベル名
                   </div>
 
-                  <input type="text" class="form_input_text" v-model="editingFrameEvent.defineLabel.label">
+                  <input type="text" class="form_input_text" v-model="editingFrameEvent.defineLabel.label" required>
                 </div>
                 
                 <template v-if="editingFrameEvent.type === 'defineComponentUserFunction' && editingFrameEvent.defineComponentUserFunction">
@@ -209,7 +209,7 @@
                       ユーザ関数名
                     </div>
   
-                    <input type="text" class="form_input_text" v-model="editingFrameEvent.defineComponentUserFunction.name">
+                    <input type="text" class="form_input_text" v-model="editingFrameEvent.defineComponentUserFunction.name" required>
                   </div>  
 
                   <div class="form_row">
@@ -217,7 +217,7 @@
                       スクリプト
                     </div>
   
-                    <textarea class="form_textarea" v-model="editingFrameEvent.defineComponentUserFunction.content"></textarea>
+                    <textarea class="form_textarea" v-model="editingFrameEvent.defineComponentUserFunction.content" required></textarea>
                   </div>  
                 </template>
                                 
@@ -228,7 +228,7 @@
                         ﾌﾚｰﾑｶｳﾝﾄ
                       </div>
     
-                      <input type="number" class="form_input_number" v-model="editingFrameEvent.frameCount">
+                      <input type="number" class="form_input_number" v-model="editingFrameEvent.frameCount" required>
                     </div>
                   </div>
                 </template>
@@ -240,7 +240,7 @@
                         深度
                       </div>
     
-                      <input type="number" class="form_input_number" v-model="editingFrameEvent.depth">
+                      <input type="number" class="form_input_number" v-model="editingFrameEvent.depth" required>
                     </div>
 
                     <div class="form_row">
@@ -248,7 +248,7 @@
                         ﾌﾚｰﾑｶｳﾝﾄ
                       </div>
     
-                      <input type="number" class="form_input_number" v-model="editingFrameEvent.frameCount">
+                      <input type="number" class="form_input_number" v-model="editingFrameEvent.frameCount" required>
                     </div>
                   </div>
                   
@@ -257,7 +257,7 @@
                       ｵﾌﾞｼﾞｪｸﾄID
                     </div>
 
-                    <input type="text" class="form_input_text" v-model="editingFrameEvent.objectId">
+                    <input type="text" class="form_input_text" v-model="editingFrameEvent.objectId" required pattern="^\w+$">
                   </div>
 
                   <template v-if="editingFrameEvent.layoutOptions">
@@ -267,7 +267,7 @@
                           X
                         </div>
       
-                        <input type="number" class="form_input_number" v-model="editingFrameEvent.layoutOptions.x">
+                        <input type="number" class="form_input_number" v-model="editingFrameEvent.layoutOptions.x" required>
                       </div>
                       
                       <div class="form_row">
@@ -275,7 +275,7 @@
                           Y
                         </div>
       
-                        <input type="number" class="form_input_number" v-model="editingFrameEvent.layoutOptions.y">
+                        <input type="number" class="form_input_number" v-model="editingFrameEvent.layoutOptions.y" required>
                       </div>
 
                       <div class="form_row">
@@ -283,7 +283,7 @@
                           幅
                         </div>
       
-                        <input type="number" class="form_input_number" v-model="editingFrameEvent.layoutOptions.width">
+                        <input type="number" class="form_input_number" v-model="editingFrameEvent.layoutOptions.width" required>
                       </div>
                       
                       <div class="form_row">
@@ -291,7 +291,7 @@
                           高さ
                         </div>
       
-                        <input type="number" class="form_input_number" v-model="editingFrameEvent.layoutOptions.height">
+                        <input type="number" class="form_input_number" v-model="editingFrameEvent.layoutOptions.height" required>
                       </div>
                     </div>
                   </template>
@@ -303,7 +303,7 @@
                           移動後X
                         </div>
       
-                        <input type="number" class="form_input_number" v-model="editingFrameEvent.lastKeyFrame.layoutOptions.x">
+                        <input type="number" class="form_input_number" v-model="editingFrameEvent.lastKeyFrame.layoutOptions.x" required>
                       </div>
                       
                       <div class="form_row">
@@ -311,7 +311,7 @@
                           Y
                         </div>
       
-                        <input type="number" class="form_input_number" v-model="editingFrameEvent.lastKeyFrame.layoutOptions.y">
+                        <input type="number" class="form_input_number" v-model="editingFrameEvent.lastKeyFrame.layoutOptions.y" required>
                       </div>
 
                       <div class="form_row">
@@ -319,7 +319,7 @@
                           幅
                         </div>
       
-                        <input type="number" class="form_input_number" v-model="editingFrameEvent.lastKeyFrame.layoutOptions.width">
+                        <input type="number" class="form_input_number" v-model="editingFrameEvent.lastKeyFrame.layoutOptions.width" required>
                       </div>
                       
                       <div class="form_row">
@@ -327,7 +327,7 @@
                           高さ
                         </div>
       
-                        <input type="number" class="form_input_number" v-model="editingFrameEvent.lastKeyFrame.layoutOptions.height">
+                        <input type="number" class="form_input_number" v-model="editingFrameEvent.lastKeyFrame.layoutOptions.height" required>
                       </div>
                     </div>
                   </template>
@@ -340,7 +340,7 @@
                         ｱｾｯﾄID
                       </div>
     
-                      <input type="text" class="form_input_number" v-model="editingFrameEvent.putImage.assetId">
+                      <input type="text" class="form_input_number" v-model="editingFrameEvent.putImage.assetId" required pattern="^\w+$">
                     </div>
                     
                     <div class="form_row">
@@ -348,7 +348,7 @@
                         ﾎﾊﾞｰ時ID
                       </div>
     
-                      <input type="text" class="form_input_number" v-model="editingFrameEvent.putImage.hoverAssetId">
+                      <input type="text" class="form_input_number" v-model="editingFrameEvent.putImage.hoverAssetId" pattern="^\w*$">
                     </div>
 
                     <div class="form_row">
@@ -356,21 +356,21 @@
                         ｱｸﾃｨﾌﾞ時ID
                       </div>
     
-                      <input type="text" class="form_input_number" v-model="editingFrameEvent.putImage.activeAssetId">
+                      <input type="text" class="form_input_number" v-model="editingFrameEvent.putImage.activeAssetId" required pattern="^\w*$">
                     </div>
                   </div>
                 </template>
               </div>
   
               <div class="modal_bottom_control">
-                <button class="form_button">OK</button>
-                <button class="form_button" @click="clickCancelEditing">キャンセル</button>  
+                <button class="form_button" type="submit">OK</button>
+                <button class="form_button" @click="clickCancelEditing" type="button">キャンセル</button>  
               </div>
             </div>
             <div class="modal_content_right">
               right
             </div>
-          </div>
+          </form>
         </div>
       </div>
       
