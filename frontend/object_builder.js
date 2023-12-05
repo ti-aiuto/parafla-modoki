@@ -24,6 +24,7 @@ const ObjectBuilder = function() {
     if (text.backgroundColor) {
       targetElement.style.backgroundColor = text.backgroundColor;
     }
+    targetElement.style.boxSizing = 'border-box';
   }
 
   return instance;
