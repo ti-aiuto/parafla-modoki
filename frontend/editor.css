@@ -93,3 +93,30 @@
 .frame_events_table_td:last-of-type {
   border-right-width: 0;
 }
+
+.modal_background {
+  z-index: 1;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal {
+  z-index: 2;
+  position: absolute;
+  width: 900px;
+  height: 500px;
+  background-color: #f9f9f9;
+  top: 50px;
+  right: 0;
+  left: 0;
+  margin: 0 auto;
+  border-radius: 12px;
+}
+
+.modal_title {
+    color: #333;
+    padding: 8px;
+    border-bottom: solid 1px #aaa;
+}
