@@ -224,6 +224,19 @@ function initEditor() {
               );
             }
           }
+          if (["putImage"].includes(this.editingFrameEvent.type)) {
+            updatedFrameEvent["putImage"] = {
+              assetId: rawUpdatedFrameEvent["putImage"]["assetId"],
+              hoverAssetId: rawUpdatedFrameEvent["putImage"]["hoverAssetId"],
+              activeAassetId:
+                rawUpdatedFrameEvent["putImage"]["activeAassetId"],
+            };
+          }
+          if (["putText"].includes(this.editingFrameEvent.type)) {
+            updatedFrameEvent["putText"] = {
+              assetId: rawUpdatedFrameEvent["putText"]["assetId"],
+            };
+          }
           if (["defineLabel"].includes(this.editingFrameEvent.type)) {
             updatedFrameEvent["defineLabel"] = {
               destination: rawUpdatedFrameEvent["defineLabel"]["destination"],
