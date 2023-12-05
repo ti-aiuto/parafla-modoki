@@ -160,7 +160,7 @@
   display: flex;
   align-items: center;
   font-size: 14px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .form_row_label {
@@ -177,6 +177,13 @@
   font-size: 14px;
   box-sizing: border-box;
   padding: 0 4px;
+}
+
+.form_textarea {
+  flex-grow: 1;
+  font-size: 12px;
+  padding: 4px;
+  height: 150px;
 }
 
 .form_button {

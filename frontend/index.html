@@ -112,6 +112,24 @@
 
                   <input type="text" class="form_input_text" v-model="editingFrameEvent.defineLabel.label">
                 </div>
+                
+                <template v-if="editingFrameEvent.type === 'defineComponentUserFunction' && editingFrameEvent.defineComponentUserFunction">
+                  <div class="form_row">
+                    <div class="form_row_label">
+                      ユーザ関数名
+                    </div>
+  
+                    <input type="text" class="form_input_text" v-model="editingFrameEvent.defineComponentUserFunction.name">
+                  </div>  
+
+                  <div class="form_row">
+                    <div class="form_row_label">
+                      スクリプト
+                    </div>
+  
+                    <textarea class="form_textarea" v-model="editingFrameEvent.defineComponentUserFunction.content"></textarea>
+                  </div>  
+                </template>
               </div>
   
               <div class="modal_bottom_control">
