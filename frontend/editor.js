@@ -3,8 +3,8 @@ function initEditor() {
     defineLabel: "ラベルを定義",
     defineComponentUserFunction: "ユーザ関数を定義",
     executeAction: "アクションを実行",
-    putImage: "画像を表示",
-    putText: "テキストを表示",
+    putImage: "画像を配置",
+    putText: "テキストを配置",
     doNothing: "何もしない",
   };
   const actionTypeTable = {
