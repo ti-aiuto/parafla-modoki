@@ -273,9 +273,7 @@ function initEditor() {
           }
           if (["putImage", "putText"].includes(this.editingFrameEvent.type)) {
             updatedFrameEvent["depth"] = Number(rawUpdatedFrameEvent["depth"]);
-            updatedFrameEvent["objectId"] = Number(
-              rawUpdatedFrameEvent["objectId"]
-            );
+            updatedFrameEvent["objectId"] = rawUpdatedFrameEvent["objectId"];
             updatedFrameEvent["layoutOptions"] = structuredClone(
               rawUpdatedFrameEvent["layoutOptions"]
             );
