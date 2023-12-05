@@ -450,7 +450,6 @@ function initEditor() {
                 rawUpdatedFrameEvent["defineComponentUserFunction"]["content"],
             };
           }
-          // TODO: アクションを実行
 
           if (["executeAction"].includes(this.editingFrameEvent.type)) {
             const rawUpdatedExecuteAction =
@@ -515,6 +514,10 @@ function initEditor() {
       onClickDisableClickAction() {
         this.$set(this.editingFrameEvent, "onClickAction", undefined);
       },
+      onOnClickActionTypeChanged() {
+        const actionType = this.editingFrameEvent.onClickAction['type'];
+        this.buildAction(this.editingFrameEvent.onClickAction, actionType);
+      }
     },
     data: {
       frameEvents: null,
