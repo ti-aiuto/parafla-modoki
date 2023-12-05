@@ -104,6 +104,14 @@
                     <option value="clearUserTimer">タイマーを解除</option>
                   </select>
                 </div>
+
+                <div class="form_row" v-if="editingFrameEvent.type === 'defineLabel' && editingFrameEvent.defineLabel">
+                  <div class="form_row_label">
+                    ラベル名
+                  </div>
+
+                  <input type="text" class="form_input_text" v-model="editingFrameEvent.defineLabel.label">
+                </div>
               </div>
   
               <div class="modal_bottom_control">

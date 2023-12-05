@@ -171,6 +171,14 @@
   padding: 2px;
 }
 
+.form_input_text {
+  flex-grow: 1;
+  line-height: 28px;
+  font-size: 14px;
+  box-sizing: border-box;
+  padding: 0 4px;
+}
+
 .form_button {
   line-height: 28px;
   font-size: 13px;
