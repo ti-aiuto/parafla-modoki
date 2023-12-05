@@ -493,6 +493,28 @@ function initEditor() {
           this.selectedFrameEvent = updatedFrameEvent; // 編集中は選択中なので選択中の参照も入れ替える
         }, UI_WAIT_TIME);
       },
+      onClickEnableAnimation() {
+        const layoutOptions = {
+          x: 0,
+          y: 0,
+          width: 640,
+          height: 480,
+        };
+        this.$set(this.editingFrameEvent, "lastKeyFrame", {
+          layoutOptions,
+        });
+      },
+      onClickDisableAnimation() {
+        this.$set(this.editingFrameEvent, "lastKeyFrame", undefined);
+      },
+      onClickEnableClickAction() {
+        this.$set(this.editingFrameEvent, "onClickAction", {
+          type: null,
+        });
+      },
+      onClickDisableClickAction() {
+        this.$set(this.editingFrameEvent, "onClickAction", undefined);
+      },
     },
     data: {
       frameEvents: null,

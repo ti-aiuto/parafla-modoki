@@ -259,7 +259,7 @@
     
                       <input type="number" class="form_input_number" v-model="editingFrameEvent.frameCount" required min="0">
                     </div>
-                    
+
                     <div class="form_row">
                       <div class="form_row_label">
                         ｵﾌﾞｼﾞｪｸﾄID
@@ -307,10 +307,10 @@
 
                   <div class="form_columns_row">
                     <div class="form_row">
-                      <button class="form_button" type="button">アニメーションを有効化</button>
+                      <button class="form_button" type="button" @click="onClickEnableAnimation" :disabled="editingFrameEvent.lastKeyFrame || editingFrameEvent.frameCount < 2">アニメーションを有効化</button>
                     </div>
                     <div class="form_row">
-                      <button class="form_button" type="button">アニメーションを削除</button>
+                      <button class="form_button" type="button" @click="onClickDisableAnimation" :disabled="!editingFrameEvent.lastKeyFrame">アニメーションを削除</button>
                     </div>
                   </div>
 
@@ -352,10 +352,10 @@
 
                   <div class="form_columns_row">
                     <div class="form_row">
-                      <button class="form_button" type="button">クリック時のアクションを設定</button>
+                      <button class="form_button" type="button" @click="onClickEnableClickAction" :disabled="editingFrameEvent.onClickAction">クリック時のアクションを設定</button>
                     </div>
                     <div class="form_row">
-                      <button class="form_button" type="button">クリック時のアクションを削除</button>
+                      <button class="form_button" type="button" @click="onClickDisableClickAction" :disabled="!editingFrameEvent.onClickAction">クリック時のアクションを削除</button>
                     </div>
                   </div>
                 </template>
