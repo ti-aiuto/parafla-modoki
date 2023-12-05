@@ -96,7 +96,7 @@ function initEditor() {
       },
       selectAsset(assetId) {
         this.selectedAssetId = assetId;
-        this.selectedFrameIndex = null;
+        this.selectedFrameEvent = null;
       },
       selectFrameEvent(frameEvent) {
         this.selectedAssetId = null;
@@ -197,7 +197,7 @@ function initEditor() {
         setTimeout(() => {
           // TODO: ここでいらないプロパティを消せるとよい
           const rawUpdatedFrameEvent = this.editingFrameEvent;
-          const updatedFrameEvent = { type: rawUpdatedFrameEvent["type"] };
+          const updatedFrameEvent = { type: rawUpdatedFrameEvent["type"], frameCount: 0 };
           if (
             ["putImage", "putObject", "doNothing"].includes(
               this.editingFrameEvent.type
@@ -207,7 +207,7 @@ function initEditor() {
               rawUpdatedFrameEvent["frameCount"]
             );
           }
-          if (["putImage", "putObject"].includes(this.editingFrameEvent.type)) {
+          if (["putImage", "putText"].includes(this.editingFrameEvent.type)) {
             updatedFrameEvent["depth"] = Number(rawUpdatedFrameEvent["depth"]);
             updatedFrameEvent["objectId"] = Number(
               rawUpdatedFrameEvent["objectId"]
@@ -239,7 +239,7 @@ function initEditor() {
           }
           if (["defineLabel"].includes(this.editingFrameEvent.type)) {
             updatedFrameEvent["defineLabel"] = {
-              destination: rawUpdatedFrameEvent["defineLabel"]["destination"],
+              label: rawUpdatedFrameEvent["defineLabel"]["label"],
             };
           }
           if (

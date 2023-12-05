@@ -67,7 +67,6 @@
                     <option value="putText">テキストを配置</option>
                     <option value="executeAction">アクションを実行</option>
                     <option value="doNothing">何もしない</option>
-                    <option value="executeAction">停止</option>
                     <option value="defineComponentUserFunction">ユーザ関数を定義</option>
                   </select>
                 </div>
@@ -357,6 +356,18 @@
                       </div>
     
                       <input type="text" class="form_input_number" v-model="editingFrameEvent.putImage.activeAssetId" pattern="^\w*$">
+                    </div>
+                  </div>
+                </template>
+                
+                <template v-if="editingFrameEvent.type === 'putText' && editingFrameEvent.putText">
+                  <div class="form_columns_row">
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        ｱｾｯﾄID
+                      </div>
+    
+                      <input type="text" class="form_input_number" v-model="editingFrameEvent.putText.assetId" required pattern="^\w+$">
                     </div>
                   </div>
                 </template>

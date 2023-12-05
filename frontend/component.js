@@ -262,7 +262,7 @@ const Component = function (
       }
 
       const depth = putObject.depth;
-      if (putObject.frameCountIndex <= 1) {
+      if (putObject.frameCountIndex <= 1 || !putObject.lastKeyFrame) {
         // 0または1
         // TODO: ここでdepthあるかの判定
         instance.screenObjectsManager.depthToLayer[depth] = {
