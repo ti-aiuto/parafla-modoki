@@ -1,6 +1,14 @@
 const ObjectBuilder = function () {
   const instance = {};
 
+  instance.setLayoutOptionsToElement = function(element, layoutOptions) {
+    element.style.position = "absolute";
+    element.style.width = `${layoutOptions.width}px`;
+    element.style.height = `${layoutOptions.height}px`;
+    element.style.left = `${layoutOptions.x}px`;
+    element.style.top = `${layoutOptions.y}px`;
+  }
+
   instance.buildImage = function (targetElement, styleElement, fullObjectId, image) {
     console.log(image);
     targetElement = document.createElement("div");

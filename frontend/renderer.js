@@ -4,14 +4,6 @@ const Renderer = function () {
 
   instance.objectBuilder = ObjectBuilder();
 
-  function setLayoutOptionsToElement(element, layoutOptions) {
-    element.style.position = "absolute";
-    element.style.width = `${layoutOptions.width}px`;
-    element.style.height = `${layoutOptions.height}px`;
-    element.style.left = `${layoutOptions.x}px`;
-    element.style.top = `${layoutOptions.y}px`;
-  }
-
   instance.render = function render(screenObjectsManager) {
     const depthToLayer = screenObjectsManager.depthToLayer;
     const root = document.getElementById("root");
@@ -72,7 +64,12 @@ const Renderer = function () {
 
         if (object.type === "image") {
           targetElement = document.createElement("div");
-          instance.objectBuilder.buildImage(targetElement, styleElement, object.fullObjectId, object.image);
+          instance.objectBuilder.buildImage(
+            targetElement,
+            styleElement,
+            object.fullObjectId,
+            object.image
+          );
         } else if (object.type === "text") {
           if (object.text.editable) {
             targetElement = document.createElement("input");
@@ -85,10 +82,10 @@ const Renderer = function () {
         }
 
         if (object.onClickAction) {
-          targetElement.style.cursor = 'pointer';
+          targetElement.style.cursor = "pointer";
         } else {
           if (!object.text?.editable) {
-            targetElement.style.cursor = 'default';
+            targetElement.style.cursor = "default";
           }
         }
 
@@ -97,8 +94,10 @@ const Renderer = function () {
         wrapper.appendChild(targetElement);
       }
 
-      const layoutOptions = object.layoutOptions;
-      setLayoutOptionsToElement(targetElement, layoutOptions);
+      instance.objectBuilder.setLayoutOptionsToElement(
+        targetElement,
+        object.layoutOptions
+      );
       if (object.type === "image") {
         // 画像の入れ替えは対応しない
       } else if (object.type === "text") {
