@@ -115,7 +115,7 @@ input[type="number"] {
 .modal {
   z-index: 2;
   position: absolute;
-  width: 850px;
+  width: 950px;
   background-color: #f9f9f9;
   top: 50px;
   right: 0;

@@ -113,7 +113,25 @@ function initEditor() {
         const previewElement = document.createElement("div");
         wrapper.appendChild(previewElement);
         this.objectBuilder.updateText(previewElement, this.selectedAsset.text);
-      },  
+      },
+      buildFrameEventElement(previewElement, styleElement, frameEvent) {
+        if (frameEvent.type === 'putImage') {
+          const putImageEvent = frameEvent['putImage'];
+          const image = {
+            image: this.assetsManager.find(putImageEvent.assetId)?.image,  // TODO: なかった場合
+            hoverImage: this.assetsManager.find(putImageEvent.hoverAssetId)?.image, 
+            activeImage: this.assetsManager.find(putImageEvent.activeAssetId)?.image, 
+          }
+          this.objectBuilder.initImage(styleElement, 'preview', image);
+          previewElement.dataset.fullObjectId = 'preview';
+          this.objectBuilder.setLayoutOptionsToElement(previewElement, frameEvent.layoutOptions);
+        } else if (frameEvent.type === 'putText') {
+          const putTextEvent = frameEvent['putText'];
+          const text = this.assetsManager.find(putTextEvent.assetId).text; // TODO: なかった場合
+          this.objectBuilder.updateText(previewElement, text);
+          this.objectBuilder.setLayoutOptionsToElement(previewElement, frameEvent.layoutOptions);
+        }
+      },
       updateEventPreview() {
         const wrapper = this.$refs.eventPreviewWrapper;
         while(wrapper.firstChild) {
@@ -123,22 +141,7 @@ function initEditor() {
         const styleElement = document.createElement('style');
         wrapper.appendChild(previewElement);
         wrapper.appendChild(styleElement);
-        if (this.selectedFrameEvent.type === 'putImage') {
-          const putImageEvent = this.selectedFrameEvent['putImage'];
-          const image = {
-            image: this.assetsManager.find(putImageEvent.assetId)?.image,  // TODO: なかった場合
-            hoverImage: this.assetsManager.find(putImageEvent.hoverAssetId)?.image, 
-            activeImage: this.assetsManager.find(putImageEvent.activeAssetId)?.image, 
-          }
-          this.objectBuilder.initImage(styleElement, 'preview', image);
-          previewElement.dataset.fullObjectId = 'preview';
-          this.objectBuilder.setLayoutOptionsToElement(previewElement, this.selectedFrameEvent.layoutOptions);
-        } else if (this.selectedFrameEvent.type === 'putText') {
-          const putTextEvent = this.selectedFrameEvent['putText'];
-          const text = this.assetsManager.find(putTextEvent.assetId).text; // TODO: なかった場合
-          this.objectBuilder.updateText(previewElement, text);
-          this.objectBuilder.setLayoutOptionsToElement(previewElement, this.selectedFrameEvent.layoutOptions);
-        }
+        this.buildFrameEventElement(previewElement, styleElement, this.selectedFrameEvent);
       },
       selectFrameEvent(frameEvent) {
         this.selectedAssetId = null;
