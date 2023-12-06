@@ -102,21 +102,44 @@ function initEditor() {
         this.selectedAssetId = assetId;
         this.selectedFrameEvent = null;
         if (this.selectedAsset?.type === "text") {
-          const previewElement = document.createElement("div");
-          const wrapper = this.$refs.textWrapper;
-          if (wrapper.firstChild) {
-            wrapper.removeChild(wrapper.firstChild);
+          this.updateTextAssetPreview();
+        }
+      },
+      updateTextAssetPreview() {
+        const wrapper = this.$refs.textWrapper;
+        if (wrapper.firstChild) {
+          wrapper.removeChild(wrapper.firstChild);
+        }
+        const previewElement = document.createElement("div");
+        wrapper.appendChild(previewElement);
+        this.objectBuilder.updateText(previewElement, this.selectedAsset.text);
+      },  
+      updateEventPreview() {
+        const wrapper = this.$refs.eventPreviewWrapper;
+        while(wrapper.firstChild) {
+          wrapper.removeChild(wrapper.firstChild);
+        }
+        const previewElement = document.createElement('div');
+        const styleElement = document.createElement('style');
+        wrapper.appendChild(previewElement);
+        wrapper.appendChild(styleElement);
+        if (this.selectedFrameEvent.type === 'putImage') {
+          const putImageEvent = this.selectedFrameEvent['putImage'];
+          const image = {
+            image: this.assetsManager.find(putImageEvent.assetId)?.image, 
+            hoverImage: this.assetsManager.find(putImageEvent.hoverAssetId)?.image, 
+            activeImage: this.assetsManager.find(putImageEvent.activeAssetId)?.image, 
           }
-          wrapper.appendChild(previewElement);
-          this.objectBuilder.updateText(
-            previewElement,
-            this.selectedAsset.text
-          );
+          this.objectBuilder.initImage(styleElement, 'preview', image);
+          previewElement.dataset.fullObjectId = 'preview';
+          this.objectBuilder.setLayoutOptionsToElement(previewElement, this.selectedFrameEvent.layoutOptions);
+        } else if (this.selectFrameEvent.type === 'putText') {
         }
       },
       selectFrameEvent(frameEvent) {
         this.selectedAssetId = null;
         this.selectedFrameEvent = frameEvent;
+        this.updateEventPreview();
       },
       openPreview() {
         const previewWindow = open("./preview.html", "preview");

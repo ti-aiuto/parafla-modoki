@@ -228,3 +228,14 @@ input[type="number"] {
   width: 100%;
   max-height: 170px;
 }
+.asset_preview_event {
+  width: 220px;
+  height: calc(3 * 220px / 4);
+  border: solid 1px #333;
+  box-sizing: border-box;
+}
+.asset_preview_wrapper {
+  position: relative;
+  transform-origin: top left;
+  transform: scale(calc(220 / 640));
+}

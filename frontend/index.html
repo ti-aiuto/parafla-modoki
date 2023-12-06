@@ -558,14 +558,18 @@
         <div class="editor_columns">
           <div class="editor_left_column">
             <div class="editor_left_column_top">
-              <div class="asset_preview">
-                <template v-show="selectedAsset">
+              <div class="asset_preview" v-show="selectedAsset">
                   <template v-if="selectedAsset?.type === 'image'">
                     <img :src="selectedAsset.image.source" class="asset_preview_image">
                   </template>
 
-                  <div ref="textWrapper" v-show="selectedAsset?.type === 'text'"></div>
-                </template>  
+                <div ref="textWrapper" v-show="selectedAsset?.type === 'text'"></div>
+              </div>
+              
+              <div class="asset_preview" v-show="selectedFrameEvent">
+                <div class="asset_preview_event">
+                  <div ref="eventPreviewWrapper"  class="asset_preview_wrapper"></div>
+                </div>
               </div>
             </div>
             <div class="editor_left_column_bottom">
