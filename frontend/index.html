@@ -559,9 +559,14 @@
           <div class="editor_left_column">
             <div class="editor_left_column_top">
               <div class="asset_preview">
-                <template v-if="selectedAsset">
-                  <template v-if="selectedAsset.type === 'image'">
+                <template v-show="selectedAsset">
+                  <template v-if="selectedAsset?.type === 'image'">
                     <img :src="selectedAsset.image.source" class="asset_preview_image">
+                  </template>
+
+                  <template v-show="selectedAsset?.type === 'text'">
+                    <div ref="textWrapper">
+                    </div>
                   </template>
                 </template>  
               </div>

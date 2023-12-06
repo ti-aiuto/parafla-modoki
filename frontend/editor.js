@@ -101,6 +101,18 @@ function initEditor() {
       selectAsset(assetId) {
         this.selectedAssetId = assetId;
         this.selectedFrameEvent = null;
+        if (this.selectedAsset?.type === "text") {
+          const previewElement = document.createElement("div");
+          const wrapper = this.$refs.textWrapper;
+          if (wrapper.firstChild) {
+            wrapper.removeChild(wrapper.firstChild);
+          }
+          wrapper.appendChild(previewElement);
+          this.objectBuilder.updateText(
+            previewElement,
+            this.selectedAsset.text
+          );
+        }
       },
       selectFrameEvent(frameEvent) {
         this.selectedAssetId = null;
@@ -525,7 +537,7 @@ function initEditor() {
         if (Number(this.editingFrameEvent.frameCount) < 2) {
           this.onClickDisableAnimation();
         }
-      }
+      },
     },
     computed: {
       selectedAsset() {
@@ -539,6 +551,7 @@ function initEditor() {
       frameEvents: null,
       started: false,
       assetsManager: assetsManager,
+      objectBuilder: new ObjectBuilder(),
       selectedAssetId: null,
       selectedFrameEvent: null,
       editingTargetFrameEvent: null,
