@@ -647,6 +647,8 @@ function initEditor() {
       selectedFrameEvent: null,
       editingTargetFrameEvent: null,
       editingFrameEvent: null,
+      editingTargetAsset: null,
+      editingAsset: null,
     },
     watch: {
       editingFrameEvent: {

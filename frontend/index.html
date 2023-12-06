@@ -46,12 +46,12 @@
   </head>
   <body>
     <div id="vue_root">
-      <div v-cloack>
+      <div v-cloack v-if="editingAsset">
         <div class="modal_background">
           &nbsp;
         </div>
   
-        <div class="modal edit_text_modal" v-if="false">
+        <div class="modal edit_text_modal" v-if="editingAsset?.type === 'text'">
           <div class="modal_title">テキストの編集</div>
           
           <form class="modal_content" @submit.prevent="onSubmit">
@@ -144,7 +144,7 @@
           </form>
         </div>
 
-        <div class="modal edit_text_modal" v-if="true">
+        <div class="modal edit_text_modal" v-if="editingAsset?.type === 'image'">
           <div class="modal_title">画像の編集</div>
           
           <form class="modal_content" @submit.prevent="onSubmit">
