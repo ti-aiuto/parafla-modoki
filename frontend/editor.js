@@ -222,6 +222,16 @@ function initEditor() {
         setTimeout(() => {
           this.editingTargetFrameEvent = this.selectedFrameEvent;
           this.editingFrameEvent = structuredClone(this.selectedFrameEvent);
+
+          // 「未選択」の選択状態を正しく表示するためのロジック
+          if (this.editingFrameEvent.type === 'putImage') {
+            if (!this.editingFrameEvent['putImage'].hoverAssetId) {
+              this.$set(this.editingFrameEvent['putImage'], 'hoverAssetId', '');
+            }
+            if (!this.editingFrameEvent['putImage'].activeAssetId) {
+              this.$set(this.editingFrameEvent['putImage'], 'activeAssetId', '');
+            }
+          }
         }, UI_WAIT_TIME);
       },
       clickCancelEditing() {
@@ -535,8 +545,8 @@ function initEditor() {
               hoverAssetId: rawUpdatedFrameEvent["putImage"]["hoverAssetId"]
                 ? Number(rawUpdatedFrameEvent["putImage"]["hoverAssetId"])
                 : null,
-              activeAassetId: rawUpdatedFrameEvent["putImage"]["activeAassetId"]
-                ? Number(rawUpdatedFrameEvent["putImage"]["activeAassetId"])
+                activeAssetId: rawUpdatedFrameEvent["putImage"]["activeAssetId"]
+                ? Number(rawUpdatedFrameEvent["putImage"]["activeAssetId"])
                 : null,
             };
           }
