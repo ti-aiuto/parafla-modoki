@@ -11,10 +11,6 @@
     <script type="text/javascript" src="renderer.js"></script>
     <script type="text/javascript" src="assets_manager.js"></script>
 
-    <script type="text/javascript" src="assets.js"></script>
-    <script type="text/javascript">
-      const assetsManager = AssetsManager(window.dummyAssets);
-    </script>
     <script type="text/javascript">
       function load() {
         const compiler = Compiler(assetsManager);
@@ -33,7 +29,9 @@
       let firstEvent = true;
       window.addEventListener("message", function (e) {
         if (firstEvent) {
-          window.frameEvents = JSON.parse(e.data);
+          const data = JSON.parse(e.data);
+          window.assetsManager = AssetsManager(data["allIdToAsset"]);
+          window.frameEvents = data["frameEvents"];
           load();
         }
         firstEvent = false;

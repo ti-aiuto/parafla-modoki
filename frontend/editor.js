@@ -202,7 +202,7 @@ function initEditor() {
         // 受け取れてるかわからないので繰り返し送信する
         let count = 0;
         const timerId = setInterval(() => {
-          previewWindow.postMessage(JSON.stringify(this.frameEvents), "*");
+          previewWindow.postMessage(JSON.stringify({frameEvents: this.frameEvents, allIdToAsset: this.allIdToAsset}), "*");
           count++;
           if (count >= 5) {
             clearInterval(timerId);
