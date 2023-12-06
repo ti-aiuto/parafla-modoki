@@ -426,11 +426,11 @@
                     </div>
   
                     <textarea class="form_textarea" v-model="editingFrameEvent.defineComponentUserFunction.content" required></textarea>
-
-                    <div class="form_row">
-                      <button class="form_button" type="button" @click="checkScript(editingFrameEvent.defineComponentUserFunction.content)">スクリプトの構文チェック</button>
-                    </div>
                   </div>  
+
+                  <div class="form_row">
+                    <button class="form_button" type="button" @click="checkScript(editingFrameEvent.defineComponentUserFunction.content)">スクリプトの構文チェック</button>
+                  </div>
                 </template>
                                 
                 <template v-if="editingFrameEvent.type === 'doNothing'">
