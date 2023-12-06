@@ -132,7 +132,7 @@ function initEditor() {
               ?.image,
           };
           if (!image.image) {
-            return alert("画像不明");
+            return;
           }
           this.objectBuilder.initImage(styleElement, fullObjectId, image);
           previewElement.dataset.fullObjectId = fullObjectId;
@@ -144,7 +144,7 @@ function initEditor() {
           const putTextEvent = frameEvent["putText"];
           const text = this.assetsManager.find(putTextEvent.assetId)?.text; // TODO: なかった場合
           if (!text) {
-            return alert("画像不明");
+            return;
           }
           this.objectBuilder.updateText(previewElement, text);
           this.objectBuilder.setLayoutOptionsToElement(
@@ -444,8 +444,8 @@ function initEditor() {
         } else if (frameEventType === "putImage") {
           this.$set(this.editingFrameEvent, "putImage", {
             assetId: null,
-            hoverAssetId: null,
-            activeAssetId: null,
+            hoverAssetId: '',
+            activeAssetId: '',
           });
           this.$set(this.editingFrameEvent, "frameCount", 0);
           this.$set(this.editingFrameEvent, "depth", 1);
@@ -602,6 +602,7 @@ function initEditor() {
           this.editingFrameEvent = null;
           this.selectedFrameEvent = updatedFrameEvent; // 編集中は選択中なので選択中の参照も入れ替える
           this.updateEventPreview();
+          console.debug(this.selectedFrameEvent);
         }, UI_WAIT_TIME);
       },
       onClickEnableAnimation() {
@@ -831,6 +832,12 @@ function initEditor() {
       selectedEventPreviewAvailable() {
         return ["putImage", "putText"].includes(this.selectedFrameEvent?.type);
       },
+      textAssetIds() {
+        return Object.keys(this.allIdToAsset).filter((assetId)=> this.allIdToAsset[assetId]['type'] === 'text');
+      },
+      imageAssetIds() {
+        return Object.keys(this.allIdToAsset).filter((assetId)=> this.allIdToAsset[assetId]['type'] === 'image');
+      }
     },
     data: {
       frameEvents: null,
