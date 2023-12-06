@@ -64,8 +64,7 @@ const Renderer = function () {
 
         if (object.type === "image") {
           targetElement = document.createElement("div");
-          instance.objectBuilder.buildImage(
-            targetElement,
+          instance.objectBuilder.initImage(
             styleElement,
             object.fullObjectId,
             object.image

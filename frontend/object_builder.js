@@ -9,14 +9,7 @@ const ObjectBuilder = function () {
     element.style.top = `${layoutOptions.y}px`;
   };
 
-  instance.buildImage = function (
-    targetElement,
-    styleElement,
-    fullObjectId,
-    image
-  ) {
-    console.log(image);
-    targetElement = document.createElement("div");
+  instance.initImage = function (styleElement, fullObjectId, image) {
     const hover = image.hoverImage?.source
       ? `[data-full-object-id='${fullObjectId}']:hover { background-image: url("${image.hoverImage.source}"); }`
       : "";
