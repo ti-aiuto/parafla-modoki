@@ -102,7 +102,7 @@ function initEditor() {
       },
       selectAsset(assetId) {
         this.clearSelected();
-        this.selectedAssetId = assetId;
+        this.selectedAssetId = Number(assetId);
         if (this.selectedAsset?.type === "text") {
           this.updateTextAssetPreview();
         }
@@ -531,15 +531,18 @@ function initEditor() {
           }
           if (["putImage"].includes(this.editingFrameEvent.type)) {
             updatedFrameEvent["putImage"] = {
-              assetId: rawUpdatedFrameEvent["putImage"]["assetId"],
-              hoverAssetId: rawUpdatedFrameEvent["putImage"]["hoverAssetId"],
-              activeAassetId:
-                rawUpdatedFrameEvent["putImage"]["activeAassetId"],
+              assetId: Number(rawUpdatedFrameEvent["putImage"]["assetId"]),
+              hoverAssetId: rawUpdatedFrameEvent["putImage"]["hoverAssetId"]
+                ? Number(rawUpdatedFrameEvent["putImage"]["hoverAssetId"])
+                : null,
+              activeAassetId: rawUpdatedFrameEvent["putImage"]["activeAassetId"]
+                ? Number(rawUpdatedFrameEvent["putImage"]["activeAassetId"])
+                : null,
             };
           }
           if (["putText"].includes(this.editingFrameEvent.type)) {
             updatedFrameEvent["putText"] = {
-              assetId: rawUpdatedFrameEvent["putText"]["assetId"],
+              assetId: Number(rawUpdatedFrameEvent["putText"]["assetId"]),
             };
           }
           if (["defineLabel"].includes(this.editingFrameEvent.type)) {
@@ -714,7 +717,14 @@ function initEditor() {
         this.$set(this.editingAsset.text, "borderEnabled", false);
       },
       clickDeleteAsset() {
-        if (!this.selectedAsset) {
+        if (!this.selectedAssetId) {
+          return;
+        }
+        const referenedEvent = this.checkAssetReference(this.selectedAssetId);
+        if (referenedEvent) {
+          alert(
+            `選択中のアセットはフレーム番号${referenedEvent.scheduledFrameNumber}で使用中のため削除できません。先にイベントを削除してください。`
+          );
           return;
         }
         if (confirm("選択中のアセットを削除します")) {
@@ -785,6 +795,23 @@ function initEditor() {
       },
       reloadAllAssets() {
         this.allIdToAsset = this.assetsManager.allIdToAsset();
+      },
+      checkAssetReference(assetId) {
+        return this.frameEvents.find((frameEvent) => {
+          if (frameEvent.putText?.assetId === assetId) {
+            return true;
+          }
+          if (frameEvent.putImage?.assetId === assetId) {
+            return true;
+          }
+          if (frameEvent.putImage?.hoverAssetId === assetId) {
+            return true;
+          }
+          if (frameEvent.putImage?.activeAssetId === assetId) {
+            return true;
+          }
+          return false;
+        });
       },
       clearSelected() {
         this.selectedAssetId = null;
