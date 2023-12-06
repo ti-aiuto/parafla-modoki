@@ -741,16 +741,21 @@
       
       <div class="editor_layout">
         <div class="editor_menu">
-          <button @click="clickNewFrameEvent">イベントを追加</button>
-          <button @click="clickEditFrameEvent" :disabled="!selectedFrameEvent">イベントを編集</button>
-          <button @click="clickRemoveFrameEvent" :disabled="!selectedFrameEvent">イベントを削除</button>
-          <button @click="clickMoveDownwardFrameEvent" :disabled="!selectedFrameEvent || !canMoveDownwardSelected()">イベントを下に移動</button>
-          <button @click="clickMoveUpwardFrameEvent" :disabled="!selectedFrameEvent || !canMoveUpwardSelected()">イベントを上に移動</button>
+          イベント：
+          <button @click="clickNewFrameEvent">追加</button>
+          <button @click="clickEditFrameEvent" :disabled="!selectedFrameEvent">編集</button>
+          <button @click="clickRemoveFrameEvent" :disabled="!selectedFrameEvent">削除</button>
+          <button @click="clickMoveDownwardFrameEvent" :disabled="!selectedFrameEvent || !canMoveDownwardSelected()">下に移動</button>
+          <button @click="clickMoveUpwardFrameEvent" :disabled="!selectedFrameEvent || !canMoveUpwardSelected()">上に移動</button>
           <button @click="openPreview()">プレビュー</button>
-          <button @click="clickAddTextAsset()">テキストアセットを追加</button>
-          <button @click="clickAddImageAsset()">画像アセットを追加</button>
-          <button @click="clickEditAsset()" :disabled="!selectedAssetId">アセットを編集</button>
-          <button @click="clickDeleteAsset()" :disabled="!selectedAssetId">アセットを削除</button>
+          アセット：
+          <button @click="clickAddTextAsset()">テキストを追加</button>
+          <button @click="clickAddImageAsset()">画像を追加</button>
+          <button @click="clickEditAsset()" :disabled="!selectedAssetId">編集</button>
+          <button @click="clickDeleteAsset()" :disabled="!selectedAssetId">削除</button>
+          作業：
+          <button @click="clickAddTextAsset()">読込</button>
+          <button @click="clickAddTextAsset()">保存</button>
         </div>
         <div class="editor_columns">
           <div class="editor_left_column">
