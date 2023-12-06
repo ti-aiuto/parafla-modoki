@@ -150,6 +150,11 @@ const Component = function (
       defineComponentUserFunction(name, content) {
         instance.defineComponentUserFunction(name, content);
       },
+      executeScript(content) {
+        const func = new Function("context", "args", content);
+        const context = instance.createContext();
+        return func(context);
+      },
       callComponentUserFunction(name, args = {}) {
         return instance.callComponentUserFunction(name, args);
       },
@@ -216,6 +221,8 @@ const Component = function (
         action.defineComponentUserFunction.name,
         action.defineComponentUserFunction.content
       );
+    } else if (action.type === "executeScript") {
+      context.executeScript(action.executeScript.content);
     } else if (action.type === "callComponentUserFunction") {
       context.callComponentUserFunction(
         action.callComponentUserFunction.name,
