@@ -558,7 +558,13 @@
         <div class="editor_columns">
           <div class="editor_left_column">
             <div class="editor_left_column_top">
-  
+              <div class="asset_preview">
+                <template v-if="selectedAsset">
+                  <template v-if="selectedAsset.type === 'image'">
+                    <img :src="selectedAsset.image.source" class="asset_preview_image">
+                  </template>
+                </template>  
+              </div>
             </div>
             <div class="editor_left_column_bottom">
               <table class="asset_table">

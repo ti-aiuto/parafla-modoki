@@ -81,14 +81,6 @@ function initEditor() {
         }
         return content;
       },
-      resourcePreviewImage(resourceId) {
-        return null;
-        // return userResources[resourceId]["image"]["source"];
-      },
-      resourcePreviewText(resourceId) {
-        return null;
-        // return userResources[resourceId]["text"]["content"];
-      },
       frameEventRowStyle(row) {
         if (row === this.selectedFrameEvent) {
           return { color: "#fff", "background-color": "#0000cd" };
@@ -534,6 +526,14 @@ function initEditor() {
           this.onClickDisableAnimation();
         }
       }
+    },
+    computed: {
+      selectedAsset() {
+        if (!this.selectedAssetId) {
+          return null;
+        }
+        return this.assetsManager.find(this.selectedAssetId);
+      },
     },
     data: {
       frameEvents: null,
