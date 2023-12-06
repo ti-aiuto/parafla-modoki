@@ -592,6 +592,7 @@ function initEditor() {
           this.editingTargetFrameEvent = null;
           this.editingFrameEvent = null;
           this.selectedFrameEvent = updatedFrameEvent; // 編集中は選択中なので選択中の参照も入れ替える
+          this.updateEventPreview();
         }, UI_WAIT_TIME);
       },
       onClickEnableAnimation() {
@@ -719,6 +720,7 @@ function initEditor() {
             );
           }
         }
+        this.selectAsset(this.selectedAssetId);
         this.editingTargetAsset = null;
         this.editingAsset = null;
       },
