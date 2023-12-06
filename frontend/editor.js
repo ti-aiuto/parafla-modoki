@@ -202,7 +202,13 @@ function initEditor() {
         // 受け取れてるかわからないので繰り返し送信する
         let count = 0;
         const timerId = setInterval(() => {
-          previewWindow.postMessage(JSON.stringify({frameEvents: this.frameEvents, allIdToAsset: this.allIdToAsset}), "*");
+          previewWindow.postMessage(
+            JSON.stringify({
+              frameEvents: this.frameEvents,
+              allIdToAsset: this.allIdToAsset,
+            }),
+            "*"
+          );
           count++;
           if (count >= 5) {
             clearInterval(timerId);
@@ -634,7 +640,7 @@ function initEditor() {
       clickAddTextAsset() {
         this.editingTargetAsset = null;
         this.editingAsset = {
-          type: 'text', 
+          type: "text",
           name: null,
           text: {
             content: null,
@@ -642,10 +648,46 @@ function initEditor() {
             textColor: "#000000",
             padding: 4,
             lineHeight: 24,
-          }
+          },
         };
       },
-      clickAddImageAsset() {},
+      selectImageFile(event) {
+        const file = event.target.files[0];
+        if (!file) {
+          return;
+        }
+        const fileName = file.name.toLowerCase();
+        if (
+          !(
+            fileName.endsWith("png") ||
+            fileName.endsWith("jpg") ||
+            fileName.endsWith("jpeg") ||
+            fileName.endsWith("svg") ||
+            fileName.endsWith("webp") ||
+            fileName.endsWith("gif")
+          )
+        ) {
+          return alert("非対応の形式です");
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (!this.selectedAsset?.type === "image") {
+            return;
+          }
+          this.$set(this.editingAsset.image, 'source', reader.result);
+        };
+        reader.readAsDataURL(file);
+      },
+      clickAddImageAsset() {
+        this.editingTargetAsset = null;
+        this.editingAsset = {
+          type: "image",
+          name: null,
+          image: {
+            content: null,
+          },
+        };
+      },
       clickEditAsset() {
         if (!this.selectedAsset) {
           return;
@@ -653,24 +695,24 @@ function initEditor() {
         this.editingTargetAsset = this.selectedAsset;
         this.editingAsset = structuredClone(this.selectedAsset);
         if (this.editingAsset?.text?.borderWidth) {
-          this.$set(this.editingAsset.text, 'borderEnabled', true);
+          this.$set(this.editingAsset.text, "borderEnabled", true);
         }
       },
       clickEnableBackgroundColor() {
-        this.$set(this.editingAsset.text, 'backgroundColor', '#000000');
-      }, 
+        this.$set(this.editingAsset.text, "backgroundColor", "#000000");
+      },
       clickDisableBackgroundColor() {
-        this.$set(this.editingAsset.text, 'backgroundColor', undefined);
-      }, 
+        this.$set(this.editingAsset.text, "backgroundColor", undefined);
+      },
       clickEnableBorder() {
-        this.$set(this.editingAsset.text, 'borderEnabled', true);
-        this.$set(this.editingAsset.text, 'borderStyle', 'solid');
-        this.$set(this.editingAsset.text, 'borderWidth', '1');
-        this.$set(this.editingAsset.text, 'borderColor', '#000000');
-      }, 
+        this.$set(this.editingAsset.text, "borderEnabled", true);
+        this.$set(this.editingAsset.text, "borderStyle", "solid");
+        this.$set(this.editingAsset.text, "borderWidth", "1");
+        this.$set(this.editingAsset.text, "borderColor", "#000000");
+      },
       clickDisableBorder() {
-        this.$set(this.editingAsset.text, 'borderEnabled', false);
-      }, 
+        this.$set(this.editingAsset.text, "borderEnabled", false);
+      },
       clickDeleteAsset() {
         // あとで実装でもよい
       },
@@ -679,70 +721,35 @@ function initEditor() {
         this.editingAsset = null;
       },
       extractTextAsset(target, source) {
-        this.$set(
-          target,
-          "type",
-          'text'
-        );
-        this.$set(
-          target,
-          "name",
-          source.name
-        );
-        this.$set(
-          target.text,
-          "content",
-          source.text.content
-        );
-        this.$set(
-          target.text,
-          "fontSize",
-          Number(source.text.fontSize)
-        );
-        this.$set(
-          target.text,
-          "textColor",
-          source.text.textColor
-        );
-        this.$set(
-          target.text,
-          "padding",
-          Number(source.text.padding)
-        );
-        this.$set(
-          target.text,
-          "lineHeight",
-          Number(source.text.lineHeight)
-        );
-        this.$set(
-          target.text,
-          "backgroundColor",
-          source.text.backgroundColor
-        );
+        this.$set(target, "type", "text");
+        this.$set(target, "name", source.name);
+        this.$set(target.text, "content", source.text.content);
+        this.$set(target.text, "fontSize", Number(source.text.fontSize));
+        this.$set(target.text, "textColor", source.text.textColor);
+        this.$set(target.text, "padding", Number(source.text.padding));
+        this.$set(target.text, "lineHeight", Number(source.text.lineHeight));
+        this.$set(target.text, "backgroundColor", source.text.backgroundColor);
         if (source.text.borderEnabled) {
           this.$set(
             target.text,
             "borderWidth",
             Number(source.text.borderWidth)
           );
-          this.$set(
-            target.text,
-            "borderStyle",
-            source.text.borderStyle
-          );
-          this.$set(
-            target.text,
-            "borderColor",
-            source.text.borderColor
-          );
+          this.$set(target.text, "borderStyle", source.text.borderStyle);
+          this.$set(target.text, "borderColor", source.text.borderColor);
         }
-      }, 
+      },
+      extractImageAsset(target, source) {
+        this.$set(target, "type", "image");
+        this.$set(target, "name", source.name);
+        this.$set(target.image, "source", source.image.source);
+      },
       onSubmitTextAsset() {
         if (this.editingTargetAsset) {
           this.extractTextAsset(this.editingTargetAsset, this.editingAsset);
           this.selectAsset(this.selectedAssetId);
         } else {
-          const newAsset = {text: {}};
+          const newAsset = { text: {} };
           this.extractTextAsset(newAsset, this.editingAsset);
           const newId = this.assetsManager.add(newAsset);
           this.allIdToAsset = this.assetsManager.allIdToAsset();
@@ -751,7 +758,20 @@ function initEditor() {
         this.editingTargetAsset = null;
         this.editingAsset = null;
       },
-      onSubmitImageAsset() {},
+      onSubmitImageAsset() {
+        if (this.editingTargetAsset) {
+          this.extractImageAsset(this.editingTargetAsset, this.editingAsset);
+          this.selectAsset(this.selectedAssetId);
+        } else {
+          const newAsset = { image: {} };
+          this.extractImageAsset(newAsset, this.editingAsset);
+          const newId = this.assetsManager.add(newAsset);
+          this.allIdToAsset = this.assetsManager.allIdToAsset();
+          this.selectAsset(newId);
+        }
+        this.editingTargetAsset = null;
+        this.editingAsset = null;
+      },
       clickCancelEditingImageAsset() {
         this.editingTargetAsset = null;
         this.editingAsset = null;

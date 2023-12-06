@@ -27,7 +27,7 @@
       }
       window.onload = function () {
         const compiler = Compiler(assetsManager);
-        compiler.compile(window.frameEventsTyping);
+        compiler.compile(window.frameEventsTyping); // 整形済みデータになったら不要
         initEditor();
       };
     </script>
@@ -180,7 +180,10 @@
                     表示内容
                   </div>
 
-                  <img :src="editingAsset.image.source" class="edit_image_modal_image">
+                  <div>
+                    <img :src="editingAsset.image.source" class="edit_image_modal_image"><br>
+                    <input type="text" :value="editingAsset.image.source" required placeholder="(画像選択で自動入力)">
+                  </div>
                 </div>  
 
                 <div class="form_columns_row">
@@ -189,7 +192,7 @@
                       画像の変更
                     </div>
   
-                    <input type="file">
+                    <input type="file" @change="selectImageFile($event)">
                   </div>  
                 </div>
               </div>
