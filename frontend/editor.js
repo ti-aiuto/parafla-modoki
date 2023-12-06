@@ -866,7 +866,15 @@ function initEditor() {
           this.importingWorkspace = false;
         };
         reader.readAsText(file);
-      }
+      },
+      checkScript(scriptContent) {
+        try {
+          new Function("context", "args", scriptContent);
+          alert('構文エラーはありません');
+        } catch(e) {
+          alert(`エラー：${e}`);
+        }
+      },
     },
     computed: {
       selectedAsset() {
