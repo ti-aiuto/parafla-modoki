@@ -51,7 +51,7 @@
           &nbsp;
         </div>
   
-        <div class="modal edit_text_modal" v-if="editingAsset?.type === 'text'">
+        <div class="modal edit_text_modal" v-if="editingAsset?.type === 'text' && editingAsset.text">
           <div class="modal_title">テキストの編集</div>
           
           <form class="modal_content" @submit.prevent="onSubmitTextAsset">
@@ -62,7 +62,7 @@
                     アセット名
                   </div>
 
-                  <input type="text" class="form_input_text" required>
+                  <input type="text" class="form_input_text" required v-model="editingAsset.name">
                 </div>  
 
                 <div class="form_row">
@@ -70,7 +70,7 @@
                     表示内容
                   </div>
 
-                  <input type="text" class="form_input_text">
+                  <input type="text" class="form_input_text" v-model="editingAsset.text.content">
                 </div>  
 
                 <div class="form_columns_row">
@@ -79,7 +79,7 @@
                       文字サイズ
                     </div>
   
-                    <input type="number" class="form_input_number">
+                    <input type="number" class="form_input_number" v-model="editingAsset.text.fontSize">
                   </div>  
   
                   <div class="form_row">
@@ -87,7 +87,7 @@
                       padding
                     </div>
   
-                    <input type="number" class="form_input_number">
+                    <input type="number" class="form_input_number" v-model="editingAsset.text.padding">
                   </div>  
   
                   <div class="form_row">
@@ -95,7 +95,7 @@
                       行の高さ
                     </div>
   
-                    <input type="number" class="form_input_number">
+                    <input type="number" class="form_input_number" v-model="editingAsset.text.lineHeight">
                   </div>  
                 </div>
 
@@ -104,7 +104,7 @@
                     背景色
                   </div>
 
-                  <input type="color" class="form_input_color">
+                  <input type="color" class="form_input_color" v-model="editingAsset.text.backgroundColor">
                 </div>  
 
                 <div class="form_columns_row">
@@ -113,7 +113,7 @@
                       罫線の種類
                     </div>
   
-                    <select class="form_select">
+                    <select class="form_select" v-model="editingAsset.text.borderStyle">
                       <option value="solid">実線</option>
                     </select>
                   </div>  
@@ -123,7 +123,7 @@
                       罫線の幅
                     </div>
   
-                    <input type="number" class="form_input_number">
+                    <input type="number" class="form_input_number" v-model="editingAsset.text.borderWidth">
                   </div>  
   
                   <div class="form_row">
@@ -131,7 +131,7 @@
                       罫線の色
                     </div>
   
-                    <input type="color" class="form_input_color">
+                    <input type="color" class="form_input_color" v-model="editingAsset.text.borderColor">
                   </div>  
                 </div>
               </div>
@@ -144,7 +144,7 @@
           </form>
         </div>
 
-        <div class="modal edit_text_modal" v-if="editingAsset?.type === 'image'">
+        <div class="modal edit_text_modal" v-if="editingAsset?.type === 'image' && editingAsset.image">
           <div class="modal_title">画像の編集</div>
           
           <form class="modal_content" @submit.prevent="onSubmitImageAsset">
@@ -155,7 +155,7 @@
                     アセット名
                   </div>
 
-                  <input type="text" class="form_input_text" required>
+                  <input type="text" class="form_input_text" required v-model="editingAsset.name">
                 </div>  
 
                 <div class="form_row">
@@ -163,7 +163,7 @@
                     表示内容
                   </div>
 
-                  aaa
+                  <img :src="editingAsset.image.source" class="edit_image_modal_image">
                 </div>  
 
                 <div class="form_columns_row">
