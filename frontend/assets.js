@@ -37,6 +37,9 @@ window.dummyAssets = {
     type: "text",
     text: {
       content: "image2",
+      fontSize: 16,
+      padding: 4,
+      lineHeight: 24,
       borderColor: "#000000",
       borderStyle: "solid",
       borderWidth: "1",
@@ -47,6 +50,9 @@ window.dummyAssets = {
     type: "text",
     text: {
       content: "",
+      fontSize: 16,
+      padding: 4,
+      lineHeight: 24,
       borderColor: "#000000",
       borderStyle: "solid",
       borderWidth: "1",
@@ -57,7 +63,10 @@ window.dummyAssets = {
     type: "text",
     text: {
       content: "計算",
-      borderColor: "#000000",
+      fontSize: 16,
+      padding: 4,
+      lineHeight: 24,
+     borderColor: "#000000",
       borderStyle: "solid",
       borderWidth: "1",
     },
@@ -114,6 +123,9 @@ window.dummyAssets = {
     type: "text",
     text: {
       content: "はじめる",
+      fontSize: 16,
+      padding: 4,
+      lineHeight: 24,
       borderColor: "#000000",
       borderStyle: "solid",
       borderWidth: "1",
@@ -124,6 +136,9 @@ window.dummyAssets = {
     type: "text",
     text: {
       content: "戻る",
+      fontSize: 16,
+      padding: 4,
+      lineHeight: 24,
       borderColor: "#000000",
       borderStyle: "solid",
       borderWidth: "1",
@@ -135,6 +150,9 @@ window.dummyAssets = {
     name: "残時間表示",
     text: {
       content: "",
+      fontSize: 16,
+      padding: 4,
+      lineHeight: 24,
       borderColor: "#000000",
       borderStyle: "solid",
       borderWidth: "1",
@@ -146,6 +164,9 @@ window.dummyAssets = {
     name: "打つ文字",
     text: {
       content: "",
+      fontSize: 16,
+      padding: 4,
+      lineHeight: 24,
       borderColor: "#000000",
       borderStyle: "solid",
       borderWidth: "1",
@@ -157,6 +178,9 @@ window.dummyAssets = {
     name: "打った文字",
     text: {
       content: "",
+      fontSize: 16,
+      padding: 4,
+      lineHeight: 24,
       borderColor: "#000000",
       borderStyle: "solid",
       borderWidth: "1",
@@ -168,6 +192,9 @@ window.dummyAssets = {
     name: "皿の枚数",
     text: {
       content: "",
+      fontSize: 16,
+      padding: 4,
+      lineHeight: 24,
       borderColor: "#000000",
       borderStyle: "solid",
       borderWidth: "1",
@@ -179,6 +206,9 @@ window.dummyAssets = {
     name: "成績",
     text: {
       content: "",
+      fontSize: 16,
+      padding: 4,
+      lineHeight: 24,
       borderColor: "#000000",
       borderStyle: "solid",
       borderWidth: "1",
