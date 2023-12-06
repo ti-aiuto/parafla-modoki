@@ -126,10 +126,10 @@
                 
                 <div class="form_columns_row">
                   <div class="form_row">
-                    <button class="form_button" type="button" :disabled="editingAsset.text.borderEnabled">罫線を設定</button>
+                    <button class="form_button" type="button" :disabled="editingAsset.text.borderEnabled" @click="clickEnableBorder">罫線を設定</button>
                   </div>
                   <div class="form_row">
-                    <button class="form_button" type="button" :disabled="!editingAsset.text.borderEnabled">罫線を削除</button>
+                    <button class="form_button" type="button" :disabled="!editingAsset.text.borderEnabled" @click="clickDisableBorder">罫線を削除</button>
                   </div>
                 </div>
 
@@ -752,7 +752,7 @@
           <button @click="clickAddTextAsset()">テキストを追加</button>
           <button @click="clickAddImageAsset()">画像を追加</button>
           <button @click="clickEditAsset()" :disabled="!selectedAssetId">編集</button>
-          <button @click="clickDeleteAsset()" :disabled="!selectedAssetId">削除</button>
+          <!-- <button @click="clickDeleteAsset()" :disabled="!selectedAssetId">削除</button> -->
           作業：
           <button @click="clickAddTextAsset()">読込</button>
           <button @click="clickAddTextAsset()">保存</button>

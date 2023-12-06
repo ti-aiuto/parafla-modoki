@@ -638,7 +638,19 @@ function initEditor() {
         }
         this.editingTargetAsset = this.selectedAsset;
         this.editingAsset = structuredClone(this.selectedAsset);
+        if (this.editingAsset?.text?.borderWidth) {
+          this.$set(this.editingAsset.text, 'borderEnabled', true);
+        }
       },
+      clickEnableBorder() {
+        this.$set(this.editingAsset.text, 'borderEnabled', true);
+        this.$set(this.editingAsset.text, 'borderStyle', 'solid');
+        this.$set(this.editingAsset.text, 'borderWidth', '1');
+        this.$set(this.editingAsset.text, 'borderColor', '#000000');
+      }, 
+      clickDisableBorder() {
+        this.$set(this.editingAsset.text, 'borderEnabled', false);
+      }, 
       clickDeleteAsset() {
         // あとで実装でもよい
       },
@@ -685,8 +697,8 @@ function initEditor() {
           );
           if (this.editingAsset.text.borderEnabled) {
             this.$set(
-              this.editingTargetAsset.borderWidth,
-              "lineHeight",
+              this.editingTargetAsset.text,
+              "borderWidth",
               Number(this.editingAsset.text.borderWidth)
             );
             this.$set(
@@ -696,8 +708,8 @@ function initEditor() {
             );
             this.$set(
               this.editingTargetAsset.text,
-              "backgroundColor",
-              this.editingAsset.text.backgroundColor
+              "borderColor",
+              this.editingAsset.text.borderColor
             );
           }
         }
