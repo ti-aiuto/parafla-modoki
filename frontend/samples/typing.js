@@ -85,57 +85,6 @@ window.frameEventsTyping = [
     frameCount: 0,
   },
   {
-    type: "defineComponentUserFunction",
-    defineComponentUserFunction: {
-      name: "タイピング画面を開いたとき",
-      content: `
-      // タイピング画面の準備(キー操作の検知とカウントダウンの設定など)
-
-      // 変数初期化
-      context.setComponentUserVariable('nagashitaSushiCount', 0);
-      context.setComponentUserVariable('currentUtsumoji', null);
-      context.setComponentUserVariable('cursor', 0);
-      context.setComponentUserVariable('saraCount', 0);
-      context.setComponentUserVariable('correctCount', 0);
-      context.setComponentUserVariable('wrongCount', 0);
-      context.setComponentUserVariable('nokoriJikan', 7);
-
-      // 表示初期化
-      context.setTextValue('nokorijikan', '{{nokoriJikan}}秒');
-      context.setTextValue('saramaisuu', '打った皿の枚数:{{saraCount}}');
-
-      context.startUserTimer('時間制限タイマー', 'カウントダウンのタイマーtick', 1000);
-      context.registerGlobalKeydownListener('タイピング画面キー押下リスナー', 'タイピング中のキー押下時');
-      
-      // 最初の一問目
-      context.gotoAndPlay('寿司を流す');
-    `,
-    },
-    frameCount: 0,
-  },
-  {
-    type: "defineComponentUserFunction",
-    defineComponentUserFunction: {
-      name: "次に打つ単語を設定する",
-      content: `// 次にタイプするお題を設定して、寿司を流し始める処理
-      const nagashitaSushiCount = context.getComponentUserVariable('nagashitaSushiCount', 0);
-      // これから出題する単語
-      context.setComponentUserVariable('currentUtsumoji', ['misonikomi', 'kishimen', 'ebifurya', 'ebisen', 'motsunabe'][nagashitaSushiCount]);
-      context.setTextValue("utsumoji", '{{currentUtsumoji}}');
-
-      // 何文字目まで打ったかをリセットする
-      context.setComponentUserVariable('cursor', 0);
-
-      // これまでに打った文字を空にする
-      context.setTextValue('uttamoji', '');  
-      // 現在何問目か
-      context.incrementComponentUserVariable('nagashitaSushiCount');
-      `,
-    },
-    frameCount: 0,
-  },
-
-  {
     type: "defineLabel",
     defineLabel: {
       label: "タイトル画面",
@@ -232,7 +181,7 @@ window.frameEventsTyping = [
       type: "registerGlobalKeydownListener",
       registerGlobalKeydownListener: {
         listenerId: "準備画面リスナー",
-        componentUserFunctionName: '準備画面のキー押下時'
+        componentUserFunctionName: "準備画面のキー押下時",
       },
     },
   },
@@ -339,13 +288,33 @@ window.frameEventsTyping = [
     type: "executeAction",
     frameCount: 0,
     executeAction: {
-      type: "callComponentUserFunction",
-      callComponentUserFunction: {
-        name: "タイピング画面を開いたとき",
+      type: "executeScript",
+      executeScript: {
+        content: `
+        // タイピング画面の準備(キー操作の検知とカウントダウンの設定など)
+  
+        // 変数初期化
+        context.setComponentUserVariable('nagashitaSushiCount', 0);
+        context.setComponentUserVariable('currentUtsumoji', null);
+        context.setComponentUserVariable('cursor', 0);
+        context.setComponentUserVariable('saraCount', 0);
+        context.setComponentUserVariable('correctCount', 0);
+        context.setComponentUserVariable('wrongCount', 0);
+        context.setComponentUserVariable('nokoriJikan', 7);
+  
+        // 表示初期化
+        context.setTextValue('nokorijikan', '{{nokoriJikan}}秒');
+        context.setTextValue('saramaisuu', '打った皿の枚数:{{saraCount}}');
+  
+        context.startUserTimer('時間制限タイマー', 'カウントダウンのタイマーtick', 1000);
+        context.registerGlobalKeydownListener('タイピング画面キー押下リスナー', 'タイピング中のキー押下時');
+        
+        // 最初の一問目
+        context.gotoAndPlay('寿司を流す');
+      `,
       },
     },
   },
-
   {
     type: "executeAction",
     frameCount: 1,
@@ -376,12 +345,26 @@ window.frameEventsTyping = [
     type: "executeAction",
     frameCount: 0,
     executeAction: {
-      type: "callComponentUserFunction",
-      callComponentUserFunction: {
-        name: "次に打つ単語を設定する",
+      type: "executeScript",
+      executeScript: {
+        content: `// 次にタイプするお題を設定して、寿司を流し始める処理
+        const nagashitaSushiCount = context.getComponentUserVariable('nagashitaSushiCount', 0);
+        // これから出題する単語
+        context.setComponentUserVariable('currentUtsumoji', ['misonikomi', 'kishimen', 'ebifurya', 'ebisen', 'motsunabe'][nagashitaSushiCount]);
+        context.setTextValue("utsumoji", '{{currentUtsumoji}}');
+  
+        // 何文字目まで打ったかをリセットする
+        context.setComponentUserVariable('cursor', 0);
+  
+        // これまでに打った文字を空にする
+        context.setTextValue('uttamoji', '');  
+        // 現在何問目か
+        context.incrementComponentUserVariable('nagashitaSushiCount');
+        `,
       },
     },
   },
+
   {
     type: "putImage",
     putImage: {
@@ -511,7 +494,6 @@ window.frameEventsTyping = [
     },
   },
 
-  
   {
     type: "defineLabel",
     defineLabel: {
@@ -543,7 +525,7 @@ window.frameEventsTyping = [
       },
     },
   },
-  
+
   {
     type: "defineLabel",
     defineLabel: {
