@@ -25,6 +25,7 @@ window.dummyAssets = {
     text: {
       content: "image1",
       fontSize: 16,
+      textColor: "#000000",
       padding: 4,
       lineHeight: 24,
       borderColor: "#000000",
@@ -38,6 +39,7 @@ window.dummyAssets = {
     text: {
       content: "image2",
       fontSize: 16,
+      textColor: "#000000",
       padding: 4,
       lineHeight: 24,
       borderColor: "#000000",
@@ -51,6 +53,7 @@ window.dummyAssets = {
     text: {
       content: "",
       fontSize: 16,
+      textColor: "#000000",
       padding: 4,
       lineHeight: 24,
       borderColor: "#000000",
@@ -64,6 +67,7 @@ window.dummyAssets = {
     text: {
       content: "計算",
       fontSize: 16,
+      textColor: "#000000",
       padding: 4,
       lineHeight: 24,
      borderColor: "#000000",
@@ -124,6 +128,7 @@ window.dummyAssets = {
     text: {
       content: "はじめる",
       fontSize: 16,
+      textColor: "#000000",
       padding: 4,
       lineHeight: 24,
       borderColor: "#000000",
@@ -137,6 +142,7 @@ window.dummyAssets = {
     text: {
       content: "戻る",
       fontSize: 16,
+      textColor: "#000000",
       padding: 4,
       lineHeight: 24,
       borderColor: "#000000",
@@ -151,6 +157,7 @@ window.dummyAssets = {
     text: {
       content: "",
       fontSize: 16,
+      textColor: "#000000",
       padding: 4,
       lineHeight: 24,
       borderColor: "#000000",
@@ -165,6 +172,7 @@ window.dummyAssets = {
     text: {
       content: "",
       fontSize: 16,
+      textColor: "#000000",
       padding: 4,
       lineHeight: 24,
       borderColor: "#000000",
@@ -179,6 +187,7 @@ window.dummyAssets = {
     text: {
       content: "",
       fontSize: 16,
+      textColor: "#000000",
       padding: 4,
       lineHeight: 24,
       borderColor: "#000000",
@@ -193,6 +202,7 @@ window.dummyAssets = {
     text: {
       content: "",
       fontSize: 16,
+      textColor: "#000000",
       padding: 4,
       lineHeight: 24,
       borderColor: "#000000",
@@ -207,6 +217,7 @@ window.dummyAssets = {
     text: {
       content: "",
       fontSize: 16,
+      textColor: "#000000",
       padding: 4,
       lineHeight: 24,
       borderColor: "#000000",
