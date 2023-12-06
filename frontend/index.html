@@ -109,10 +109,10 @@
 
                 <div class="form_columns_row">
                   <div class="form_row">
-                    <button class="form_button" type="button" :disabled="editingAsset.text.backgroundColor">背景色を設定</button>
+                    <button class="form_button" type="button" :disabled="editingAsset.text.backgroundColor" @click="clickEnableBackgroundColor">背景色を設定</button>
                   </div>
                   <div class="form_row">
-                    <button class="form_button" type="button" :disabled="!editingAsset.text.backgroundColor">背景色を削除</button>
+                    <button class="form_button" type="button" :disabled="!editingAsset.text.backgroundColor" @click="clickDisableBackgroundColor">背景色を削除</button>
                   </div>
                 </div>
 

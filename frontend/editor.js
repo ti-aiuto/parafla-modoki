@@ -642,6 +642,12 @@ function initEditor() {
           this.$set(this.editingAsset.text, 'borderEnabled', true);
         }
       },
+      clickEnableBackgroundColor() {
+        this.$set(this.editingAsset.text, 'backgroundColor', '#000000');
+      }, 
+      clickDisableBackgroundColor() {
+        this.$set(this.editingAsset.text, 'backgroundColor', undefined);
+      }, 
       clickEnableBorder() {
         this.$set(this.editingAsset.text, 'borderEnabled', true);
         this.$set(this.editingAsset.text, 'borderStyle', 'solid');

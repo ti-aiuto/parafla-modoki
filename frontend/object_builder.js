@@ -35,6 +35,9 @@ const ObjectBuilder = function () {
       }
     }
     // 全部デフォルト値を持った上で上書きしたほうがいい
+    if (text.textColor) {
+      targetElement.style.color = text.textColor;
+    }
     if (text.borderWidth) {
       targetElement.style.borderWidth = `${text.borderWidth}px`;
     }
