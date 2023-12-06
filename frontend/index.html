@@ -54,7 +54,7 @@
         <div class="modal edit_text_modal" v-if="editingAsset?.type === 'text'">
           <div class="modal_title">テキストの編集</div>
           
-          <form class="modal_content" @submit.prevent="onSubmit">
+          <form class="modal_content" @submit.prevent="onSubmitTextAsset">
             <div class="edit_text_modal_content">
               <div class="edit_text_modal_form">
                 <div class="form_row">
@@ -138,7 +138,7 @@
 
               <div class="modal_bottom_control">
                 <button class="form_button" type="submit">OK</button>
-                <button class="form_button" @click="clickCancelEditing" type="button">キャンセル</button>  
+                <button class="form_button" @click="clickCancelEditingTextAsset" type="button">キャンセル</button>  
               </div>
             </div>
           </form>
@@ -147,7 +147,7 @@
         <div class="modal edit_text_modal" v-if="editingAsset?.type === 'image'">
           <div class="modal_title">画像の編集</div>
           
-          <form class="modal_content" @submit.prevent="onSubmit">
+          <form class="modal_content" @submit.prevent="onSubmitImageAsset">
             <div class="edit_text_modal_content">
               <div class="edit_text_modal_form">
                 <div class="form_row">
@@ -179,7 +179,7 @@
 
               <div class="modal_bottom_control">
                 <button class="form_button" type="submit">OK</button>
-                <button class="form_button" @click="clickCancelEditing" type="button">キャンセル</button>  
+                <button class="form_button" @click="clickCancelEditingImageAsset" type="button">キャンセル</button>  
               </div>
             </div>
           </form>
@@ -721,7 +721,8 @@
           <button @click="clickMoveDownwardFrameEvent" :disabled="!selectedFrameEvent || !canMoveDownwardSelected()">イベントを下に移動</button>
           <button @click="clickMoveUpwardFrameEvent" :disabled="!selectedFrameEvent || !canMoveUpwardSelected()">イベントを上に移動</button>
           <button @click="openPreview()">プレビュー</button>
-          <button @click="clickAddAsset()">アセットを追加</button>
+          <button @click="clickAddTextAsset()">テキストアセットを追加</button>
+          <button @click="clickAddImageAsset()">画像アセットを追加</button>
           <button @click="clickEditAsset()" :disabled="!selectedAssetId">アセットを編集</button>
           <button @click="clickDeleteAsset()" :disabled="!selectedAssetId">アセットを削除</button>
         </div>

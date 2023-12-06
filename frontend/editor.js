@@ -623,6 +623,33 @@ function initEditor() {
           this.onClickDisableAnimation();
         }
       },
+      clickAddTextAsset() {
+
+      },
+      clickAddImageAsset() {
+
+      },
+      clickEditAsset() {
+        this.editingTargetAsset = this.selectedAsset;
+        this.editingAsset = structuredClone(this.selectedAsset);
+      },
+      clickDeleteAsset() {
+
+      },
+      clickCancelEditingTextAsset() {
+        this.editingTargetAsset = null;
+        this.editingAsset = null;
+      },
+      onSubmitTextAsset() {
+
+      },
+      onSubmitImageAsset() {
+
+      },
+      clickCancelEditingImageAsset(){
+        this.editingTargetAsset = null;
+        this.editingAsset = null;
+      }
     },
     computed: {
       selectedAsset() {
