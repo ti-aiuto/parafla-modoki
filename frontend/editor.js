@@ -35,6 +35,7 @@ function initEditor() {
       selectStory() {
         this.frameEvents = structuredClone(window.frameEventsTyping);
         // this.frameEvents = [];
+        this.updateFrameNumbers();
       },
       start() {
         this.started = true;
