@@ -259,3 +259,7 @@ input[type="number"] {
   transform-origin: top left;
   transform: scale(calc(220 / 640));
 }
+
+.v-cloack {
+  display: none;
+}
