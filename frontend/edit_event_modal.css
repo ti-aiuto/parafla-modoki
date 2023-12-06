@@ -102,4 +102,5 @@
   width: 150px;
   height: 150px;
   object-fit: contain;
+  border: solid 1px #ccc;
 }
