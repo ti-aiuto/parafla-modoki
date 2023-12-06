@@ -323,6 +323,9 @@
                     <div class="form_row">
                       <button class="form_button" type="button" @click="onClickDisableAnimation" :disabled="!editingFrameEvent.lastKeyFrame">アニメーションを削除</button>
                     </div>
+                    <div class="form_row">
+                      <button class="form_button" type="button" @click="onClickCentering">左右中央</button>
+                    </div>
                   </div>
 
                   <template v-if="editingFrameEvent.lastKeyFrame && editingFrameEvent.lastKeyFrame.layoutOptions">

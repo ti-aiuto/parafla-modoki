@@ -600,6 +600,9 @@ function initEditor() {
           layoutOptions,
         });
       },
+      onClickCentering() {
+        this.editingFrameEvent.layoutOptions.x = Math.floor((640 - this.editingFrameEvent.layoutOptions.width) / 2);
+      },
       onClickDisableAnimation() {
         this.$set(this.editingFrameEvent, "lastKeyFrame", undefined);
       },
