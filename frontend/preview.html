@@ -33,7 +33,7 @@
           Object.keys(vars).forEach(function (key) {
             text += key;
             text += "\t\t";
-            text += vars[key];
+            text += JSON.parse(vars[key]);
             text += "\n";
           });
           document.getElementById("userVars").value = text;
