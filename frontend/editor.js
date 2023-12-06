@@ -96,7 +96,7 @@ function initEditor() {
         }
       },
       assetRowStyle(assetId) {
-        if (assetId === this.selectedAssetId) {
+        if (Number(assetId) === Number(this.selectedAssetId)) {
           return { color: "#fff", "background-color": "#0000cd" };
         }
       },
@@ -631,7 +631,20 @@ function initEditor() {
           this.onClickDisableAnimation();
         }
       },
-      clickAddTextAsset() {},
+      clickAddTextAsset() {
+        this.editingTargetAsset = null;
+        this.editingAsset = {
+          type: 'text', 
+          name: null,
+          text: {
+            content: null,
+            fontSize: 16,
+            textColor: "#000000",
+            padding: 4,
+            lineHeight: 24,
+          }
+        };
+      },
       clickAddImageAsset() {},
       clickEditAsset() {
         if (!this.selectedAsset) {
@@ -665,62 +678,76 @@ function initEditor() {
         this.editingTargetAsset = null;
         this.editingAsset = null;
       },
+      extractTextAsset(target, source) {
+        this.$set(
+          target,
+          "type",
+          'text'
+        );
+        this.$set(
+          target,
+          "name",
+          source.name
+        );
+        this.$set(
+          target.text,
+          "content",
+          source.text.content
+        );
+        this.$set(
+          target.text,
+          "fontSize",
+          Number(source.text.fontSize)
+        );
+        this.$set(
+          target.text,
+          "textColor",
+          source.text.textColor
+        );
+        this.$set(
+          target.text,
+          "padding",
+          Number(source.text.padding)
+        );
+        this.$set(
+          target.text,
+          "lineHeight",
+          Number(source.text.lineHeight)
+        );
+        this.$set(
+          target.text,
+          "backgroundColor",
+          source.text.backgroundColor
+        );
+        if (source.text.borderEnabled) {
+          this.$set(
+            target.text,
+            "borderWidth",
+            Number(source.text.borderWidth)
+          );
+          this.$set(
+            target.text,
+            "borderStyle",
+            source.text.borderStyle
+          );
+          this.$set(
+            target.text,
+            "borderColor",
+            source.text.borderColor
+          );
+        }
+      }, 
       onSubmitTextAsset() {
         if (this.editingTargetAsset) {
-          this.$set(
-            this.editingTargetAsset,
-            "name",
-            this.editingAsset.name
-          );
-          this.$set(
-            this.editingTargetAsset.text,
-            "content",
-            this.editingAsset.text.content
-          );
-          this.$set(
-            this.editingTargetAsset.text,
-            "fontSize",
-            Number(this.editingAsset.text.fontSize)
-          );
-          this.$set(
-            this.editingTargetAsset.text,
-            "textColor",
-            this.editingAsset.text.textColor
-          );
-          this.$set(
-            this.editingTargetAsset.text,
-            "padding",
-            Number(this.editingAsset.text.padding)
-          );
-          this.$set(
-            this.editingTargetAsset.text,
-            "lineHeight",
-            Number(this.editingAsset.text.lineHeight)
-          );
-          this.$set(
-            this.editingTargetAsset.text,
-            "backgroundColor",
-            this.editingAsset.text.backgroundColor
-          );
-          if (this.editingAsset.text.borderEnabled) {
-            this.$set(
-              this.editingTargetAsset.text,
-              "borderWidth",
-              Number(this.editingAsset.text.borderWidth)
-            );
-            this.$set(
-              this.editingTargetAsset.text,
-              "borderStyle",
-              this.editingAsset.text.borderStyle
-            );
-            this.$set(
-              this.editingTargetAsset.text,
-              "borderColor",
-              this.editingAsset.text.borderColor
-            );
-          }
+          this.extractTextAsset(this.editingTargetAsset, this.editingAsset);
+          this.selectAsset(this.selectedAssetId);
+        } else {
+          const newAsset = {text: {}};
+          this.extractTextAsset(newAsset, this.editingAsset);
+          const newId = this.assetsManager.add(newAsset);
+          this.allIdToAsset = this.assetsManager.allIdToAsset();
+          this.selectAsset(newId);
         }
-        this.selectAsset(this.selectedAssetId);
         this.editingTargetAsset = null;
         this.editingAsset = null;
       },
@@ -755,6 +782,7 @@ function initEditor() {
       editingFrameEvent: null,
       editingTargetAsset: null,
       editingAsset: null,
+      allIdToAsset: assetsManager.allIdToAsset(),
     },
     watch: {
       editingFrameEvent: {

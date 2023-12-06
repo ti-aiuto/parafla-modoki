@@ -16,17 +16,27 @@
     <script src="./samples/typing.js" type="text/javascript"></script>
     <script type="text/javascript" src="assets.js"></script>
     <script type="text/javascript">
-        const AssetsManager = function () {
+        const AssetsManager = function (initialItems) {
           const instance = {};
+          instance.items = initialItems;
           instance.find = function (id) {
-            return window.dummyAssets[id];
+            return instance.items[id];
           };
-          instance.findAllIds = function () {
-            return Object.keys(window.dummyAssets);
+          instance.allIdToAsset = function () {
+            return this.items;
           };
+          instance.add = function(object) {
+            const maxId = Math.max.apply(
+              null,
+              Object.keys(instance.items)
+            );
+            const newId = maxId + 1;
+            instance.items[newId] = object;
+            return newId;
+          }
           return instance;
         };
-      const assetsManager = AssetsManager();
+      const assetsManager = AssetsManager(window.dummyAssets);
     </script>
     <script src="editor.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -781,10 +791,10 @@
                   <th>アセット名</th>
                   <th>種別</th>
                 </tr>
-                <tr v-for="assetId in assetsManager.findAllIds()" @click="selectAsset(assetId)" :style="assetRowStyle(assetId)" @dblclick="clickEditAsset">
+                <tr v-for="assetId in Object.keys(allIdToAsset)" @click="selectAsset(assetId)" :style="assetRowStyle(assetId)" @dblclick="clickEditAsset">
                   <td class="asset_table_td">{{assetId}}</td>
-                  <td class="asset_table_td">{{assetsManager.find(assetId).name}}</td>
-                  <td class="asset_table_td">{{assetsManager.find(assetId).type === 'image' ? '画像' : 'テキスト'}}</td>
+                  <td class="asset_table_td">{{allIdToAsset[assetId].name}}</td>
+                  <td class="asset_table_td">{{allIdToAsset[assetId].type === 'image' ? '画像' : 'テキスト'}}</td>
                 </tr>    
               </table>
             </div>
