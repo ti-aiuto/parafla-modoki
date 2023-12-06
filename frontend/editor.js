@@ -115,42 +115,73 @@ function initEditor() {
         this.objectBuilder.updateText(previewElement, this.selectedAsset.text);
       },
       buildFrameEventElement(previewElement, styleElement, frameEvent) {
-        if (frameEvent.type === 'putImage') {
-          const putImageEvent = frameEvent['putImage'];
+        if (frameEvent.type === "putImage") {
+          const putImageEvent = frameEvent["putImage"];
           const image = {
-            image: this.assetsManager.find(putImageEvent.assetId)?.image,  // TODO: なかった場合
-            hoverImage: this.assetsManager.find(putImageEvent.hoverAssetId)?.image, 
-            activeImage: this.assetsManager.find(putImageEvent.activeAssetId)?.image, 
-          }
+            image: this.assetsManager.find(putImageEvent.assetId)?.image, // TODO: なかった場合
+            hoverImage: this.assetsManager.find(putImageEvent.hoverAssetId)
+              ?.image,
+            activeImage: this.assetsManager.find(putImageEvent.activeAssetId)
+              ?.image,
+          };
           if (!image.image) {
-            return alert('画像不明');
+            return alert("画像不明");
           }
-          this.objectBuilder.initImage(styleElement, 'preview', image);
-          previewElement.dataset.fullObjectId = 'preview';
-          this.objectBuilder.setLayoutOptionsToElement(previewElement, frameEvent.layoutOptions);
-        } else if (frameEvent.type === 'putText') {
-          const putTextEvent = frameEvent['putText'];
+          this.objectBuilder.initImage(styleElement, "preview", image);
+          previewElement.dataset.fullObjectId = "preview";
+          this.objectBuilder.setLayoutOptionsToElement(
+            previewElement,
+            frameEvent.layoutOptions
+          );
+        } else if (frameEvent.type === "putText") {
+          const putTextEvent = frameEvent["putText"];
           const text = this.assetsManager.find(putTextEvent.assetId)?.text; // TODO: なかった場合
           if (!text) {
-            return alert('画像不明');
+            return alert("画像不明");
           }
           this.objectBuilder.updateText(previewElement, text);
-          this.objectBuilder.setLayoutOptionsToElement(previewElement, frameEvent.layoutOptions);
+          this.objectBuilder.setLayoutOptionsToElement(
+            previewElement,
+            frameEvent.layoutOptions
+          );
         }
       },
       updateModalEventPreview() {
+        if (!["putImage", "putText"].includes(this.editingFrameEvent?.type)) {
+          return;
+        }
 
+        const wrapper = this.$refs.modalEventPreviewWrapper;
+        if (!wrapper) {
+          return;
+        }
+        while (wrapper.firstChild) {
+          wrapper.removeChild(wrapper.firstChild);
+        }
+        const previewElement = document.createElement("div");
+        const styleElement = document.createElement("style");
+        wrapper.appendChild(previewElement);
+        wrapper.appendChild(styleElement);
+        this.buildFrameEventElement(
+          previewElement,
+          styleElement,
+          this.editingFrameEvent
+        );
       },
       updateEventPreview() {
         const wrapper = this.$refs.eventPreviewWrapper;
-        while(wrapper.firstChild) {
+        while (wrapper.firstChild) {
           wrapper.removeChild(wrapper.firstChild);
         }
-        const previewElement = document.createElement('div');
-        const styleElement = document.createElement('style');
+        const previewElement = document.createElement("div");
+        const styleElement = document.createElement("style");
         wrapper.appendChild(previewElement);
         wrapper.appendChild(styleElement);
-        this.buildFrameEventElement(previewElement, styleElement, this.selectedFrameEvent);
+        this.buildFrameEventElement(
+          previewElement,
+          styleElement,
+          this.selectedFrameEvent
+        );
       },
       selectFrameEvent(frameEvent) {
         this.selectedAssetId = null;
@@ -595,6 +626,14 @@ function initEditor() {
       selectedFrameEvent: null,
       editingTargetFrameEvent: null,
       editingFrameEvent: null,
+    },
+    watch: {
+      editingFrameEvent: {
+        deep: true,
+        handler() {
+          this.updateModalEventPreview();
+        },
+      },
     },
     mounted() {
       this.selectStory();

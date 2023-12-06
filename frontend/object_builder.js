@@ -18,7 +18,7 @@ const ObjectBuilder = function () {
       : "";
 
     styleElement.innerText = `
-    [data-full-object-id='${fullObjectId}'] { background-image: url("${image.image.source}"); background-repeat: no-repeat; background-size: 100% 100%; }
+    [data-full-object-id='${fullObjectId}'] { background-image: url("${image.image.source}"); background-repeat: no-repeat; background-size: cover; }
     ${hover}
     ${active}
     `;

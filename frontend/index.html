@@ -46,7 +46,7 @@
     <div id="root" class="player_root" style="display: none;"></div>
 
     <div id="vue_root">
-      <div v-if="editingFrameEvent">
+      <div v-show="editingFrameEvent">
         <div class="modal_background">
           &nbsp;
         </div>
@@ -54,7 +54,7 @@
         <div class="modal">
           <div class="modal_title">イベントの編集</div>
           <form class="modal_content" @submit.prevent="onSubmit">
-            <div class="modal_content_left">
+            <div class="modal_content_left" v-if="editingFrameEvent">
               <div class="modal_content_left_content">
                 <div class="form_row">
                   <div class="form_row_label">
@@ -541,7 +541,7 @@
             </div>
             <div class="modal_content_right">
               <div class="modal_content_right_preview_event">
-                <div ref="modalEventPreviewWrapper"  class="modal_content_right_preview_event_wrapper"></div>
+                <div ref="modalEventPreviewWrapper" class="modal_content_right_preview_event_wrapper"></div>
               </div>
             </div>
           </form>
