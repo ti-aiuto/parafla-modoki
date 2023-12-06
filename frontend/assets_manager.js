@@ -4,6 +4,9 @@ const AssetsManager = function (initialItems) {
   instance.find = function (id) {
     return instance.items[id];
   };
+  instance.delete = function (id) {
+    delete instance.items[id];
+  };
   instance.allIdToAsset = function () {
     return this.items;
   };

@@ -101,8 +101,8 @@ function initEditor() {
         }
       },
       selectAsset(assetId) {
+        this.clearSelected();
         this.selectedAssetId = assetId;
-        this.selectedFrameEvent = null;
         if (this.selectedAsset?.type === "text") {
           this.updateTextAssetPreview();
         }
@@ -193,7 +193,7 @@ function initEditor() {
         );
       },
       selectFrameEvent(frameEvent) {
-        this.selectedAssetId = null;
+        this.clearSelected();
         this.selectedFrameEvent = frameEvent;
         this.updateEventPreview();
       },
@@ -674,7 +674,7 @@ function initEditor() {
           if (!this.selectedAsset?.type === "image") {
             return;
           }
-          this.$set(this.editingAsset.image, 'source', reader.result);
+          this.$set(this.editingAsset.image, "source", reader.result);
         };
         reader.readAsDataURL(file);
       },
@@ -714,7 +714,14 @@ function initEditor() {
         this.$set(this.editingAsset.text, "borderEnabled", false);
       },
       clickDeleteAsset() {
-        // あとで実装でもよい
+        if (!this.selectedAsset) {
+          return;
+        }
+        if (confirm("選択中のアセットを削除します")) {
+          this.assetsManager.delete(this.selectedAssetId);
+          this.reloadAllAssets();
+          this.clearSelected();
+        }
       },
       clickCancelEditingTextAsset() {
         this.editingTargetAsset = null;
@@ -752,7 +759,7 @@ function initEditor() {
           const newAsset = { text: {} };
           this.extractTextAsset(newAsset, this.editingAsset);
           const newId = this.assetsManager.add(newAsset);
-          this.allIdToAsset = this.assetsManager.allIdToAsset();
+          this.reloadAllAssets();
           this.selectAsset(newId);
         }
         this.editingTargetAsset = null;
@@ -766,7 +773,7 @@ function initEditor() {
           const newAsset = { image: {} };
           this.extractImageAsset(newAsset, this.editingAsset);
           const newId = this.assetsManager.add(newAsset);
-          this.allIdToAsset = this.assetsManager.allIdToAsset();
+          this.reloadAllAssets();
           this.selectAsset(newId);
         }
         this.editingTargetAsset = null;
@@ -776,6 +783,10 @@ function initEditor() {
         this.editingTargetAsset = null;
         this.editingAsset = null;
       },
+      reloadAllAssets() {
+        this.allIdToAsset = this.assetsManager.allIdToAsset();
+      },
+      clearSelected() {},
     },
     computed: {
       selectedAsset() {
@@ -802,7 +813,7 @@ function initEditor() {
       editingFrameEvent: null,
       editingTargetAsset: null,
       editingAsset: null,
-      allIdToAsset: assetsManager.allIdToAsset(),
+      allIdToAsset: {},
     },
     watch: {
       editingFrameEvent: {
@@ -813,6 +824,7 @@ function initEditor() {
       },
     },
     mounted() {
+      this.reloadAllAssets();
       this.selectStory();
     },
   });
