@@ -24,6 +24,9 @@ window.dummyAssets = {
     type: "text",
     text: {
       content: "image1",
+      fontSize: 16,
+      padding: 4,
+      lineHeight: 24,
       borderColor: "#000000",
       borderStyle: "solid",
       borderWidth: "1",

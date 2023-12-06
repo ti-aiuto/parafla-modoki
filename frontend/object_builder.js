@@ -47,6 +47,16 @@ const ObjectBuilder = function () {
     if (text.backgroundColor) {
       targetElement.style.backgroundColor = text.backgroundColor;
     }
+    if (text.fontSize) {
+      element.style.fontSize = `${text.fontSize}px`;
+    }
+    if (text.padding) {
+      element.style.padding = `${text.padding}px`;
+    }
+    if (text.lineHeight) {
+      element.style.lineHeight = `${text.lineHeight}px`;
+    }
+ 
     targetElement.style.boxSizing = "border-box";
   };
 
