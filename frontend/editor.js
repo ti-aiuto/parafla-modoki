@@ -305,6 +305,10 @@ function initEditor() {
             objectId: null,
             value: null,
           });
+        } else if (actionType === "executeScript") {
+          this.$set(actionObject, "executeScript", {
+            content: null,
+          });
         } else if (actionType === "registerGlobalKeydownListener") {
           this.$set(actionObject, "registerGlobalKeydownListener", {
             componentUserFunctionName: null,
@@ -354,6 +358,10 @@ function initEditor() {
           updatedExecuteAction["setTextValue"] = {
             objectId: rawUpdatedExecuteAction["setTextValue"]["objectId"],
             value: rawUpdatedExecuteAction["setTextValue"]["value"],
+          };
+        } else if (actionType === "executeScript") {
+          updatedExecuteAction["executeScript"] = {
+            content: rawUpdatedExecuteAction["executeScript"]["content"],
           };
         } else if (actionType === "registerGlobalKeydownListener") {
           updatedExecuteAction["registerGlobalKeydownListener"] = {
