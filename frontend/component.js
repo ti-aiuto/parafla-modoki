@@ -246,9 +246,11 @@ const Component = function (
       if (putObject.type === "image") {
         objectBase = {
           type: "image",
-          image: putObject.image.image,
-          hoverImage: putObject.image.hoverImage,
-          activeImage: putObject.image.activeImage,
+          image: {
+            image: putObject.image.image,
+            hoverImage: putObject.image.hoverImage,
+            activeImage: putObject.image.activeImage,
+          },
           fullObjectId,
           onClickAction: putObject["onClickAction"],
         };

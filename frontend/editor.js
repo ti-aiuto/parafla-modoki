@@ -33,8 +33,8 @@ function initEditor() {
         });
       },
       selectStory() {
-        // this.frameEvents = structuredClone(window.frameEventsTyping);
-        this.frameEvents = [];
+        this.frameEvents = structuredClone(window.frameEventsTyping);
+        // this.frameEvents = [];
       },
       start() {
         this.started = true;

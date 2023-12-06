@@ -1,7 +1,26 @@
-const ObjectBuilder = function() {
+const ObjectBuilder = function () {
   const instance = {};
 
-  instance.buildText = function(targetElement, text) {
+  instance.buildImage = function (targetElement, styleElement, fullObjectId, image) {
+    console.log(image);
+    targetElement = document.createElement("div");
+    const hover = image.hoverImage?.source
+      ? `[data-full-object-id='${fullObjectId}']:hover { background-image: url("${image.hoverImage.source}"); }`
+      : "";
+    const active = image.activeImage?.source
+      ? `[data-full-object-id='${fullObjectId}']:active { background-image: url("${image.activeImage.source}"); }`
+      : "";
+
+    styleElement.innerText = `
+    [data-full-object-id='${fullObjectId}'] { background-image: url("${image.image.source}"); }
+    ${hover}
+    ${active}
+    `;
+    targetElement.style.backgroundRepeat = "no-repeat";
+    targetElement.style.backgroundSize = "100% 100%";
+  };
+
+  instance.updateText = function (targetElement, text) {
     if (text.editable) {
       if (targetElement.value !== text.content) {
         targetElement.value = text.content;
@@ -24,8 +43,8 @@ const ObjectBuilder = function() {
     if (text.backgroundColor) {
       targetElement.style.backgroundColor = text.backgroundColor;
     }
-    targetElement.style.boxSizing = 'border-box';
-  }
+    targetElement.style.boxSizing = "border-box";
+  };
 
   return instance;
-}
+};

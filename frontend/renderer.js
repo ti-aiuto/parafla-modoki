@@ -72,21 +72,7 @@ const Renderer = function () {
 
         if (object.type === "image") {
           targetElement = document.createElement("div");
-
-          const hover = object.hoverImage?.source
-            ? `[data-full-object-id='${object.fullObjectId}']:hover { background-image: url("${object.hoverImage.source}"); }`
-            : "";
-          const active = object.activeImage?.source
-            ? `[data-full-object-id='${object.fullObjectId}']:active { background-image: url("${object.activeImage.source}"); }`
-            : "";
-
-          styleElement.innerText = `
-        [data-full-object-id='${object.fullObjectId}'] { background-image: url("${object.image.source}"); }
-        ${hover}
-        ${active}
-        `;
-          targetElement.style.backgroundRepeat = "no-repeat";
-          targetElement.style.backgroundSize = "100% 100%";
+          instance.objectBuilder.buildImage(targetElement, styleElement, object.fullObjectId, object.image);
         } else if (object.type === "text") {
           if (object.text.editable) {
             targetElement = document.createElement("input");
@@ -116,7 +102,7 @@ const Renderer = function () {
       if (object.type === "image") {
         // 画像の入れ替えは対応しない
       } else if (object.type === "text") {
-        instance.objectBuilder.buildText(targetElement, object.text);
+        instance.objectBuilder.updateText(targetElement, object.text);
       }
     });
   };
