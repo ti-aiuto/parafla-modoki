@@ -685,7 +685,9 @@
                         ｱｾｯﾄID
                       </div>
     
-                      <input type="text" class="form_input_number" v-model="editingFrameEvent.putImage.assetId" required pattern="^\w+$">
+                      <select v-model="editingFrameEvent.putImage.assetId" class="form_input_number" required>
+                        <option v-for="assetId in Object.keys(allIdToAsset)" :value="assetId">{{assetId}}</option>
+                      </select>
                     </div>
                     
                     <div class="form_row">
@@ -693,7 +695,10 @@
                         ﾎﾊﾞｰ時ID
                       </div>
     
-                      <input type="text" class="form_input_number" v-model="editingFrameEvent.putImage.hoverAssetId" pattern="^\w*$">
+                      <select v-model="editingFrameEvent.putImage.hoverAssetId" class="form_input_number">
+                        <option :value="undefined">未選択</option>
+                        <option v-for="assetId in Object.keys(allIdToAsset)" :value="assetId">{{assetId}}</option>
+                      </select>
                     </div>
 
                     <div class="form_row">
@@ -701,7 +706,10 @@
                         ｱｸﾃｨﾌﾞ時ID
                       </div>
     
-                      <input type="text" class="form_input_number" v-model="editingFrameEvent.putImage.activeAssetId" pattern="^\w*$">
+                      <select v-model="editingFrameEvent.putImage.activeAssetId" class="form_input_number">
+                        <option :value="undefined">未選択</option>
+                        <option v-for="assetId in Object.keys(allIdToAsset)" :value="assetId">{{assetId}}</option>
+                      </select>
                     </div>
                   </div>
                 </template>
@@ -713,7 +721,9 @@
                         ｱｾｯﾄID
                       </div>
     
-                      <input type="text" class="form_input_number" v-model="editingFrameEvent.putText.assetId" required pattern="^\w+$">
+                      <select v-model="editingFrameEvent.putText.assetId" class="form_input_number" required>
+                        <option v-for="assetId in Object.keys(allIdToAsset)" :value="assetId">{{assetId}}</option>
+                      </select>
                     </div>
                   </div>
                 </template>
