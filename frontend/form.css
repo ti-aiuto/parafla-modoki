@@ -34,6 +34,14 @@
   padding: 0 4px;
 }
 
+.form_input_color {
+  width: 65px;
+  line-height: 28px;
+  font-size: 14px;
+  box-sizing: border-box;
+  padding: 0 4px;
+}
+
 .form_textarea {
   flex-grow: 1;
   font-size: 12px;
