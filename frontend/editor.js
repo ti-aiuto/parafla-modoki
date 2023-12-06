@@ -126,14 +126,18 @@ function initEditor() {
         if (this.selectedFrameEvent.type === 'putImage') {
           const putImageEvent = this.selectedFrameEvent['putImage'];
           const image = {
-            image: this.assetsManager.find(putImageEvent.assetId)?.image, 
+            image: this.assetsManager.find(putImageEvent.assetId)?.image,  // TODO: なかった場合
             hoverImage: this.assetsManager.find(putImageEvent.hoverAssetId)?.image, 
             activeImage: this.assetsManager.find(putImageEvent.activeAssetId)?.image, 
           }
           this.objectBuilder.initImage(styleElement, 'preview', image);
           previewElement.dataset.fullObjectId = 'preview';
           this.objectBuilder.setLayoutOptionsToElement(previewElement, this.selectedFrameEvent.layoutOptions);
-        } else if (this.selectFrameEvent.type === 'putText') {
+        } else if (this.selectedFrameEvent.type === 'putText') {
+          const putTextEvent = this.selectedFrameEvent['putText'];
+          const text = this.assetsManager.find(putTextEvent.assetId).text; // TODO: なかった場合
+          this.objectBuilder.updateText(previewElement, text);
+          this.objectBuilder.setLayoutOptionsToElement(previewElement, this.selectedFrameEvent.layoutOptions);
         }
       },
       selectFrameEvent(frameEvent) {
