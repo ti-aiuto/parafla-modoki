@@ -540,7 +540,7 @@
               </div>
             </div>
             <div class="modal_content_right">
-              <div class="modal_content_right_preview_event">
+              <div class="modal_content_right_preview_event" v-show="modalEventPreviewAvailable">
                 <div ref="modalEventPreviewWrapper" class="modal_content_right_preview_event_wrapper"></div>
               </div>
             </div>
@@ -568,7 +568,7 @@
                 <div ref="textWrapper" v-show="selectedAsset?.type === 'text'"></div>
               </div>
               
-              <div class="asset_preview" v-show="selectedFrameEvent">
+              <div class="asset_preview" v-show="selectedEventPreviewAvailable">
                 <div class="asset_preview_event">
                   <div ref="eventPreviewWrapper"  class="asset_preview_wrapper"></div>
                 </div>

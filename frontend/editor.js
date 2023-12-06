@@ -147,7 +147,7 @@ function initEditor() {
         }
       },
       updateModalEventPreview() {
-        if (!["putImage", "putText"].includes(this.editingFrameEvent?.type)) {
+        if (!this.modalEventPreviewAvailable) {
           return;
         }
 
@@ -618,6 +618,12 @@ function initEditor() {
         }
         return this.assetsManager.find(this.selectedAssetId);
       },
+      modalEventPreviewAvailable() {
+        return ["putImage", "putText"].includes(this.editingFrameEvent?.type);
+      },
+      selectedEventPreviewAvailable() {
+        return ["putImage", "putText"].includes(this.selectedFrameEvent?.type);
+      }
     },
     data: {
       frameEvents: null,
