@@ -15,6 +15,7 @@ function initEditor() {
     stop: "停止",
     gotoAndPlay: "指定ラベルにジャンプして再生",
     setTextValue: "テキストの表示内容を更新",
+    executeScript: "スクリプトを実行",
     callComponentUserFunction: "ユーザ関数を呼び出し",
     registerGlobalKeydownListener: "キー押下リスナーを登録",
     unregisterGlobalKeydownListener: "キー押下リスナーを登録解除",

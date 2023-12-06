@@ -83,6 +83,7 @@
                       <option value="stop">停止</option>
                       <option value="gotoAndPlay">指定ラベルへジャンプして再生</option>
                       <option value="setTextValue">テキストの表示内容を更新</option>
+                      <option value="executeScript">スクリプトを実行</option>
                       <option value="callComponentUserFunction">ユーザ関数を呼び出し</option>
                       <option value="registerGlobalKeydownListener">キー押下リスナーを登録</option>
                       <option value="unregisterGlobalKeydownListener">キー押下リスナーを登録解除</option>
@@ -200,6 +201,16 @@
                       </div>
     
                       <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.clearUserTimer.listenerId" required>
+                    </div>
+                  </template>
+                  
+                  <template v-if="editingFrameEvent.executeAction.type === 'executeScript' && editingFrameEvent.executeAction.executeScript">                    
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        スクリプト
+                      </div>
+    
+                      <textarea class="form_textarea" v-model="editingFrameEvent.executeAction.executeScript.content" required></textarea>
                     </div>
                   </template>
                 </template>
@@ -371,6 +382,7 @@
                         <option value="stop">停止</option>
                         <option value="gotoAndPlay">指定ラベルへジャンプして再生</option>
                         <option value="setTextValue">テキストの表示内容を更新</option>
+                        <option value="executeScript">スクリプトを実行</option>
                         <option value="callComponentUserFunction">ユーザ関数を呼び出し</option>
                         <option value="registerGlobalKeydownListener">キー押下リスナーを登録</option>
                         <option value="unregisterGlobalKeydownListener">キー押下リスナーを登録解除</option>
@@ -488,6 +500,16 @@
                         </div>
       
                         <input type="text" class="form_input_text" v-model="editingFrameEvent.onClickAction.clearUserTimer.listenerId" required>
+                      </div>
+                    </template>
+                    
+                    <template v-if="editingFrameEvent.onClickAction.type === 'executeScript' && editingFrameEvent.onClickAction.executeScript">                    
+                      <div class="form_row">
+                        <div class="form_row_label">
+                          スクリプト
+                        </div>
+      
+                        <textarea class="form_textarea" v-model="editingFrameEvent.onClickAction.executeScript.content" required></textarea>
                       </div>
                     </template>
                   </template>
