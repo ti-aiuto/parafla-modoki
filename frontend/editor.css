@@ -121,6 +121,6 @@
   transform: scale(calc(220 / 640));
 }
 
-.v-cloack {
+.v-cloak {
   display: none;
 }

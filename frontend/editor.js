@@ -116,7 +116,12 @@ function initEditor() {
         wrapper.appendChild(previewElement);
         this.objectBuilder.updateText(previewElement, this.selectedAsset.text);
       },
-      buildFrameEventElement(previewElement, styleElement, frameEvent, fullObjectId) {
+      buildFrameEventElement(
+        previewElement,
+        styleElement,
+        frameEvent,
+        fullObjectId
+      ) {
         if (frameEvent.type === "putImage") {
           const putImageEvent = frameEvent["putImage"];
           const image = {
@@ -168,7 +173,7 @@ function initEditor() {
           previewElement,
           styleElement,
           this.editingFrameEvent,
-          'modal-preview'
+          "modal-preview"
         );
       },
       updateEventPreview() {
@@ -184,7 +189,7 @@ function initEditor() {
           previewElement,
           styleElement,
           this.selectedFrameEvent,
-          'left-column-preview'
+          "left-column-preview"
         );
       },
       selectFrameEvent(frameEvent) {
@@ -601,7 +606,9 @@ function initEditor() {
         });
       },
       onClickCentering() {
-        this.editingFrameEvent.layoutOptions.x = Math.floor((640 - this.editingFrameEvent.layoutOptions.width) / 2);
+        this.editingFrameEvent.layoutOptions.x = Math.floor(
+          (640 - this.editingFrameEvent.layoutOptions.width) / 2
+        );
       },
       onClickDisableAnimation() {
         this.$set(this.editingFrameEvent, "lastKeyFrame", undefined);
@@ -623,33 +630,85 @@ function initEditor() {
           this.onClickDisableAnimation();
         }
       },
-      clickAddTextAsset() {
-
-      },
-      clickAddImageAsset() {
-
-      },
+      clickAddTextAsset() {},
+      clickAddImageAsset() {},
       clickEditAsset() {
+        if (!this.selectedAsset) {
+          return;
+        }
         this.editingTargetAsset = this.selectedAsset;
         this.editingAsset = structuredClone(this.selectedAsset);
       },
       clickDeleteAsset() {
-
+        // あとで実装でもよい
       },
       clickCancelEditingTextAsset() {
         this.editingTargetAsset = null;
         this.editingAsset = null;
       },
       onSubmitTextAsset() {
-
-      },
-      onSubmitImageAsset() {
-
-      },
-      clickCancelEditingImageAsset(){
+        if (this.editingTargetAsset) {
+          this.$set(
+            this.editingTargetAsset,
+            "name",
+            this.editingAsset.name
+          );
+          this.$set(
+            this.editingTargetAsset.text,
+            "content",
+            this.editingAsset.text.content
+          );
+          this.$set(
+            this.editingTargetAsset.text,
+            "fontSize",
+            Number(this.editingAsset.text.fontSize)
+          );
+          this.$set(
+            this.editingTargetAsset.text,
+            "textColor",
+            this.editingAsset.text.textColor
+          );
+          this.$set(
+            this.editingTargetAsset.text,
+            "padding",
+            Number(this.editingAsset.text.padding)
+          );
+          this.$set(
+            this.editingTargetAsset.text,
+            "lineHeight",
+            Number(this.editingAsset.text.lineHeight)
+          );
+          this.$set(
+            this.editingTargetAsset.text,
+            "backgroundColor",
+            this.editingAsset.text.backgroundColor
+          );
+          if (this.editingAsset.text.borderEnabled) {
+            this.$set(
+              this.editingTargetAsset.borderWidth,
+              "lineHeight",
+              Number(this.editingAsset.text.borderWidth)
+            );
+            this.$set(
+              this.editingTargetAsset.text,
+              "borderStyle",
+              this.editingAsset.text.borderStyle
+            );
+            this.$set(
+              this.editingTargetAsset.text,
+              "backgroundColor",
+              this.editingAsset.text.backgroundColor
+            );
+          }
+        }
         this.editingTargetAsset = null;
         this.editingAsset = null;
-      }
+      },
+      onSubmitImageAsset() {},
+      clickCancelEditingImageAsset() {
+        this.editingTargetAsset = null;
+        this.editingAsset = null;
+      },
     },
     computed: {
       selectedAsset() {
@@ -663,7 +722,7 @@ function initEditor() {
       },
       selectedEventPreviewAvailable() {
         return ["putImage", "putText"].includes(this.selectedFrameEvent?.type);
-      }
+      },
     },
     data: {
       frameEvents: null,

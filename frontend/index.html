@@ -46,7 +46,7 @@
   </head>
   <body>
     <div id="vue_root">
-      <div v-cloack v-if="editingAsset">
+      <div v-cloak v-if="editingAsset">
         <div class="modal_background">
           &nbsp;
         </div>
@@ -212,7 +212,7 @@
         </div>
       </div>
 
-      <div v-show="editingFrameEvent" v-cloack>
+      <div v-show="editingFrameEvent" v-cloak>
         <div class="modal_background">
           &nbsp;
         </div>
@@ -781,7 +781,7 @@
                   <th>アセット名</th>
                   <th>種別</th>
                 </tr>
-                <tr v-for="assetId in assetsManager.findAllIds()" @click="selectAsset(assetId)" :style="assetRowStyle(assetId)">
+                <tr v-for="assetId in assetsManager.findAllIds()" @click="selectAsset(assetId)" :style="assetRowStyle(assetId)" @dblclick="clickEditAsset">
                   <td class="asset_table_td">{{assetId}}</td>
                   <td class="asset_table_td">{{assetsManager.find(assetId).name}}</td>
                   <td class="asset_table_td">{{assetsManager.find(assetId).type === 'image' ? '画像' : 'テキスト'}}</td>
