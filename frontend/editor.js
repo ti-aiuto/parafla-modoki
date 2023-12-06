@@ -33,10 +33,12 @@ function initEditor() {
           frameNumber += frameEvent.frameCount;
         });
       },
-      selectStory() {
-        this.frameEvents = structuredClone(window.frameEventsTyping);
-        // this.frameEvents = [];
+      loadWorkspace(workspace) {
+        console.debug('workspace読込', workspace);
+        this.frameEvents = workspace['frameEvents'];
         this.updateFrameNumbers();
+        this.assetsManager = AssetsManager(workspace['allIdToAsset']);
+        this.reloadAllAssets();
       },
       start() {
         this.started = true;
@@ -840,6 +842,30 @@ function initEditor() {
         
         const blob = new Blob([JSON.stringify(data, null, '  ')], {type: 'application\/json'});
         this.downloadUrl = URL.createObjectURL(blob);
+      },
+      selectWorkspaceFile(event) {
+        const file = event.target.files[0];
+        if (!file) {
+          return;
+        }
+        const fileName = file.name.toLowerCase();
+        if (
+          !(
+            fileName.endsWith("json")
+          )
+        ) {
+          return alert("非対応の形式です");
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+          const json = JSON.parse(reader.result);
+          if (json['app'] !== 'parahtml') {
+            alert('非対応の形式です');
+          }
+          this.loadWorkspace(json['workspace']);
+          this.importingWorkspace = false;
+        };
+        reader.readAsText(file);
       }
     },
     computed: {
@@ -863,9 +889,9 @@ function initEditor() {
       }
     },
     data: {
-      frameEvents: null,
+      frameEvents: [],
       started: false,
-      assetsManager: assetsManager,
+      assetsManager: AssetsManager(),
       objectBuilder: new ObjectBuilder(),
       selectedAssetId: null,
       selectedFrameEvent: null,
@@ -875,6 +901,7 @@ function initEditor() {
       editingAsset: null,
       allIdToAsset: {},
       downloadUrl: null,
+      importingWorkspace: false,
     },
     watch: {
       editingFrameEvent: {
@@ -885,8 +912,6 @@ function initEditor() {
       },
     },
     mounted() {
-      this.reloadAllAssets();
-      this.selectStory();
     },
   });
 }

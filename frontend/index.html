@@ -37,6 +37,36 @@
   </head>
   <body>
     <div id="vue_root">
+      <div v-cloak v-if="importingWorkspace">
+        <div class="modal_background">
+          &nbsp;
+        </div>
+
+        <div class="modal edit_text_modal">
+          <div class="modal_title">ワークスペースの読み込み</div>
+          
+          <form class="modal_content" @submit.prevent="onSubmitImageAsset">
+            <div class="edit_text_modal_content">
+              <div class="edit_text_modal_form">
+                <div class="form_columns_row">
+                  <div class="form_row">
+                    <div class="form_row_label">
+                      ファイル選択
+                    </div>
+  
+                    <input type="file" @change="selectWorkspaceFile($event)">
+                  </div>  
+                </div>
+              </div>
+
+              <div class="modal_bottom_control">
+                <button class="form_button" @click="importingWorkspace=false" type="button">キャンセル</button>  
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div v-cloak v-if="editingAsset">
         <div class="modal_background">
           &nbsp;
@@ -758,7 +788,7 @@
           <button @click="clickEditAsset()" :disabled="!selectedAssetId">編集</button>
           <button @click="clickDeleteAsset()" :disabled="!selectedAssetId">削除</button>
           作業：
-          <button @click="clickAddTextAsset()">読込</button>
+          <button @click="importingWorkspace=true">読込</button>
           <button @click="downloadWorkspace()">保存準備</button>
           <a v-if="downloadUrl" :href="downloadUrl" download="parahtml_workspace.json">ダウンロード</a>
         </div>

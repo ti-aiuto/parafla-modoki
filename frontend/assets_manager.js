@@ -1,6 +1,6 @@
 const AssetsManager = function (initialItems) {
   const instance = {};
-  instance.items = initialItems;
+  instance.items = initialItems || {};
   instance.find = function (id) {
     return instance.items[id];
   };
