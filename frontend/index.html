@@ -46,12 +46,101 @@
   </head>
   <body>
     <div id="vue_root">
+      <div v-cloack>
+        <div class="modal_background">
+          &nbsp;
+        </div>
+  
+        <div class="modal edit_text_modal">
+          <div class="modal_title">テキストの編集</div>
+          
+          <form class="modal_content" @submit.prevent="onSubmit">
+            <div class="edit_text_modal_content">
+              <div class="edit_text_modal_form">
+                <div class="form_row">
+                  <div class="form_row_label">
+                    表示内容
+                  </div>
+
+                  <input type="text" class="form_input_text">
+                </div>  
+
+                <div class="form_columns_row">
+                  <div class="form_row">
+                    <div class="form_row_label">
+                      文字サイズ
+                    </div>
+  
+                    <input type="number" class="form_input_number">
+                  </div>  
+  
+                  <div class="form_row">
+                    <div class="form_row_label">
+                      padding
+                    </div>
+  
+                    <input type="number" class="form_input_number">
+                  </div>  
+  
+                  <div class="form_row">
+                    <div class="form_row_label">
+                      行の高さ
+                    </div>
+  
+                    <input type="number" class="form_input_number">
+                  </div>  
+                </div>
+
+                <div class="form_row">
+                  <div class="form_row_label">
+                    背景色
+                  </div>
+
+                  <input type="text" class="form_input_text">
+                </div>  
+
+                <div class="form_row">
+                  <div class="form_row_label">
+                    罫線の種類
+                  </div>
+
+                  <select class="form_select">
+                    <option value="solid">実線</option>
+                  </select>
+                </div>  
+
+                <div class="form_row">
+                  <div class="form_row_label">
+                    罫線の太さ
+                  </div>
+
+                  <input type="number" class="form_input_number">
+                </div>  
+
+                <div class="form_row">
+                  <div class="form_row_label">
+                    罫線の色
+                  </div>
+
+                  <input type="text" class="form_input_text">
+                </div>  
+              </div>
+
+              <div class="modal_bottom_control">
+                <button class="form_button" type="submit">OK</button>
+                <button class="form_button" @click="clickCancelEditing" type="button">キャンセル</button>  
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div v-show="editingFrameEvent" v-cloack>
         <div class="modal_background">
           &nbsp;
         </div>
   
-        <div class="modal">
+        <div class="modal edit_event_modal">
           <div class="modal_title">イベントの編集</div>
           <form class="modal_content" @submit.prevent="onSubmit">
             <div class="modal_content_left" v-if="editingFrameEvent">
