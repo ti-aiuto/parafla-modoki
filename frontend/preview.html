@@ -9,20 +9,11 @@
     <script type="text/javascript" src="component.js"></script>
     <script type="text/javascript" src="object_builder.js"></script>
     <script type="text/javascript" src="renderer.js"></script>
+    <script type="text/javascript" src="assets_manager.js"></script>
 
     <script type="text/javascript" src="assets.js"></script>
     <script type="text/javascript">
-      const AssetsManager = function () {
-        const instance = {};
-        instance.find = function (id) {
-          return window.dummyAssets[id];
-        };
-        instance.findAllIds = function () {
-          return Object.keys(window.dummyAssets);
-        };
-        return instance;
-      };
-      const assetsManager = AssetsManager();
+      const assetsManager = AssetsManager(window.dummyAssets);
     </script>
     <script type="text/javascript">
       function load() {
