@@ -24,6 +24,20 @@
         );
         component.play();
         console.debug(component);
+
+        setInterval(function () {
+          document.getElementById("frame").value = component.currentFrameCount;
+
+          const vars = component.componentUserVariables;
+          let text = "";
+          Object.keys(vars).forEach(function (key) {
+            text += key;
+            text += "\t\t";
+            text += vars[key];
+            text += "\n";
+          });
+          document.getElementById("userVars").value = text;
+        }, 300);
       }
 
       let firstEvent = true;
@@ -42,9 +56,33 @@
         margin: 0;
         padding: 0;
       }
+      .variables {
+      }
+      .layout {
+        display: flex;
+      }
+      .player_root {
+        flex-shrink: 0;
+      }
+      .debugger {
+        padding: 12px;
+      }
+
+      #userVars {
+        width: 400px;
+        height: 250px;
+      }
     </style>
   </head>
   <body>
-    <div id="root" class="player_root"></div>
+    <div class="layout">
+      <div id="root" class="player_root"></div>
+      <div class="debugger">
+        <div>フレーム: <input id="frame" type="text" /></div>
+
+        <div>ユーザ変数</div>
+        <textarea id="userVars"></textarea>
+      </div>
+    </div>
   </body>
 </html>
