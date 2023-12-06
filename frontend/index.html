@@ -51,7 +51,7 @@
           &nbsp;
         </div>
   
-        <div class="modal edit_text_modal">
+        <div class="modal edit_text_modal" v-if="false">
           <div class="modal_title">テキストの編集</div>
           
           <form class="modal_content" @submit.prevent="onSubmit">
@@ -132,6 +132,47 @@
                     </div>
   
                     <input type="color" class="form_input_color">
+                  </div>  
+                </div>
+              </div>
+
+              <div class="modal_bottom_control">
+                <button class="form_button" type="submit">OK</button>
+                <button class="form_button" @click="clickCancelEditing" type="button">キャンセル</button>  
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="modal edit_text_modal" v-if="true">
+          <div class="modal_title">画像の編集</div>
+          
+          <form class="modal_content" @submit.prevent="onSubmit">
+            <div class="edit_text_modal_content">
+              <div class="edit_text_modal_form">
+                <div class="form_row">
+                  <div class="form_row_label">
+                    アセット名
+                  </div>
+
+                  <input type="text" class="form_input_text" required>
+                </div>  
+
+                <div class="form_row">
+                  <div class="form_row_label">
+                    表示内容
+                  </div>
+
+                  aaa
+                </div>  
+
+                <div class="form_columns_row">
+                  <div class="form_row">
+                    <div class="form_row_label">
+                      画像の変更
+                    </div>
+  
+                    <input type="file">
                   </div>  
                 </div>
               </div>
