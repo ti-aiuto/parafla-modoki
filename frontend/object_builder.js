@@ -1,15 +1,20 @@
 const ObjectBuilder = function () {
   const instance = {};
 
-  instance.setLayoutOptionsToElement = function(element, layoutOptions) {
+  instance.setLayoutOptionsToElement = function (element, layoutOptions) {
     element.style.position = "absolute";
     element.style.width = `${layoutOptions.width}px`;
     element.style.height = `${layoutOptions.height}px`;
     element.style.left = `${layoutOptions.x}px`;
     element.style.top = `${layoutOptions.y}px`;
-  }
+  };
 
-  instance.buildImage = function (targetElement, styleElement, fullObjectId, image) {
+  instance.buildImage = function (
+    targetElement,
+    styleElement,
+    fullObjectId,
+    image
+  ) {
     console.log(image);
     targetElement = document.createElement("div");
     const hover = image.hoverImage?.source
@@ -20,12 +25,10 @@ const ObjectBuilder = function () {
       : "";
 
     styleElement.innerText = `
-    [data-full-object-id='${fullObjectId}'] { background-image: url("${image.image.source}"); }
+    [data-full-object-id='${fullObjectId}'] { background-image: url("${image.image.source}"); background-repeat: no-repeat; background-size: 100% 100%; }
     ${hover}
     ${active}
     `;
-    targetElement.style.backgroundRepeat = "no-repeat";
-    targetElement.style.backgroundSize = "100% 100%";
   };
 
   instance.updateText = function (targetElement, text) {
