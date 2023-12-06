@@ -786,7 +786,10 @@ function initEditor() {
       reloadAllAssets() {
         this.allIdToAsset = this.assetsManager.allIdToAsset();
       },
-      clearSelected() {},
+      clearSelected() {
+        this.selectedAssetId = null;
+        this.selectedFrameEvent = null;
+      },
     },
     computed: {
       selectedAsset() {
