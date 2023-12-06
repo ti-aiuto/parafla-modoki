@@ -114,7 +114,7 @@ function initEditor() {
         wrapper.appendChild(previewElement);
         this.objectBuilder.updateText(previewElement, this.selectedAsset.text);
       },
-      buildFrameEventElement(previewElement, styleElement, frameEvent) {
+      buildFrameEventElement(previewElement, styleElement, frameEvent, fullObjectId) {
         if (frameEvent.type === "putImage") {
           const putImageEvent = frameEvent["putImage"];
           const image = {
@@ -127,8 +127,8 @@ function initEditor() {
           if (!image.image) {
             return alert("画像不明");
           }
-          this.objectBuilder.initImage(styleElement, "preview", image);
-          previewElement.dataset.fullObjectId = "preview";
+          this.objectBuilder.initImage(styleElement, fullObjectId, image);
+          previewElement.dataset.fullObjectId = fullObjectId;
           this.objectBuilder.setLayoutOptionsToElement(
             previewElement,
             frameEvent.layoutOptions
@@ -165,7 +165,8 @@ function initEditor() {
         this.buildFrameEventElement(
           previewElement,
           styleElement,
-          this.editingFrameEvent
+          this.editingFrameEvent,
+          'modal-preview'
         );
       },
       updateEventPreview() {
@@ -180,7 +181,8 @@ function initEditor() {
         this.buildFrameEventElement(
           previewElement,
           styleElement,
-          this.selectedFrameEvent
+          this.selectedFrameEvent,
+          'left-column-preview'
         );
       },
       selectFrameEvent(frameEvent) {
