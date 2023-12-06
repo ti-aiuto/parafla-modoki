@@ -40,7 +40,7 @@ input[type="number"] {
   height: calc(100% - 40px);
 }
 .editor_left_column {
-  width: 350px;
+  width: 300px;
   border-right: solid 3px #aaa;
   display: flex;
   flex-direction: column;
@@ -115,7 +115,7 @@ input[type="number"] {
 .modal {
   z-index: 2;
   position: absolute;
-  width: 800px;
+  width: 850px;
   background-color: #f9f9f9;
   top: 50px;
   right: 0;
