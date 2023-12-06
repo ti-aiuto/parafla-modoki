@@ -203,10 +203,7 @@ function initEditor() {
         let count = 0;
         const timerId = setInterval(() => {
           previewWindow.postMessage(
-            JSON.stringify({
-              frameEvents: this.frameEvents,
-              allIdToAsset: this.allIdToAsset,
-            }),
+            JSON.stringify(this.generatWorkspaceJson()),
             "*"
           );
           count++;
@@ -828,6 +825,22 @@ function initEditor() {
         this.selectedAssetId = null;
         this.selectedFrameEvent = null;
       },
+      generatWorkspaceJson() {
+        return {
+          frameEvents: this.frameEvents,
+          allIdToAsset: this.allIdToAsset,
+        };
+      }, 
+      downloadWorkspace() {
+        const data = {
+          app: 'parahtml',
+          version: 1,
+          workspace: this.generatWorkspaceJson()
+        };
+        
+        const blob = new Blob([JSON.stringify(data, null, '  ')], {type: 'application\/json'});
+        this.downloadUrl = URL.createObjectURL(blob);
+      }
     },
     computed: {
       selectedAsset() {
@@ -861,6 +874,7 @@ function initEditor() {
       editingTargetAsset: null,
       editingAsset: null,
       allIdToAsset: {},
+      downloadUrl: null,
     },
     watch: {
       editingFrameEvent: {

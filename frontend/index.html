@@ -759,7 +759,8 @@
           <button @click="clickDeleteAsset()" :disabled="!selectedAssetId">削除</button>
           作業：
           <button @click="clickAddTextAsset()">読込</button>
-          <button @click="clickAddTextAsset()">保存</button>
+          <button @click="downloadWorkspace()">保存準備</button>
+          <a v-if="downloadUrl" :href="downloadUrl" download="parahtml_workspace.json">ダウンロード</a>
         </div>
         <div class="editor_columns">
           <div class="editor_left_column">
