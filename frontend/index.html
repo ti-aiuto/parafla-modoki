@@ -556,6 +556,9 @@
           <button @click="clickMoveDownwardFrameEvent" :disabled="!selectedFrameEvent || !canMoveDownwardSelected()">イベントを下に移動</button>
           <button @click="clickMoveUpwardFrameEvent" :disabled="!selectedFrameEvent || !canMoveUpwardSelected()">イベントを上に移動</button>
           <button @click="openPreview()">プレビュー</button>
+          <button @click="clickAddAsset()">アセットを追加</button>
+          <button @click="clickEditAsset()" :disabled="!selectedAssetId">アセットを編集</button>
+          <button @click="clickDeleteAsset()" :disabled="!selectedAssetId">アセットを削除</button>
         </div>
         <div class="editor_columns">
           <div class="editor_left_column">
