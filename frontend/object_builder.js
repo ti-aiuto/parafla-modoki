@@ -25,7 +25,7 @@ const ObjectBuilder = function () {
   };
 
   instance.updateText = function (targetElement, text) {
-    if (text.editable) {
+    if (text.editable && targetElement.tagName === 'input') {
       if (targetElement.value !== text.content) {
         targetElement.value = text.content;
       }

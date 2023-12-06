@@ -109,7 +109,7 @@ function initEditor() {
       },
       updateTextAssetPreview() {
         const wrapper = this.$refs.textWrapper;
-        if (wrapper.firstChild) {
+        while (wrapper.firstChild) {
           wrapper.removeChild(wrapper.firstChild);
         }
         const previewElement = document.createElement("div");
