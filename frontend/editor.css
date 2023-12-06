@@ -160,10 +160,30 @@ input[type="number"] {
   flex-grow: 0;
   padding: 12px 16px;
   display: flex;
+  flex-shrink: 0;
   gap: 12px;
 }
 
 .modal_content_right {
+  box-sizing: border-box;
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  overflow: auto;
+}
+.modal_content_right_preview_event {
+  width: 320px;
+  height: calc(3 * 320px / 4);
+  border: solid 1px #333;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+.modal_content_right_preview_event_wrapper {
+  position: relative;
+  transform-origin: top left;
+  transform: scale(calc(320 / 640));
 }
 
 .form_row {

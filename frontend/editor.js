@@ -122,15 +122,24 @@ function initEditor() {
             hoverImage: this.assetsManager.find(putImageEvent.hoverAssetId)?.image, 
             activeImage: this.assetsManager.find(putImageEvent.activeAssetId)?.image, 
           }
+          if (!image.image) {
+            return alert('画像不明');
+          }
           this.objectBuilder.initImage(styleElement, 'preview', image);
           previewElement.dataset.fullObjectId = 'preview';
           this.objectBuilder.setLayoutOptionsToElement(previewElement, frameEvent.layoutOptions);
         } else if (frameEvent.type === 'putText') {
           const putTextEvent = frameEvent['putText'];
-          const text = this.assetsManager.find(putTextEvent.assetId).text; // TODO: なかった場合
+          const text = this.assetsManager.find(putTextEvent.assetId)?.text; // TODO: なかった場合
+          if (!text) {
+            return alert('画像不明');
+          }
           this.objectBuilder.updateText(previewElement, text);
           this.objectBuilder.setLayoutOptionsToElement(previewElement, frameEvent.layoutOptions);
         }
+      },
+      updateModalEventPreview() {
+
       },
       updateEventPreview() {
         const wrapper = this.$refs.eventPreviewWrapper;
