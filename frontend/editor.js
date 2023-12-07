@@ -138,7 +138,7 @@ function initEditor() {
           }
           this.objectBuilder.initImage(styleElement, fullObjectId, image);
           previewElement.dataset.fullObjectId = fullObjectId;
-          previewElement.style.border = 'solid 6px #aaa';
+          previewElement.style.border = "solid 6px #aaa";
           this.objectBuilder.setLayoutOptionsToElement(
             previewElement,
             frameEvent.layoutOptions
@@ -908,6 +908,11 @@ function initEditor() {
         return Object.keys(this.allIdToAsset).filter(
           (assetId) => this.allIdToAsset[assetId]["type"] === "image"
         );
+      },
+      allLabelNames() {
+        return this.frameEvents
+          .map((event) => event["defineLabel"] && event["defineLabel"]["label"])
+          .filter((item) => item);
       },
     },
     data: {

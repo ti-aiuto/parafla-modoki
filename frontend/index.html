@@ -282,7 +282,9 @@
                         ジャンプ先
                       </div>
     
-                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.gotoAndPlay.destination" required>
+                      <select class="form_input_text" v-model="editingFrameEvent.executeAction.gotoAndPlay.destination" required>
+                        <option v-for="labelName in allLabelNames" :value="labelName">{{labelName}}</option>
+                      </select>
                     </div>  
                   </template>
 
@@ -592,7 +594,9 @@
                           ジャンプ先
                         </div>
       
-                        <input type="text" class="form_input_text" v-model="editingFrameEvent.onClickAction.gotoAndPlay.destination" required>
+                        <select class="form_input_text" v-model="editingFrameEvent.onClickAction.gotoAndPlay.destination" required>
+                          <option v-for="labelName in allLabelNames" :value="labelName">{{labelName}}</option>
+                        </select>
                       </div>  
                     </template>
   
