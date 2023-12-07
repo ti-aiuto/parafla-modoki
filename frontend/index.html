@@ -340,7 +340,9 @@
                         ユーザ関数名
                       </div>
     
-                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.registerGlobalKeydownListener.componentUserFunctionName" required>
+                      <select class="form_input_text" v-model="editingFrameEvent.executeAction.registerGlobalKeydownListener.componentUserFunctionName" required>
+                        <option v-for="labelName in allUserFunctionNames" :value="labelName">{{labelName}}</option>
+                      </select>
                     </div>  
                   </template>
 
@@ -368,7 +370,9 @@
                         ユーザ関数名
                       </div>
     
-                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.startUserTimer.componentUserFunctionName" required>
+                      <select class="form_input_text" v-model="editingFrameEvent.executeAction.startUserTimer.componentUserFunctionName" required>
+                        <option v-for="labelName in allUserFunctionNames" :value="labelName">{{labelName}}</option>
+                      </select>
                     </div>
                     
                     <div class="form_row">
@@ -661,7 +665,9 @@
                           ユーザ関数名
                         </div>
       
-                        <input type="text" class="form_input_text" v-model="editingFrameEvent.onClickAction.registerGlobalKeydownListener.componentUserFunctionName" required>
+                        <select class="form_input_text" v-model="editingFrameEvent.onClickAction.registerGlobalKeydownListener.componentUserFunctionName" required>
+                          <option v-for="labelName in allUserFunctionNames" :value="labelName">{{labelName}}</option>
+                        </select>
                       </div>  
                     </template>
   
@@ -689,7 +695,9 @@
                           ユーザ関数名
                         </div>
       
-                        <input type="text" class="form_input_text" v-model="editingFrameEvent.onClickAction.startUserTimer.componentUserFunctionName" required>
+                        <select class="form_input_text" v-model="editingFrameEvent.onClickAction.startUserTimer.componentUserFunctionName" required>
+                          <option v-for="labelName in allUserFunctionNames" :value="labelName">{{labelName}}</option>
+                        </select>
                       </div>
                       
                       <div class="form_row">

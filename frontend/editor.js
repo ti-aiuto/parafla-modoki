@@ -959,6 +959,11 @@ function initEditor() {
           .map((event) => event["defineLabel"] && event["defineLabel"]["label"])
           .filter((item) => item);
       },
+      allUserFunctionNames() {
+        return this.frameEvents
+          .map((event) => event["defineComponentUserFunction"] && event["defineComponentUserFunction"]["name"])
+          .filter((item) => item);
+      },
     },
     data: {
       frameEvents: [],
