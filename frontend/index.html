@@ -796,7 +796,7 @@
           作業：
           <button @click="importingWorkspace=true">読込</button>
           <button @click="downloadWorkspace()">保存準備</button>
-          <a v-if="downloadUrl" :href="downloadUrl" download="parahtml_workspace.json">ダウンロード</a>
+          <a v-if="downloadUrl" :href="downloadUrl" download="parahtml_workspace.json" @click="downloadUrl = null">ダウンロード</a>
         </div>
         <div class="editor_columns">
           <div class="editor_left_column">
