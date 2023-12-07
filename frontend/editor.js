@@ -34,10 +34,10 @@ function initEditor() {
         });
       },
       loadWorkspace(workspace) {
-        console.debug('workspace読込', workspace);
-        this.frameEvents = workspace['frameEvents'];
+        console.debug("workspace読込", workspace);
+        this.frameEvents = workspace["frameEvents"];
         this.updateFrameNumbers();
-        this.assetsManager = AssetsManager(workspace['allIdToAsset']);
+        this.assetsManager = AssetsManager(workspace["allIdToAsset"]);
         this.reloadAllAssets();
       },
       start() {
@@ -223,12 +223,16 @@ function initEditor() {
           this.editingFrameEvent = structuredClone(this.selectedFrameEvent);
 
           // 「未選択」の選択状態を正しく表示するためのロジック
-          if (this.editingFrameEvent.type === 'putImage') {
-            if (!this.editingFrameEvent['putImage'].hoverAssetId) {
-              this.$set(this.editingFrameEvent['putImage'], 'hoverAssetId', '');
+          if (this.editingFrameEvent.type === "putImage") {
+            if (!this.editingFrameEvent["putImage"].hoverAssetId) {
+              this.$set(this.editingFrameEvent["putImage"], "hoverAssetId", "");
             }
-            if (!this.editingFrameEvent['putImage'].activeAssetId) {
-              this.$set(this.editingFrameEvent['putImage'], 'activeAssetId', '');
+            if (!this.editingFrameEvent["putImage"].activeAssetId) {
+              this.$set(
+                this.editingFrameEvent["putImage"],
+                "activeAssetId",
+                ""
+              );
             }
           }
         }, UI_WAIT_TIME);
@@ -453,8 +457,8 @@ function initEditor() {
         } else if (frameEventType === "putImage") {
           this.$set(this.editingFrameEvent, "putImage", {
             assetId: null,
-            hoverAssetId: '',
-            activeAssetId: '',
+            hoverAssetId: "",
+            activeAssetId: "",
           });
           this.$set(this.editingFrameEvent, "frameCount", 0);
           this.$set(this.editingFrameEvent, "depth", 1);
@@ -544,7 +548,7 @@ function initEditor() {
               hoverAssetId: rawUpdatedFrameEvent["putImage"]["hoverAssetId"]
                 ? Number(rawUpdatedFrameEvent["putImage"]["hoverAssetId"])
                 : null,
-                activeAssetId: rawUpdatedFrameEvent["putImage"]["activeAssetId"]
+              activeAssetId: rawUpdatedFrameEvent["putImage"]["activeAssetId"]
                 ? Number(rawUpdatedFrameEvent["putImage"]["activeAssetId"])
                 : null,
             };
@@ -831,16 +835,23 @@ function initEditor() {
         return {
           frameEvents: this.frameEvents,
           allIdToAsset: this.allIdToAsset,
+          settings: {
+            width: 640,
+            height: 480,
+            fps: 20,
+          },
         };
-      }, 
+      },
       downloadWorkspace() {
         const data = {
-          app: 'parahtml',
+          app: "parahtml",
           version: 1,
-          workspace: this.generatWorkspaceJson()
+          workspace: this.generatWorkspaceJson(),
         };
-        
-        const blob = new Blob([JSON.stringify(data, null, '  ')], {type: 'application\/json'});
+
+        const blob = new Blob([JSON.stringify(data, null, "  ")], {
+          type: "application/json",
+        });
         this.downloadUrl = URL.createObjectURL(blob);
       },
       selectWorkspaceFile(event) {
@@ -849,20 +860,16 @@ function initEditor() {
           return;
         }
         const fileName = file.name.toLowerCase();
-        if (
-          !(
-            fileName.endsWith("json")
-          )
-        ) {
+        if (!fileName.endsWith("json")) {
           return alert("非対応の形式です");
         }
         const reader = new FileReader();
         reader.onload = () => {
           const json = JSON.parse(reader.result);
-          if (json['app'] !== 'parahtml') {
-            alert('非対応の形式です');
+          if (json["app"] !== "parahtml") {
+            alert("非対応の形式です");
           }
-          this.loadWorkspace(json['workspace']);
+          this.loadWorkspace(json["workspace"]);
           this.importingWorkspace = false;
         };
         reader.readAsText(file);
@@ -870,8 +877,8 @@ function initEditor() {
       checkScript(scriptContent) {
         try {
           new Function("context", "args", scriptContent);
-          alert('構文エラーはありません');
-        } catch(e) {
+          alert("構文エラーはありません");
+        } catch (e) {
           alert(`エラー：${e}`);
         }
       },
@@ -890,11 +897,15 @@ function initEditor() {
         return ["putImage", "putText"].includes(this.selectedFrameEvent?.type);
       },
       textAssetIds() {
-        return Object.keys(this.allIdToAsset).filter((assetId)=> this.allIdToAsset[assetId]['type'] === 'text');
+        return Object.keys(this.allIdToAsset).filter(
+          (assetId) => this.allIdToAsset[assetId]["type"] === "text"
+        );
       },
       imageAssetIds() {
-        return Object.keys(this.allIdToAsset).filter((assetId)=> this.allIdToAsset[assetId]['type'] === 'image');
-      }
+        return Object.keys(this.allIdToAsset).filter(
+          (assetId) => this.allIdToAsset[assetId]["type"] === "image"
+        );
+      },
     },
     data: {
       frameEvents: [],
@@ -919,7 +930,6 @@ function initEditor() {
         },
       },
     },
-    mounted() {
-    },
+    mounted() {},
   });
 }
