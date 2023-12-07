@@ -138,6 +138,7 @@ function initEditor() {
           }
           this.objectBuilder.initImage(styleElement, fullObjectId, image);
           previewElement.dataset.fullObjectId = fullObjectId;
+          previewElement.style.border = 'solid 6px #aaa';
           this.objectBuilder.setLayoutOptionsToElement(
             previewElement,
             frameEvent.layoutOptions
