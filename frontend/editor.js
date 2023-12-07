@@ -784,6 +784,7 @@ function initEditor() {
           this.extractTextAsset(newAsset, this.editingAsset);
           const newId = this.assetsManager.add(newAsset);
           this.reloadAllAssets();
+          this.clearSelected();
           this.selectAsset(newId);
         }
         this.editingTargetAsset = null;
@@ -798,6 +799,7 @@ function initEditor() {
           this.extractImageAsset(newAsset, this.editingAsset);
           const newId = this.assetsManager.add(newAsset);
           this.reloadAllAssets();
+          this.clearSelected();
           this.selectAsset(newId);
         }
         this.editingTargetAsset = null;
