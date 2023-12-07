@@ -885,6 +885,51 @@ function initEditor() {
           alert(`エラー：${e}`);
         }
       },
+      calcImageSize() {
+        const imageSource = this.assetsManager.find(
+          this.editingFrameEvent["putImage"]?.assetId
+        )?.image?.source;
+        if (!imageSource) {
+          alert("画像が取得できませんでした");
+        }
+        return new Promise((resolver) => {
+          const imageElement = document.createElement("img");
+          imageElement.src = imageSource;
+          imageElement.onload = function () {
+            resolver([imageElement.naturalWidth, imageElement.naturalHeight]);
+          };
+        });
+      },
+      async onClickAutoWidth() {
+        const size = await this.calcImageSize();
+        if (!this.editingFrameEvent.layoutOptions) {
+          return;
+        }
+        const height = this.editingFrameEvent.layoutOptions.height;
+        if (height) {
+          const width = (Number(height) / size[1]) * size[0];
+          this.$set(
+            this.editingFrameEvent.layoutOptions,
+            "width",
+            Math.round(width)
+          );
+        }
+      },
+      async onClickAutoHeight() {
+        const size = await this.calcImageSize();
+        if (!this.editingFrameEvent.layoutOptions) {
+          return;
+        }
+        const width = this.editingFrameEvent.layoutOptions.width;
+        if (width) {
+          const height = (Number(width) / size[0]) * size[1];
+          this.$set(
+            this.editingFrameEvent.layoutOptions,
+            "height",
+            Math.round(height)
+          );
+        }
+      },
     },
     computed: {
       selectedAsset() {
