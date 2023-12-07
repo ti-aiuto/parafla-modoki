@@ -60,7 +60,6 @@ const Renderer = function () {
         }
 
         const styleElement = document.createElement("style");
-        wrapper.appendChild(styleElement);
 
         if (object.type === "image") {
           targetElement = document.createElement("div");
@@ -91,6 +90,7 @@ const Renderer = function () {
         targetElement.dataset.fullObjectId = object.fullObjectId;
         targetElement.style.zIndex = depth;
         wrapper.appendChild(targetElement);
+        wrapper.appendChild(styleElement);
       }
 
       instance.objectBuilder.setLayoutOptionsToElement(

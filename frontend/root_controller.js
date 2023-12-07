@@ -20,7 +20,7 @@ const RootController = function () {
         clickAction["component"].handleAction(clickAction["action"]);
       }
     });
-  });
+  }, false);
 
   instance.registerClickAction = function (fullObjectId, component, action) {
     console.debug("クリックイベント登録", fullObjectId, component, action);
