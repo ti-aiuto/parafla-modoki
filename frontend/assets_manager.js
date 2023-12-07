@@ -11,7 +11,13 @@ const AssetsManager = function (initialItems) {
     return this.items;
   };
   instance.add = function (object) {
-    const maxId = Math.max.apply(null, Object.keys(instance.items));
+    let maxId = 0;
+    if (Object.keys(instance.items).length) {
+      maxId = Math.max.apply(
+        null,
+        Object.keys(instance.items).map((key) => Number(key))
+      );
+    }
     const newId = maxId + 1;
     instance.items[newId] = object;
     return newId;

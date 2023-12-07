@@ -14,8 +14,8 @@
    viewBox="0 0 169.33333 127"
    version="1.1"
    id="svg8"
-   sodipodi:docname="page2.svg"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="凶.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -23,11 +23,11 @@
      pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1.0"
-     inkscape:pageopacity="0"
+     inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.238581"
-     inkscape:cx="-44.605977"
-     inkscape:cy="180.61945"
+     inkscape:zoom="1.4"
+     inkscape:cx="462.79855"
+     inkscape:cy="207.96825"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -45,7 +45,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -55,23 +55,22 @@
      id="layer1"
      transform="translate(0,-169.99998)">
     <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:0.9518072;stroke:#f19494;stroke-width:1.21330142;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:1;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-       id="rect22"
-       width="169.33333"
-       height="127"
-       x="0"
-       y="169.99998"
-       ry="0" />
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.21099997;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:1;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       id="rect853"
+       width="72.193451"
+       height="101.48661"
+       x="47.624996"
+       y="176.04761" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="46.568748"
-       y="238.255"
-       id="text4534"><tspan
+       x="78.770241"
+       y="192.67854"
+       id="text857"><tspan
          sodipodi:role="line"
-         id="tspan4532"
-         x="46.568748"
-         y="238.255"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.93333244px;font-family:HGSGothicM;-inkscape-font-specification:HGSGothicM;stroke-width:0.26458332">2ページ目</tspan></text>
+         id="tspan855"
+         x="78.770241"
+         y="192.67854"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'UD Digi Kyokasho N-B';-inkscape-font-specification:'UD Digi Kyokasho N-B';stroke-width:0.26458332">凶</tspan></text>
   </g>
 </svg>
