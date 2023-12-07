@@ -614,6 +614,7 @@ function initEditor() {
           this.updateFrameNumbers();
           this.editingTargetFrameEvent = null;
           this.editingFrameEvent = null;
+          this.clearSelected();
           this.selectedFrameEvent = updatedFrameEvent; // 編集中は選択中なので選択中の参照も入れ替える
           this.updateEventPreview();
           console.debug(this.selectedFrameEvent);
