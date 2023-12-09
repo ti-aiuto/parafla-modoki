@@ -1,4 +1,4 @@
-import { ScheduledFrameEvent } from "./scheduled-frame-event";
+import { ScheduledFrameEvent } from "./frame-event/scheduled-frame-event";
 
 export type ScheduledEvents = { [key in string]: ScheduledFrameEvent[] };
 export type ComponentUserFunctions = { [key in string]: string };

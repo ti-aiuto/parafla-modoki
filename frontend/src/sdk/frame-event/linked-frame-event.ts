@@ -1,14 +1,14 @@
 import { AbstractPutObjectFrameEvent } from "./abstract-put-object-frame-event";
 import { ExceptPutObjectFrameEvent } from "./except-put-object-frame-event";
-import { ImageAssetContent } from "./image-asset-content";
-import { TextAssetContent } from "./text-asset-content";
+import { ImageAssetContent } from "../asset/image-asset-content";
+import { TextAssetContent } from "../asset/text-asset-content";
 
 interface PutImgeLinkedFrameEvent extends AbstractPutObjectFrameEvent {
   type: 'putImage';
   putImage: {
-    asset: ImageAssetContent;
-    hoverAsset?: ImageAssetContent;
-    activeAsset?: ImageAssetContent;
+    image: ImageAssetContent;
+    hoverImage?: ImageAssetContent;
+    activeImage?: ImageAssetContent;
   }
 }
 

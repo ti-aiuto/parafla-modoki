@@ -1,6 +1,7 @@
 import { AssetsManager } from "./assets-manager";
 import { ComponentSource, ComponentUserFunctions, LabelToFrameNumber, ScheduledEvents } from "./component-source";
-import { FrameEvent } from "./frame-event";
+import { FrameEvent } from "./frame-event/frame-event";
+import { ScheduledFrameEvent } from "./frame-event/scheduled-frame-event";
 
 const range = (start: number, end: number) => [...Array(end + 1).keys()].slice(start);
 
@@ -40,71 +41,103 @@ export class Compiler {
     const absoluteFrameCountToScheduledFrameEvents: ScheduledEvents = {};
     let currentFrameCount = 1;
 
-    frameEvents.forEach((rawFrameEvent) => {
-      const frameEvent = structuredClone(rawFrameEvent);
-      if (frameEvent.type === "putText") {
-        frameEvent["putText"]["text"] = this.assetsManager.findTextAssetOrThrow(frameEvent["putText"].assetId).text;
-      } else if (frameEvent.type === "putImage") {
-        frameEvent["putImage"]["image"] = this.assetsManager.findImageAssetOrThrow(frameEvent["putImage"].assetId).image;
-        if (frameEvent["putImage"].hoverAssetId) {
-          const hoverAsset = this.assetsManager.findImageAsset(frameEvent["putImage"].hoverAssetId);
-          if (hoverAsset) {
-            frameEvent["putImage"]["hoverImage"] = hoverAsset.image
-          }
-        }
-        if (frameEvent["putImage"].activeAssetId) {
-          const activeAsset = this.assetsManager.findImageAsset(frameEvent["putImage"].activeAssetId);
-          if (activeAsset) {
-            frameEvent["putImage"]["activeImage"] = activeAsset.image;
-          }
-        }
+    frameEvents.forEach((frameEvent) => {
+      if (!absoluteFrameCountToScheduledFrameEvents[currentFrameCount]) {
+        absoluteFrameCountToScheduledFrameEvents[currentFrameCount] = [];
       }
 
-      const objectId = frameEvent.objectId
-        ? frameEvent.objectId
-        : "auto" + Math.random(); // 値が未指定の場合もframeEvent内で一律で持てるとよい
+      const defaultObjectId = "auto" + Math.random();
+      let putObjectFirstFrame: ScheduledFrameEvent | null = null;
+      if (frameEvent.type === "putText") {
+        putObjectFirstFrame = {
+          event: {
+            ...frameEvent, putText: {
+              text: this.assetsManager.findTextAssetOrThrow(frameEvent["putText"].assetId).text
+            }
+          },
+          frameCountInEvent: frameEvent.frameCount,
+          objectId: frameEvent.objectId || defaultObjectId,
+        };
+      } else if (frameEvent.type === "putImage") {
+        let hoverAsset = null;
+        let activeAsset = null;
+        if (frameEvent["putImage"].hoverAssetId) {
+          hoverAsset = this.assetsManager.findImageAsset(frameEvent["putImage"].hoverAssetId);
+        }
+        if (frameEvent["putImage"].activeAssetId) {
+          activeAsset = this.assetsManager.findImageAsset(frameEvent["putImage"].activeAssetId);
+        }
+        putObjectFirstFrame = {
+          event: {
+            ...frameEvent, putImage: {
+              image: this.assetsManager.findImageAssetOrThrow(frameEvent["putImage"].assetId).image,
+              hoverImage: hoverAsset ? hoverAsset.image : undefined,
+              activeImage: activeAsset ? activeAsset.image : undefined
+            }
+          },
+          frameCountInEvent: frameEvent.frameCount,
+          objectId: frameEvent.objectId || defaultObjectId,
+        };
+      }
 
-      // この分岐はなくても動くが無駄なオブジェクトが生成されるのを避けたい
-      if (frameEvent.type !== "defineLabel") {
-        if (frameEvent.frameCount === 0) {
-          if (!absoluteFrameCountToScheduledFrameEvents[currentFrameCount]) {
-            absoluteFrameCountToScheduledFrameEvents[currentFrameCount] = [];
-          }
-
+      if (frameEvent.frameCount === 0 || frameEvent.frameCount === 1) {
+        if (frameEvent.type === "putText") {
+          absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push(putObjectFirstFrame!);
+        } else if (frameEvent.type === "putImage") {
+          absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push(putObjectFirstFrame!);
+        } else {
           absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push({
             event: frameEvent,
             frameCountInEvent: 0, // 便宜上0にしておく
-            objectId: objectId,
+            objectId: defaultObjectId,
           });
-        } else {
-          range(0, frameEvent.frameCount - 1).forEach(function (
-            frameCountInEvent
+        }
+      } else {
+        range(0, frameEvent.frameCount - 1).forEach((
+          frameCountInEvent
+        ) => {
+          if (
+            frameEvent.type === "doNothing" &&
+            frameCountInEvent !== frameEvent.frameCount - 1
           ) {
-            if (
-              frameEvent.type === "doNothing" &&
-              frameCountInEvent !== frameEvent.frameCount - 1
-            ) {
-              // 最後の1フレーム以外は追加しない
-              return;
-            }
+            // 最後の1フレーム以外は追加しない
+            return;
+          }
 
-            const fixedFrameCountInEvent =
-              currentFrameCount + frameCountInEvent;
-            if (
-              !absoluteFrameCountToScheduledFrameEvents[fixedFrameCountInEvent]
-            ) {
-              absoluteFrameCountToScheduledFrameEvents[fixedFrameCountInEvent] =
-                [];
-            }
+          const fixedFrameCountInEvent =
+            currentFrameCount + frameCountInEvent;
+          if (
+            !absoluteFrameCountToScheduledFrameEvents[fixedFrameCountInEvent]
+          ) {
+            absoluteFrameCountToScheduledFrameEvents[fixedFrameCountInEvent] =
+              [];
+          }
+
+          if (frameEvent.type === 'doNothing') {
             absoluteFrameCountToScheduledFrameEvents[
               fixedFrameCountInEvent
             ].push({
               event: frameEvent,
               frameCountInEvent: frameCountInEvent + 1,
-              objectId: objectId,
+              objectId: defaultObjectId,
             });
-          });
-        }
+          } else  if (frameEvent.type === "putText" || frameEvent.type === "putImage") {
+            if (frameCountInEvent === 0) {
+              absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push({
+                ...putObjectFirstFrame!,
+                frameCountInEvent: 1
+              });
+            } else {
+              absoluteFrameCountToScheduledFrameEvents[
+                fixedFrameCountInEvent
+              ].push({
+                event: frameEvent,
+                frameCountInEvent: frameCountInEvent + 1,
+                objectId: frameEvent.objectId || defaultObjectId ,
+              });
+            }
+          } 
+        });
       }
 
       currentFrameCount += frameEvent.frameCount;
