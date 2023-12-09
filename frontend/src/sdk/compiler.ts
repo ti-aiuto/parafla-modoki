@@ -55,7 +55,7 @@ export class Compiler {
               text: this.assetsManager.findTextAssetOrThrow(frameEvent["putText"].assetId).text
             }
           },
-          frameCountInEvent: frameEvent.frameCount,
+          frameCountInEvent: 0, // とりあえず0を入れておく
           objectId: frameEvent.objectId || defaultObjectId,
         };
       } else if (frameEvent.type === "putImage") {
@@ -75,7 +75,7 @@ export class Compiler {
               activeImage: activeAsset ? activeAsset.image : undefined
             }
           },
-          frameCountInEvent: frameEvent.frameCount,
+          frameCountInEvent: 0, // とりあえず0を入れておく
           objectId: frameEvent.objectId || defaultObjectId,
         };
       }
@@ -88,7 +88,7 @@ export class Compiler {
         } else {
           absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push({
             event: frameEvent,
-            frameCountInEvent: 0, // 便宜上0にしておく
+            frameCountInEvent: frameEvent.frameCount, 
             objectId: defaultObjectId,
           });
         }
