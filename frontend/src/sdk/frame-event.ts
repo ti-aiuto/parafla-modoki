@@ -1,18 +1,4 @@
-import { Action } from "./action";
-import { LayoutOptions } from "./layout-options";
-
-interface AbstractFrameEvent {
-  type: string;
-  frameCount: number;
-  scheduledFrameNumber: number;
-}
-
-interface AbstractPutObjectFrameEvent extends AbstractFrameEvent {
-  depth: number;
-  layoutOptions: LayoutOptions;
-  lastKeyFrame: { layoutOptions: LayoutOptions };
-  onClickAction?: Action;
-}
+import { AbstractPutObjectFrameEvent } from "./abstract-put-object-frame-event";
 
 interface PutImgeFrameEvent extends AbstractPutObjectFrameEvent {
   type: 'putImage';
@@ -23,11 +9,11 @@ interface PutImgeFrameEvent extends AbstractPutObjectFrameEvent {
   }
 }
 
-interface PutObjectFrameEvent extends AbstractPutObjectFrameEvent {
+interface PutTextFrameEvent extends AbstractPutObjectFrameEvent {
   type: 'putText',
   putText: {
     assetId: number;
   }
 }
 
-export type FrameEvent = PutImgeFrameEvent;
+export type FrameEvent = PutImgeFrameEvent | PutTextFrameEvent;

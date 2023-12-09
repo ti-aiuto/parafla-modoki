@@ -1,34 +1,4 @@
-interface AbstractAsset {
-  type: string;
-  name: string;
-}
-
-interface TextAssetContent {
-  content: string;
-  fontSize: number;
-  textColor: string;
-  padding: number;
-  lineHeight: number;
-  borderWidth?: number;
-  borderStyle?: string;
-  borderColor?: string;
-}
-
-export interface TextAsset extends AbstractAsset {
-  type: 'text';
-  text: TextAssetContent;
-}
-
-interface ImageAssetContent {
-  source: string;
-}
-
-export interface ImageAsset extends AbstractAsset {
-  type: 'image';
-  image: ImageAssetContent;
-}
-
-export type Asset = ImageAsset | TextAsset;
+import { Asset } from "./asset";
 
 export class AssetsManager {
   items: { [key in string]: Asset };
