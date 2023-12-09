@@ -1,4 +1,5 @@
 import { AbstractPutObjectFrameEvent } from "./abstract-put-object-frame-event";
+import { ExceptPutObjectFrameEvent } from "./except-put-object-frame-event";
 
 interface PutImgeFrameEvent extends AbstractPutObjectFrameEvent {
   type: 'putImage';
@@ -16,4 +17,4 @@ interface PutTextFrameEvent extends AbstractPutObjectFrameEvent {
   }
 }
 
-export type FrameEvent = PutImgeFrameEvent | PutTextFrameEvent;
+export type FrameEvent = PutImgeFrameEvent | PutTextFrameEvent | ExceptPutObjectFrameEvent;

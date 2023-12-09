@@ -1,4 +1,6 @@
 import { Asset } from "./asset";
+import { ImageAsset } from "./image-asset";
+import { TextAsset } from "./text-asset";
 
 export class AssetsManager {
   items: { [key in string]: Asset };
@@ -9,6 +11,36 @@ export class AssetsManager {
 
   find(id: string): Asset | undefined {
     return structuredClone(this.items[id]);
+  }
+
+  findImageAsset(id: string): ImageAsset | undefined {
+    const asset = this.find(id);
+    if (!asset || asset.type !== 'image') {
+      return undefined;
+    }
+    return asset;
+  }
+
+  findTextAssetOrThrow(id: string): TextAsset {
+    const asset = this.find(id);
+    if (!asset) {
+      throw new Error(`${id}のアセットが見つかりませんでした`);
+    }
+    if (asset.type !== 'text') {
+      throw new Error(`${id}のアセットはテキストではありません`);
+    }
+    return asset;
+  }
+
+  findImageAssetOrThrow(id: string): ImageAsset {
+    const asset = this.find(id);
+    if (!asset) {
+      throw new Error(`${id}のアセットが見つかりませんでした`);
+    }
+    if (asset.type !== 'image') {
+      throw new Error(`${id}のアセットは画像ではありません`);
+    }
+    return asset;
   }
 
   delete(id: string) {

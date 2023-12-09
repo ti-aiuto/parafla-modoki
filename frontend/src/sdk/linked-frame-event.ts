@@ -1,4 +1,5 @@
 import { AbstractPutObjectFrameEvent } from "./abstract-put-object-frame-event";
+import { ExceptPutObjectFrameEvent } from "./except-put-object-frame-event";
 import { ImageAssetContent } from "./image-asset-content";
 import { TextAssetContent } from "./text-asset-content";
 
@@ -18,4 +19,4 @@ interface PutTextLinkedFrameEvent extends AbstractPutObjectFrameEvent {
   }
 }
 
-export type LinkedFrameEvent = PutImgeLinkedFrameEvent | PutTextLinkedFrameEvent;
+export type LinkedFrameEvent = PutImgeLinkedFrameEvent | PutTextLinkedFrameEvent | ExceptPutObjectFrameEvent;
