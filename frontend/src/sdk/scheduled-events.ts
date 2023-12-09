@@ -1,4 +1,4 @@
-export interface ScheduledEvent {
+export interface ScheduledEvents {
   type: string;
   // TODO: 追加
 }
