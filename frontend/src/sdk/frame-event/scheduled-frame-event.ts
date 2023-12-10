@@ -1,9 +1,27 @@
 import { CompiledFrameEvent } from "./compiled-frame-event";
 
-interface FirstFrameScheduledFrameEvent {
-  event: CompiledFrameEvent;
-  frameCountInEvent: 0 | 1;
-  objectId: string;
+interface AbstractScheduledFrameEvent {
+  type: string;
 }
 
-export type ScheduledFrameEvent = FirstFrameScheduledFrameEvent;
+interface FirstFrameScheduledFrameEvent extends AbstractScheduledFrameEvent {
+  type: 'firstFrame',
+  firstFrame: {
+    event: CompiledFrameEvent;
+    objectId: string;
+  }
+}
+
+interface DoNothingScheduledFrameEvent extends AbstractScheduledFrameEvent {
+  type: 'doNothing'
+}
+
+interface MoveObjectScheduledFrameEvent extends AbstractScheduledFrameEvent {
+  type: 'moveObject',
+  moveObject: {
+    frameCountInEvent: number;
+    objectId: string;
+  }
+}
+
+export type ScheduledFrameEvent = FirstFrameScheduledFrameEvent | DoNothingScheduledFrameEvent | MoveObjectScheduledFrameEvent;
