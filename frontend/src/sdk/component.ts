@@ -242,9 +242,9 @@ export class Component {
       );
     } else if (action.type === "startUserTimer") {
       context.startUserTimer(
-        action.registerGlobalKeydownListener.listenerId,
-        action.registerGlobalKeydownListener.componentUserFunctionName,
-        action.registerGlobalKeydownListener.interval
+        action.startUserTimer.listenerId,
+        action.startUserTimer.componentUserFunctionName,
+        action.startUserTimer.interval
       );
     } else if (action.type === "clearUserTimer") {
       context.clearUserTimer(action.clearUserTimer.listenerId);
