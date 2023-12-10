@@ -12,6 +12,7 @@ export class Component {
 
   currentFrameCount: number = 1;
   jumpToFrameCount: number | null = null;
+  timerId: number | undefined = undefined;
   lastFrameCount: number;
   rootInstanceId: string = "rootDummyHoge";
   componentUserVariables: { [key in string]: any } = {};
@@ -35,11 +36,420 @@ export class Component {
     this.componentUserFunctions = componentSource.componentUserFunctions;
   }
 
-  handleAction(action: Action) {
-
+  play() {
+    this.stop();
+    this.timerId = setInterval(this.tick, 50);
   }
 
-  callComponentUserFunction(name: string, args: object): boolean {
-    return false;
+  stop() {
+    clearInterval(this.timerId);
+  }
+
+  generateFullObjectId (objectId: string) {
+    return `${this.rootInstanceId}_${objectId}`;
+  }
+
+  eraseLayers  (depths: number[] | 'all'[]) {
+    // 各種購読中イベントの解除
+    this.screenObjectsManager
+      .findLayersByDepths(depths)
+      .forEach( (layer) => {
+        if (layer.object) {
+          this.rootController.unregisterClickAction(
+            layer.object.fullObjectId
+          );
+        }
+      });
+      this.screenObjectsManager.eraseLayers(depths);
+    this.render();
+  }
+
+  gotoAndPlay  (destination: string | number) {
+    // TODO: 本当はここでバリデーションが必要
+    if (typeof destination === "string") {
+      const label = this.componentSource.labelToFrameNumber[destination];
+      console.debug("ラベル解決", destination, label);
+      this.jumpToFrameCount = Number(label);
+    } else {
+      this.jumpToFrameCount = destination;
+    }
+    this.play();
+  }
+
+  setComponentUserVariable (key: string, value: any) {
+    this.componentUserVariables[key] = JSON.stringify(value);
+    console.debug("ユーザ変数設定", key, this.componentUserVariables[key]);
+  }
+
+  getComponentUserVariable (key :string, defaultValue = undefined) {
+    console.debug(
+      "ユーザ変数取得",
+      key,
+      this.componentUserVariables[key],
+      defaultValue
+    );
+    const currentRawValue = this.componentUserVariables[key];
+    if (currentRawValue !== undefined) {
+      return JSON.parse(currentRawValue);
+    } else {
+      return defaultValue;
+    }
+  }
+
+  callComponentUserFunction  (name: string, args: object = {}) {
+    console.debug("ユーザ関数呼び出し", name, args);
+    const content = this.componentUserFunctions[name];
+    const func = new Function("context", "args", content);
+    const context = this.createContext();
+    return func(context, args || {});
+  }
+
+  startUserTimer  (
+    listenerId: string,
+    componentUserFunctionName: string,
+    interval: number
+  ) {
+    console.debug(
+      "ユーザタイマー開始",
+      listenerId,
+      componentUserFunctionName,
+      interval
+    );
+    this.rootController.startUserTimer(
+      listenerId,
+      this,
+      componentUserFunctionName,
+      interval
+    );
+  }
+
+  clearUserTimer (listenerId: string) {
+    console.debug("ユーザタイマー解除", listenerId);
+    this.rootController.clearUserTimer(listenerId);
+  }
+
+  registerGlobalKeydownListener  (
+    listenerId: string,
+    componentUserFunctionName: string
+  ) {
+    console.debug(
+      "グローバルキー押下リスナー登録",
+      listenerId,
+      componentUserFunctionName
+    );
+    this.rootController.registerGlobalKeydownListener(
+      listenerId,
+      this,
+      componentUserFunctionName
+    );
+  }
+
+  unregisterGlobalKeydownListener (listenerId: string) {
+    console.debug("グローバルキー押下リスナー解除", listenerId);
+    this.rootController.unregisterGlobalKeydownListener(listenerId);
+  };
+
+  createContext () {
+    const that = this;
+    const context = {
+      play() {
+        that.play();
+      },
+      stop() {
+        that.stop();
+      },
+      gotoAndPlay(destination: string| number) {
+        that.gotoAndPlay(destination);
+      },
+      eraseLayers(depths: number[] | 'all'[]) {
+        that.eraseLayers(depths);
+      },
+      setComponentUserVariable(key: string, value: any) {
+        that.setComponentUserVariable(key, value);
+      },
+      defineComponentUserFunction(name: string, content: string): any {
+        that.defineComponentUserFunction(name, content);
+      },
+      executeScript(content: string) {
+        const func = new Function("context", "args", content);
+        const context = that.createContext();
+        return func(context);
+      },
+      callComponentUserFunction(name: string, args: object = {}) {
+        return that.callComponentUserFunction(name, args);
+      },
+      incrementComponentUserVariable(key: string) {
+        const nextValue = that.getComponentUserVariable(key) + 1;
+        that.setComponentUserVariable(key, nextValue);
+        return nextValue;
+      },
+      decrementComponentUserVariable(key: string) {
+        const nextValue = that.getComponentUserVariable(key) - 1;
+        that.setComponentUserVariable(key, nextValue);
+        return nextValue;
+      },
+      getComponentUserVariable(key: string, defaultValue: any) {
+        return that.getComponentUserVariable(key, defaultValue);
+      },
+      setTextValue(objectId: string, value: string) {
+        that.setTextValue(objectId, value);
+      },
+      getTextValue(objectId: string) {
+        return that.getTextValue(objectId);
+      },
+      startUserTimer(listenerId: string, componentUserFunctionName: string, interval: number) {
+        that.startUserTimer(
+          listenerId,
+          componentUserFunctionName,
+          interval
+        );
+      },
+      clearUserTimer(listenerId: string) {
+        that.clearUserTimer(listenerId);
+      },
+      registerGlobalKeydownListener(listenerId: string, componentUserFunctionName: string) {
+        that.registerGlobalKeydownListener(
+          listenerId,
+          componentUserFunctionName
+        );
+      },
+      unregisterGlobalKeydownListener(listenerId: string) {
+        that.unregisterGlobalKeydownListener(listenerId);
+      },
+    };
+    return context;
+  };
+
+  handleAction = function (action: Action) {
+    const context = instance.createContext();
+
+    if (action.type === "eraseLayers") {
+      context.eraseLayers(action.eraseLayers.depths);
+    } else if (action.type === "stop") {
+      context.stop();
+    } else if (action.type === "play") {
+      context.play();
+    } else if (action.type === "gotoAndPlay") {
+      context.gotoAndPlay(action.gotoAndPlay.destination);
+    } else if (action.type === "setTextValue") {
+      context.setTextValue(
+        action.setTextValue.objectId,
+        action.setTextValue.value
+      );
+    } else if (action.type === "defineComponentUserFunction") {
+      context.defineComponentUserFunction(
+        action.defineComponentUserFunction.name,
+        action.defineComponentUserFunction.content
+      );
+    } else if (action.type === "executeScript") {
+      context.executeScript(action.executeScript.content);
+    } else if (action.type === "callComponentUserFunction") {
+      context.callComponentUserFunction(
+        action.callComponentUserFunction.name,
+        action.callComponentUserFunction.args
+      );
+    } else if (action.type === "startUserTimer") {
+      context.startUserTimer(
+        action.registerGlobalKeydownListener.listenerId,
+        action.registerGlobalKeydownListener.componentUserFunctionName,
+        action.registerGlobalKeydownListener.interval
+      );
+    } else if (action.type === "clearUserTimer") {
+      context.clearUserTimer(action.clearUserTimer.listenerId);
+    } else if (action.type === "registerGlobalKeydownListener") {
+      context.registerGlobalKeydownListener(
+        action.registerGlobalKeydownListener.listenerId,
+        action.registerGlobalKeydownListener.componentUserFunctionName
+      );
+    } else if (action.type === "unregisterGlobalKeydownListener") {
+      context.registerGlobalKeydownListener(
+        action.unregisterGlobalKeydownListener.listenerId
+      );
+    } else if (action.type === "putObject") {
+      let objectBase = null;
+      const putObject = action["putObject"];
+      const fullObjectId = instance.generateFullObjectId(putObject.objectId);
+      // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
+      if (putObject.type === "image") {
+        objectBase = {
+          type: "image",
+          image: {
+            image: putObject.image.image,
+            hoverImage: putObject.image.hoverImage,
+            activeImage: putObject.image.activeImage,
+          },
+          fullObjectId,
+          onClickAction: putObject["onClickAction"],
+        };
+      } else if (putObject.type === "text") {
+        objectBase = {
+          type: "text",
+          text: putObject.text.text,
+          fullObjectId,
+          onClickAction: putObject["onClickAction"],
+        };
+      }
+
+      const depth = putObject.depth;
+      if (putObject.frameCountIndex <= 1 || !putObject.lastKeyFrame) {
+        // 0または1
+        // TODO: ここでdepthあるかの判定
+        instance.screenObjectsManager.depthToLayer[depth] = {
+          object: {
+            ...objectBase,
+            layoutOptions: putObject.layoutOptions,
+          },
+        };
+      } else {
+        const before = putObject.layoutOptions;
+        const after = putObject.lastKeyFrame.layoutOptions;
+
+        // TODO: ここでdepthあるかの判定
+        instance.screenObjectsManager.depthToLayer[depth] = {
+          object: {
+            ...objectBase,
+            layoutOptions: {
+              x:
+                before.x +
+                (putObject.frameCountIndex * (after.x - before.x)) /
+                  putObject.frameCount,
+              y:
+                before.y +
+                (putObject.frameCountIndex * (after.y - before.y)) /
+                  putObject.frameCount,
+              width:
+                before.width +
+                (putObject.frameCountIndex * (after.width - before.width)) /
+                  putObject.frameCount,
+              height:
+                before.height +
+                (putObject.frameCountIndex * (after.height - before.height)) /
+                  putObject.frameCount,
+            },
+          },
+        };
+      }
+      instance.render();
+
+      if (putObject["onClickAction"]) {
+        instance.rootController.registerClickAction(
+          fullObjectId,
+          instance,
+          putObject["onClickAction"]
+        );
+      }
+    }
+  };
+
+  setTextValue (objectId, value) {
+    // 変数の埋め込み処理
+    const valueRemovedWhiteSpaces = (value + "").replace(
+      /{{\s*(\w+?)\s}}/g,
+      "{{$1}}"
+    );
+    const variableNames = [...valueRemovedWhiteSpaces.matchAll(/{{(\w+?)}}/g)];
+    let valueWithVariables = valueRemovedWhiteSpaces;
+    variableNames.forEach(function (variableNameRow) {
+      const variableName = variableNameRow[1];
+      valueWithVariables = valueWithVariables.replace(
+        new RegExp(`{{${variableName}}}`, "g"),
+        instance.getComponentUserVariable(variableName)
+      );
+    });
+
+    for ({ object } of Object.values(
+      instance.screenObjectsManager.depthToLayer
+    )) {
+      if (!object) {
+        continue;
+      }
+      if (object.fullObjectId === instance.generateFullObjectId(objectId)) {
+        object.text.content = valueWithVariables;
+        break;
+      }
+    }
+    instance.render();
+  }
+
+  getTextValue  (objectId) {
+    for ({ object } of Object.values(
+      instance.screenObjectsManager.depthToLayer
+    )) {
+      if (!object) {
+        continue;
+      }
+      if (object.fullObjectId === instance.generateFullObjectId(objectId)) {
+        return object.text.content;
+      }
+    }
+    return undefined;
+  }
+
+  render () {
+    instance.renderer.render(instance.screenObjectsManager);
+  }
+
+  tick () {
+    // 最後まで行ったら最初に戻る（判定これでいいのかな？）
+    if (instance.currentFrameCount > instance.lastFrameCount) {
+      instance.currentFrameCount = 1;
+    }
+
+    // 飛び先が指定されていたらそっちにいく
+    if (instance.jumpToFrameCount !== null) {
+      instance.currentFrameCount = instance.jumpToFrameCount;
+      instance.jumpToFrameCount = null;
+    }
+
+    const currentScheduledFrameEvents =
+      instance.componentSource.scheduledEvents[instance.currentFrameCount] ||
+      [];
+
+    currentScheduledFrameEvents.forEach(function (scheduledFrameEvent) {
+      if (instance.jumpToFrameCount !== null) {
+        return; // frameCount>1のイベントよりも前にgotoAndPlayを実行していた場合は先に飛ぶ
+      }
+
+      const event = scheduledFrameEvent.event;
+
+      if (event.type === "executeAction") {
+        console.debug("executeAction", event.executeAction);
+        instance.handleAction(event.executeAction);
+      }
+
+      if (event.type === "putImage" || event.type === "putText") {
+        const putObjectBase = {
+          depth: event.depth,
+          layoutOptions: event.layoutOptions,
+          lastKeyFrame: event.lastKeyFrame,
+          frameCount: scheduledFrameEvent.event.frameCount,
+          frameCountIndex: scheduledFrameEvent.frameCountInEvent,
+          objectId: scheduledFrameEvent.objectId,
+          onClickAction: scheduledFrameEvent.event.onClickAction,
+        };
+
+        if (event.type === "putImage") {
+          instance.handleAction({
+            type: "putObject",
+            putObject: {
+              ...putObjectBase,
+              type: "image",
+              image: event.putImage,
+            },
+          });
+        } else if (event.type === "putText") {
+          instance.handleAction({
+            type: "putObject",
+            putObject: {
+              ...putObjectBase,
+              type: "text",
+              text: event.putText,
+            },
+          });
+        }
+      }
+    });
+
+    instance.currentFrameCount += 1;
   }
 }
