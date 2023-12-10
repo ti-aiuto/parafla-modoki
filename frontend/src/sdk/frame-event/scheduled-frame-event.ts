@@ -1,32 +1,5 @@
-import { CompiledFrameEvent } from "./compiled-frame-event";
-import { LayoutOptions } from "./layout-options";
-
-interface AbstractScheduledFrameEvent {
-  type: string;
-}
-
-interface FirstFrameScheduledFrameEvent extends AbstractScheduledFrameEvent {
-  type: 'firstFrame',
-  firstFrame: {
-    event: CompiledFrameEvent;
-    objectId: string;
-  }
-}
-
-interface DoNothingScheduledFrameEvent extends AbstractScheduledFrameEvent {
-  type: 'doNothing'
-}
-
-interface MoveObjectScheduledFrameEvent extends AbstractScheduledFrameEvent {
-  type: 'moveObject',
-  moveObject: {
-    frameNumberInEvent: number;
-    frameCount: number;
-    objectId: string;
-    lastKeyFrame: {
-      layoutOptions: LayoutOptions;
-    }
-  }
-}
+import { DoNothingScheduledFrameEvent } from "./do-nothing-scheduled-frame-event";
+import { FirstFrameScheduledFrameEvent } from "./first-frame-scheduled-frame-event";
+import { MoveObjectScheduledFrameEvent } from "./move-object-scheduled-frame-event";
 
 export type ScheduledFrameEvent = FirstFrameScheduledFrameEvent | DoNothingScheduledFrameEvent | MoveObjectScheduledFrameEvent;

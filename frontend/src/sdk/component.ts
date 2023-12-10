@@ -1,5 +1,6 @@
 import { Action } from "./action/action";
 import { ComponentSource } from "./component-source";
+import { FirstFrameScheduledFrameEvent } from "./frame-event/first-frame-scheduled-frame-event";
 import { Renderer } from "./renderer";
 import { RootController } from "./root-controller";
 import { ScreenObjectsManager } from "./screen-object-manager";
@@ -254,82 +255,9 @@ export class Component {
         action.registerGlobalKeydownListener.componentUserFunctionName
       );
     } else if (action.type === "unregisterGlobalKeydownListener") {
-      context.registerGlobalKeydownListener(
+      context.unregisterGlobalKeydownListener(
         action.unregisterGlobalKeydownListener.listenerId
       );
-    } else if (action.type === "putObject") {
-      let objectBase = null;
-      const putObject = action["putObject"];
-      const fullObjectId = instance.generateFullObjectId(putObject.objectId);
-      // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
-      if (putObject.type === "image") {
-        objectBase = {
-          type: "image",
-          image: {
-            image: putObject.image.image,
-            hoverImage: putObject.image.hoverImage,
-            activeImage: putObject.image.activeImage,
-          },
-          fullObjectId,
-          onClickAction: putObject["onClickAction"],
-        };
-      } else if (putObject.type === "text") {
-        objectBase = {
-          type: "text",
-          text: putObject.text.text,
-          fullObjectId,
-          onClickAction: putObject["onClickAction"],
-        };
-      }
-
-      const depth = putObject.depth;
-      if (putObject.frameCountIndex <= 1 || !putObject.lastKeyFrame) {
-        // 0または1
-        // TODO: ここでdepthあるかの判定
-        this.screenObjectsManager.depthToLayer[depth] = {
-          object: {
-            ...objectBase,
-            layoutOptions: putObject.layoutOptions,
-          },
-        };
-      } else {
-        const before = putObject.layoutOptions;
-        const after = putObject.lastKeyFrame.layoutOptions;
-
-        // TODO: ここでdepthあるかの判定
-        this.screenObjectsManager.depthToLayer[depth] = {
-          object: {
-            ...objectBase,
-            layoutOptions: {
-              x:
-                before.x +
-                (putObject.frameCountIndex * (after.x - before.x)) /
-                putObject.frameCount,
-              y:
-                before.y +
-                (putObject.frameCountIndex * (after.y - before.y)) /
-                putObject.frameCount,
-              width:
-                before.width +
-                (putObject.frameCountIndex * (after.width - before.width)) /
-                putObject.frameCount,
-              height:
-                before.height +
-                (putObject.frameCountIndex * (after.height - before.height)) /
-                putObject.frameCount,
-            },
-          },
-        };
-      }
-      this.render();
-
-      if (putObject["onClickAction"]) {
-        this.rootController.registerClickAction(
-          fullObjectId,
-          this,
-          putObject["onClickAction"]
-        );
-      }
     }
   };
 
@@ -408,46 +336,104 @@ export class Component {
         return; // frameCount>1のイベントよりも前にgotoAndPlayを実行していた場合は先に飛ぶ
       }
 
-      const event = scheduledFrameEvent.event;
+      if (scheduledFrameEvent.type === 'firstFrame') {
+        const event = scheduledFrameEvent.firstFrame.event;
+        if (event.type === "executeAction") {
+          console.debug("executeAction", event.executeAction);
+          this.handleAction(event.executeAction);
+        }
 
-      if (event.type === "executeAction") {
-        console.debug("executeAction", event.executeAction);
-        this.handleAction(event.executeAction);
-      }
-
-      if (event.type === "putImage" || event.type === "putText") {
-        const putObjectBase = {
-          depth: event.depth,
-          layoutOptions: event.layoutOptions,
-          lastKeyFrame: event.lastKeyFrame,
-          frameCount: scheduledFrameEvent.event.frameCount,
-          frameCountIndex: scheduledFrameEvent.frameCountInEvent,
-          objectId: scheduledFrameEvent.objectId,
-          onClickAction: scheduledFrameEvent.event.onClickAction,
-        };
-
-        if (event.type === "putImage") {
-          this.handleAction({
-            type: "putObject",
-            putObject: {
-              ...putObjectBase,
-              type: "image",
-              image: event.putImage,
-            },
-          });
-        } else if (event.type === "putText") {
-          this.handleAction({
-            type: "putObject",
-            putObject: {
-              ...putObjectBase,
-              type: "text",
-              text: event.putText,
-            },
-          });
+        if (event.type === "putAttachedImage" || event.type === "putAttachedText") {
+          this.putAttachedObject(scheduledFrameEvent);
         }
       }
     });
 
     this.currentFrameCount += 1;
+  }
+
+  private moveObject() {
+    const before = putObject.layoutOptions;
+    const after = putObject.lastKeyFrame.layoutOptions;
+
+    // TODO: ここでdepthあるかの判定
+    this.screenObjectsManager.depthToLayer[depth] = {
+      object: {
+        ...objectBase,
+        layoutOptions: {
+          x:
+            before.x +
+            (putObject.frameCountIndex * (after.x - before.x)) /
+            putObject.frameCount,
+          y:
+            before.y +
+            (putObject.frameCountIndex * (after.y - before.y)) /
+            putObject.frameCount,
+          width:
+            before.width +
+            (putObject.frameCountIndex * (after.width - before.width)) /
+            putObject.frameCount,
+          height:
+            before.height +
+            (putObject.frameCountIndex * (after.height - before.height)) /
+            putObject.frameCount,
+        },
+      },
+    };
+  }
+
+  private putAttachedObject(scheduledFrameEvent: FirstFrameScheduledFrameEvent) {
+    const event = scheduledFrameEvent.firstFrame.event;
+    if (event.type !== 'putAttachedImage' && event.type !== 'putAttachedText') {
+      throw new Error(`${event}は配置イベントではありません`);
+    }
+
+    const objectBase = {
+      depth: event.depth,
+      layoutOptions: event.layoutOptions,
+      lastKeyFrame: event.lastKeyFrame,
+      objectId: scheduledFrameEvent.firstFrame.objectId,
+      onClickAction: event.onClickAction,
+    };
+
+    const depth = event.depth;
+    const fullObjectId = this.generateFullObjectId(scheduledFrameEvent.firstFrame.objectId);
+    // ここの種別は、画像・テキスト・HTML要素・音声・スプライトなどを想定
+    if (event.type === "putAttachedImage") {
+      this.screenObjectsManager.depthToLayer[depth] = {
+        object: {
+          ...objectBase,
+          fullObjectId,
+          layoutOptions: event.layoutOptions,
+          onClickAction: event["onClickAction"],
+          type: "image",
+          image: {
+            image: event.putAttachedImage.image,
+            hoverImage: event.putAttachedImage.hoverImage,
+            activeImage: event.putAttachedImage.activeImage,
+          },
+        },
+      };
+    } else if (event.type === "putAttachedText") {
+      this.screenObjectsManager.depthToLayer[depth] = {
+        object: {
+          ...objectBase,
+          fullObjectId,
+          layoutOptions: event.layoutOptions,
+          onClickAction: event["onClickAction"],
+          type: "text",
+          text: event.putAttachedText.text,
+        },
+      };
+    }
+    this.render();
+
+    if (event["onClickAction"]) {
+      this.rootController.registerClickAction(
+        fullObjectId, // TODO: 自動登録とわかるような何か識別子つけたほうがいいかも
+        this,
+        event["onClickAction"]
+      );
+    }
   }
 }
