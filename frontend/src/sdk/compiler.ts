@@ -3,7 +3,6 @@ import { ComponentSource, ComponentUserFunctions, LabelToFrameNumber, ScheduledE
 import { FrameEvent } from "./frame-event/frame-event";
 import { PutAttachedImageFrameEvent } from "./frame-event/put-attached-image-frame-event";
 import { PutAttachedTextFrameEvent } from "./frame-event/put-attached-text-frame-event";
-import { ScheduledFrameEvent } from "./frame-event/scheduled-frame-event";
 
 const range = (start: number, end: number) => [...Array(end + 1).keys()].slice(start);
 
