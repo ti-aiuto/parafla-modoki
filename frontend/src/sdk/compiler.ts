@@ -1,6 +1,8 @@
 import { AssetsManager } from "./assets-manager";
 import { ComponentSource, ComponentUserFunctions, LabelToFrameNumber, ScheduledEvents } from "./component-source";
 import { FrameEvent } from "./frame-event/frame-event";
+import { PutAttachedImageFrameEvent } from "./frame-event/put-attached-image-frame-event";
+import { PutAttachedTextFrameEvent } from "./frame-event/put-attached-text-frame-event";
 import { ScheduledFrameEvent } from "./frame-event/scheduled-frame-event";
 
 const range = (start: number, end: number) => [...Array(end + 1).keys()].slice(start);
@@ -37,6 +39,44 @@ export class Compiler {
     });
   };
 
+  private buildPutAttachedImage(frameEvent: FrameEvent): PutAttachedImageFrameEvent {
+    if (frameEvent.type !== "putImage") {
+      throw new Error(`${frameEvent}はputTextに該当しません`);
+    }
+
+    let hoverAsset = null;
+    let activeAsset = null;
+    if (frameEvent["putImage"].hoverAssetId) {
+      hoverAsset = this.assetsManager.findImageAsset(frameEvent["putImage"].hoverAssetId);
+    }
+    if (frameEvent["putImage"].activeAssetId) {
+      activeAsset = this.assetsManager.findImageAsset(frameEvent["putImage"].activeAssetId);
+    }
+    return {
+      ...frameEvent,
+      type: 'putAttachedImage',
+      putAttachedImage: {
+        image: this.assetsManager.findImageAssetOrThrow(frameEvent["putImage"].assetId).image,
+        hoverImage: hoverAsset ? hoverAsset.image : undefined,
+        activeImage: activeAsset ? activeAsset.image : undefined
+      }
+    };
+  }
+
+  private buildPutAttachedText(frameEvent: FrameEvent): PutAttachedTextFrameEvent {
+    if (frameEvent.type !== "putText") {
+      throw new Error(`${frameEvent}はputTextに該当しません`);
+    }
+
+    return {
+      ...frameEvent,
+      type: 'putAttachedText',
+      putAttachedText: {
+        text: this.assetsManager.findTextAssetOrThrow(frameEvent["putText"].assetId).text
+      }
+    }
+  }
+
   generateScheduledEvents(frameEvents: FrameEvent[]): ScheduledEvents {
     const absoluteFrameCountToScheduledFrameEvents: ScheduledEvents = {};
     let currentFrameCount = 1;
@@ -47,49 +87,30 @@ export class Compiler {
       }
 
       const defaultObjectId = "auto" + Math.random();
-      let putObjectFirstFrame: ScheduledFrameEvent | null = null;
-      if (frameEvent.type === "putText") {
-        putObjectFirstFrame = {
-          event: {
-            ...frameEvent, putText: {
-              text: this.assetsManager.findTextAssetOrThrow(frameEvent["putText"].assetId).text
-            }
-          },
-          frameCountInEvent: 0, // とりあえず0を入れておく
-          objectId: frameEvent.objectId || defaultObjectId,
-        };
-      } else if (frameEvent.type === "putImage") {
-        let hoverAsset = null;
-        let activeAsset = null;
-        if (frameEvent["putImage"].hoverAssetId) {
-          hoverAsset = this.assetsManager.findImageAsset(frameEvent["putImage"].hoverAssetId);
-        }
-        if (frameEvent["putImage"].activeAssetId) {
-          activeAsset = this.assetsManager.findImageAsset(frameEvent["putImage"].activeAssetId);
-        }
-        putObjectFirstFrame = {
-          event: {
-            ...frameEvent, putImage: {
-              image: this.assetsManager.findImageAssetOrThrow(frameEvent["putImage"].assetId).image,
-              hoverImage: hoverAsset ? hoverAsset.image : undefined,
-              activeImage: activeAsset ? activeAsset.image : undefined
-            }
-          },
-          frameCountInEvent: 0, // とりあえず0を入れておく
-          objectId: frameEvent.objectId || defaultObjectId,
-        };
-      }
-
-      if (frameEvent.frameCount === 0 || frameEvent.frameCount === 1) {
+      if (frameEvent.frameCount <= 1) {
         if (frameEvent.type === "putText") {
-          absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push(putObjectFirstFrame!);
+          absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push({
+            type: 'firstFrame',
+            firstFrame: {
+              event: this.buildPutAttachedText(frameEvent),
+              objectId: frameEvent.objectId || defaultObjectId,
+            }
+          });
         } else if (frameEvent.type === "putImage") {
-          absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push(putObjectFirstFrame!);
+          absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push({
+            type: 'firstFrame',
+            firstFrame: {
+              event: this.buildPutAttachedImage(frameEvent),
+              objectId: frameEvent.objectId || defaultObjectId,
+            }
+          });
         } else {
           absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push({
-            event: frameEvent,
-            frameCountInEvent: frameEvent.frameCount, 
-            objectId: defaultObjectId,
+            type: 'firstFrame',
+            firstFrame: {
+              event: frameEvent,
+              objectId: defaultObjectId,
+            }
           });
         }
       } else {
@@ -117,26 +138,45 @@ export class Compiler {
             absoluteFrameCountToScheduledFrameEvents[
               fixedFrameCountInEvent
             ].push({
-              event: frameEvent,
-              frameCountInEvent: frameCountInEvent + 1,
-              objectId: defaultObjectId,
+              type: 'doNothing',
             });
-          } else  if (frameEvent.type === "putText" || frameEvent.type === "putImage") {
+          } else if (frameEvent.type === "putText" || frameEvent.type === "putImage") {
             if (frameCountInEvent === 0) {
-              absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push({
-                ...putObjectFirstFrame!,
-                frameCountInEvent: 1
-              });
+              if (frameEvent.type === "putText") {
+                absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push({
+                  type: 'firstFrame',
+                  firstFrame: {
+                    event: this.buildPutAttachedText(frameEvent),
+                    objectId: frameEvent.objectId || defaultObjectId,
+                  }
+                });
+              } else if (frameEvent.type === "putImage") {
+                absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push({
+                  type: 'firstFrame',
+                  firstFrame: {
+                    event: this.buildPutAttachedImage(frameEvent),
+                    objectId: frameEvent.objectId || defaultObjectId,
+                  }
+                });
+              }
             } else {
-              absoluteFrameCountToScheduledFrameEvents[
-                fixedFrameCountInEvent
-              ].push({
-                event: frameEvent,
-                frameCountInEvent: frameCountInEvent + 1,
-                objectId: frameEvent.objectId || defaultObjectId ,
-              });
+              if (frameEvent.lastKeyFrame) {
+                absoluteFrameCountToScheduledFrameEvents[
+                  fixedFrameCountInEvent
+                ].push({
+                  type: 'moveObject',
+                  moveObject: {
+                    frameCount: frameEvent.frameCount,
+                    lastKeyFrame: frameEvent.lastKeyFrame,
+                    frameNumberInEvent: frameCountInEvent + 1,
+                    objectId: frameEvent.objectId || defaultObjectId,
+                  }
+                });
+              } else {
+                // 移動先がない場合もある
+              }
             }
-          } 
+          }
         });
       }
 

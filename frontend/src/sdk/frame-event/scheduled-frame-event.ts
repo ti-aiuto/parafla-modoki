@@ -1,4 +1,5 @@
 import { CompiledFrameEvent } from "./compiled-frame-event";
+import { LayoutOptions } from "./layout-options";
 
 interface AbstractScheduledFrameEvent {
   type: string;
@@ -19,8 +20,12 @@ interface DoNothingScheduledFrameEvent extends AbstractScheduledFrameEvent {
 interface MoveObjectScheduledFrameEvent extends AbstractScheduledFrameEvent {
   type: 'moveObject',
   moveObject: {
-    frameCountInEvent: number;
+    frameNumberInEvent: number;
+    frameCount: number;
     objectId: string;
+    lastKeyFrame: {
+      layoutOptions: LayoutOptions;
+    }
   }
 }
 
