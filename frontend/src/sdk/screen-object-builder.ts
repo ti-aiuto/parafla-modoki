@@ -1,16 +1,16 @@
 import { ScreenLayer } from "./screen-layer";
 
 export class ScreenObjectsManager {
-  depthToLayer: { [key in string]: ScreenLayer | undefined } = {};
+  depthToLayer: { [key in string]: ScreenLayer } = {};
 
   eraseLayers(depths: number[] | 'all'[]) {
     if (depths[0] === 'all') {
       Object.keys(this.depthToLayer).forEach((eachDepth) => {
-        this.depthToLayer[eachDepth] = undefined;
+        delete this.depthToLayer[eachDepth];
       });
     } else {
       (depths as number[]).forEach((eachDepth: number) => {
-        this.depthToLayer[eachDepth] = undefined;
+        delete this.depthToLayer[eachDepth];
       });
     }
   };
