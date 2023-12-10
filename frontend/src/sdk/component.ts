@@ -167,9 +167,6 @@ export class Component {
       setComponentUserVariable(key: string, value: any) {
         that.setComponentUserVariable(key, value);
       },
-      defineComponentUserFunction(name: string, content: string): any {
-        that.defineComponentUserFunction(name, content);
-      },
       executeScript(content: string) {
         const func = new Function("context", "args", content);
         const context = that.createContext();
@@ -235,11 +232,6 @@ export class Component {
       context.setTextValue(
         action.setTextValue.objectId,
         action.setTextValue.value
-      );
-    } else if (action.type === "defineComponentUserFunction") {
-      context.defineComponentUserFunction(
-        action.defineComponentUserFunction.name,
-        action.defineComponentUserFunction.content
       );
     } else if (action.type === "executeScript") {
       context.executeScript(action.executeScript.content);
