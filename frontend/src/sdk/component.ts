@@ -349,29 +349,35 @@ export class Component {
       );
     });
 
-    for ({ object } of Object.values(
+    for (let { object } of Object.values(
       this.screenObjectsManager.depthToLayer
     )) {
       if (!object) {
         continue;
       }
-      if (object.fullObjectId === instance.generateFullObjectId(objectId)) {
-        object.text.content = valueWithVariables;
-        break;
+      if (object.fullObjectId === this.generateFullObjectId(objectId)) {
+        if (object.type === 'text') {
+          object.text.content = valueWithVariables;
+          break;
+        }
       }
     }
     this.render();
   }
 
   getTextValue(objectId: string) {
-    for ({ object } of Object.values(
-      instance.screenObjectsManager.depthToLayer
+    for (let { object } of Object.values(
+      this.screenObjectsManager.depthToLayer
     )) {
       if (!object) {
         continue;
       }
       if (object.fullObjectId === this.generateFullObjectId(objectId)) {
-        return object.text.content;
+        if (object.type === 'text') {
+          return object.text.content;
+        } else {
+          // warn textではない
+        }
       }
     }
     return undefined;
