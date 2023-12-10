@@ -40,7 +40,7 @@ export class Component {
 
   play() {
     this.stop();
-    this.timerId = setInterval(this.tick, 50);
+    this.timerId = setInterval(() => this.tick(), 500);
   }
 
   stop() {
@@ -331,7 +331,7 @@ export class Component {
     const currentScheduledFrameEvents =
       this.componentSource.scheduledEvents[this.currentFrameCount] ||
       [];
-
+ 
     currentScheduledFrameEvents.forEach((scheduledFrameEvent) => {
       if (this.jumpToFrameCount !== null) {
         return; // frameCount>1のイベントよりも前にgotoAndPlayを実行していた場合は先に飛ぶ
