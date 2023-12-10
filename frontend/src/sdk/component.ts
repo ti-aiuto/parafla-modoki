@@ -40,7 +40,7 @@ export class Component {
 
   play() {
     this.stop();
-    this.timerId = setInterval(() => this.tick(), 500);
+    this.timerId = setInterval(() => this.tick(), 50);
   }
 
   stop() {
