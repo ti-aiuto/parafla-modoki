@@ -2,7 +2,7 @@ import { Action } from "./action/action";
 import { ComponentSource } from "./component-source";
 import { Renderer } from "./renderer";
 import { RootController } from "./root-controller";
-import { ScreenObjectsManager } from "./screen-object-builder";
+import { ScreenObjectsManager } from "./screen-object-manager";
 
 export class Component {
   constructor(rootController: RootController,

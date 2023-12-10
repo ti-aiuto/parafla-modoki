@@ -1,5 +1,5 @@
 import { ObjectBuilder } from "./object-builder";
-import { ScreenObjectsManager } from "./screen-object-builder";
+import { ScreenObjectsManager } from "./screen-object-manager";
 
 export class Renderer {
   objectBuilder: ObjectBuilder;
