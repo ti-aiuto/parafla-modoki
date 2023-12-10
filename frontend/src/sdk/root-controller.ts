@@ -2,12 +2,12 @@ import { Action } from "./action/action";
 import { Component } from "./component";
 
 export class RootController {
-  doc: HTMLElement;
+  doc: Document;
   clickActions: { [key in string]: { component: Component, action: Action } } = {};
   timers: { [key in string]: number } = {};
   keydownListeners: { [key in string]: (event: KeyboardEvent) => void } = {};
 
-  constructor(doc: HTMLElement) {
+  constructor(doc: Document) {
     this.doc = doc;
     doc.addEventListener("click", (event: { target: EventTarget | null }) => {
       const clickedFullObjectIds = [];

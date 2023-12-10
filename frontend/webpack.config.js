@@ -4,11 +4,14 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
-module.exports = {
-  entry: "./src/index.ts",
+const main = {
+  entry: {
+    main: "./src/index.ts",
+    preview: "./src/preview/preview.ts",
+  },
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "application-[chunkhash].js",
+    filename: "application-[name]-[chunkhash].js",
     assetModuleFilename: "[name]-[hash][ext]",
   },
   module: {
@@ -53,7 +56,14 @@ module.exports = {
       filename: "application-[chunkhash].css",
     }),
     new HtmlWebpackPlugin({
+      filename: "index.html",
+      chunks: ["main"],
       template: "./src/index.html",
+    }),
+    new HtmlWebpackPlugin({
+      filename: "preview.html",
+      chunks: ["preview"],
+      template: "./src/preview/preview.html",
     }),
     new CleanWebpackPlugin(),
   ],
@@ -66,3 +76,5 @@ module.exports = {
   },
   target: ["web", "es5"],
 };
+
+module.exports = main;
