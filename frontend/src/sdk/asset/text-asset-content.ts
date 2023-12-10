@@ -4,6 +4,8 @@ export interface TextAssetContent {
   textColor: string;
   padding: number;
   lineHeight: number;
+  editable: boolean;
+  backgroundColor?: string;
   borderWidth?: number;
   borderStyle?: string;
   borderColor?: string;
