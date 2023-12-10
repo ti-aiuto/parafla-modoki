@@ -15,6 +15,13 @@ export class Renderer {
     this.depthToLayerWrapper = {};
   }
 
+  private removeLayer(depth: number) {
+    const wrapper = this.depthToLayerWrapper[depth];
+    while (wrapper.firstChild) {
+      wrapper.removeChild(wrapper.firstChild);
+    }
+  }
+
   render() {
     const depthToLayer = this.screenObjectsManager.depthToLayer;
     const root = document.getElementById("root");
@@ -29,6 +36,11 @@ export class Renderer {
     root.style.overflow = "hidden";
 
     // TODO: 列挙順がdepth順になっていることを保証する
+    Object.keys(this.depthToLayerWrapper).forEach((depth) => {
+      if (!depthToLayer.hasOwnProperty(depth)) {
+        this.removeLayer(Number(depth)); // なくなってたら消す
+      }
+    });
     Object.keys(depthToLayer).forEach((depth) => {
       const layer = depthToLayer[depth];
 
@@ -44,9 +56,7 @@ export class Renderer {
       const object = layer && layer.object;
       if (!object) {
         // 何もなくなってたら消すだけ
-        while (wrapper.firstChild) {
-          wrapper.removeChild(wrapper.firstChild);
-        }
+        this.removeLayer(Number(depth));
         return;
       }
 
