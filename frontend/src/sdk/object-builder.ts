@@ -1,6 +1,7 @@
 import { TextAssetContent } from "./asset/text-asset-content";
 import { ButtonImageWithAssetContent } from "./frame-event/button-image-with-asset-content";
 import { LayoutOptions } from "./frame-event/layout-options";
+import { ScreenObject } from "./screen/screen-object";
 
 export class ObjectBuilder {
   setLayoutOptionsToElement(element: HTMLElement, layoutOptions: LayoutOptions) {
@@ -10,6 +11,52 @@ export class ObjectBuilder {
     element.style.left = `${layoutOptions.x}px`;
     element.style.top = `${layoutOptions.y}px`;
   };
+
+  setCommonOptions(targetElement: HTMLElement, object: ScreenObject, depth: number) {
+    if (object.onClickAction) {
+      targetElement.style.cursor = "pointer";
+    } else {
+      if (object.type === 'text' && !object.text.editable) {
+        targetElement.style.cursor = "default";
+      }
+    }
+
+    targetElement.dataset.fullObjectId = object.fullObjectId;
+    targetElement.style.zIndex = `${depth}`;
+  }
+
+  putObject(wrapper: HTMLElement, object: ScreenObject, depth: number): HTMLElement {
+    if (object.type === "image") {
+      const styleElement = document.createElement("style");
+      this.initImage(
+        styleElement,
+        object.fullObjectId,
+        object.image
+      );
+      const targetElement = document.createElement("div");
+      this.setCommonOptions(targetElement, object, depth);
+      wrapper.appendChild(targetElement);
+      wrapper.appendChild(styleElement);
+      return targetElement;
+    } else if (object.type === "text") {
+      if (object.text.editable) {
+        const targetElement = document.createElement("input");
+        targetElement.addEventListener("input", (event: { target: EventTarget | null }) => {
+          object.text.content = (event.target as HTMLInputElement).value; // 中間データオブジェクトに同期しておく
+        });
+        this.setCommonOptions(targetElement, object, depth);
+        wrapper.appendChild(targetElement);
+        return targetElement;
+      } else {
+        const targetElement = document.createElement("div");
+        this.setCommonOptions(targetElement, object, depth);
+        wrapper.appendChild(targetElement);
+        return targetElement;
+      }
+    } else {
+      throw new Error(`想定外のオブジェクト: ${object}`);
+    }
+  }
 
   initImage(styleElement: HTMLStyleElement, fullObjectId: string, image: ButtonImageWithAssetContent) {
     const hover = image.hoverImage?.source

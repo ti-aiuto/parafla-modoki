@@ -1,4 +1,4 @@
-import { ScreenLayer } from "./screen-layer";
+import { ScreenLayer } from "./screen/screen-layer";
 
 export class ScreenObjectsManager {
   depthToLayer: { [key in string]: ScreenLayer } = {};
