@@ -43,7 +43,7 @@ window.addEventListener("message", function (e) {
     if (`${e.data}`.includes('frameEvents')) {
       const data = JSON.parse(e.data) as any;
       load(data);  
+      firstEvent = false;
     }
   }
-  firstEvent = false;
 });

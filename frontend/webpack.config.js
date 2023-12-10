@@ -6,7 +6,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 const main = {
   entry: {
-    main: "./src/index.ts",
+    editor: "./src/editor/editor.ts",
     preview: "./src/preview/preview.ts",
   },
   output: {
@@ -56,9 +56,9 @@ const main = {
       filename: "application-[chunkhash].css",
     }),
     new HtmlWebpackPlugin({
-      filename: "index.html",
-      chunks: ["main"],
-      template: "./src/index.html",
+      filename: "editor.html",
+      chunks: ["editor"],
+      template: "./src/editor/editor.html",
     }),
     new HtmlWebpackPlugin({
       filename: "preview.html",
