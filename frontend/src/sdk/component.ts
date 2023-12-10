@@ -45,26 +45,26 @@ export class Component {
     clearInterval(this.timerId);
   }
 
-  generateFullObjectId (objectId: string) {
+  generateFullObjectId(objectId: string) {
     return `${this.rootInstanceId}_${objectId}`;
   }
 
-  eraseLayers  (depths: number[] | 'all'[]) {
+  eraseLayers(depths: number[] | 'all'[]) {
     // 各種購読中イベントの解除
     this.screenObjectsManager
       .findLayersByDepths(depths)
-      .forEach( (layer) => {
+      .forEach((layer) => {
         if (layer.object) {
           this.rootController.unregisterClickAction(
             layer.object.fullObjectId
           );
         }
       });
-      this.screenObjectsManager.eraseLayers(depths);
+    this.screenObjectsManager.eraseLayers(depths);
     this.render();
   }
 
-  gotoAndPlay  (destination: string | number) {
+  gotoAndPlay(destination: string | number) {
     // TODO: 本当はここでバリデーションが必要
     if (typeof destination === "string") {
       const label = this.componentSource.labelToFrameNumber[destination];
@@ -76,12 +76,12 @@ export class Component {
     this.play();
   }
 
-  setComponentUserVariable (key: string, value: any) {
+  setComponentUserVariable(key: string, value: any) {
     this.componentUserVariables[key] = JSON.stringify(value);
     console.debug("ユーザ変数設定", key, this.componentUserVariables[key]);
   }
 
-  getComponentUserVariable (key :string, defaultValue = undefined) {
+  getComponentUserVariable(key: string, defaultValue = undefined) {
     console.debug(
       "ユーザ変数取得",
       key,
@@ -96,7 +96,7 @@ export class Component {
     }
   }
 
-  callComponentUserFunction  (name: string, args: object = {}) {
+  callComponentUserFunction(name: string, args: object = {}) {
     console.debug("ユーザ関数呼び出し", name, args);
     const content = this.componentUserFunctions[name];
     const func = new Function("context", "args", content);
@@ -104,7 +104,7 @@ export class Component {
     return func(context, args || {});
   }
 
-  startUserTimer  (
+  startUserTimer(
     listenerId: string,
     componentUserFunctionName: string,
     interval: number
@@ -123,12 +123,12 @@ export class Component {
     );
   }
 
-  clearUserTimer (listenerId: string) {
+  clearUserTimer(listenerId: string) {
     console.debug("ユーザタイマー解除", listenerId);
     this.rootController.clearUserTimer(listenerId);
   }
 
-  registerGlobalKeydownListener  (
+  registerGlobalKeydownListener(
     listenerId: string,
     componentUserFunctionName: string
   ) {
@@ -144,12 +144,12 @@ export class Component {
     );
   }
 
-  unregisterGlobalKeydownListener (listenerId: string) {
+  unregisterGlobalKeydownListener(listenerId: string) {
     console.debug("グローバルキー押下リスナー解除", listenerId);
     this.rootController.unregisterGlobalKeydownListener(listenerId);
   };
 
-  createContext () {
+  createContext() {
     const that = this;
     const context = {
       play() {
@@ -158,7 +158,7 @@ export class Component {
       stop() {
         that.stop();
       },
-      gotoAndPlay(destination: string| number) {
+      gotoAndPlay(destination: string | number) {
         that.gotoAndPlay(destination);
       },
       eraseLayers(depths: number[] | 'all'[]) {
@@ -220,8 +220,8 @@ export class Component {
     return context;
   };
 
-  handleAction = function (action: Action) {
-    const context = instance.createContext();
+  handleAction(action: Action) {
+    const context = this.createContext();
 
     if (action.type === "eraseLayers") {
       context.eraseLayers(action.eraseLayers.depths);
@@ -294,7 +294,7 @@ export class Component {
       if (putObject.frameCountIndex <= 1 || !putObject.lastKeyFrame) {
         // 0または1
         // TODO: ここでdepthあるかの判定
-        instance.screenObjectsManager.depthToLayer[depth] = {
+        this.screenObjectsManager.depthToLayer[depth] = {
           object: {
             ...objectBase,
             layoutOptions: putObject.layoutOptions,
@@ -305,43 +305,43 @@ export class Component {
         const after = putObject.lastKeyFrame.layoutOptions;
 
         // TODO: ここでdepthあるかの判定
-        instance.screenObjectsManager.depthToLayer[depth] = {
+        this.screenObjectsManager.depthToLayer[depth] = {
           object: {
             ...objectBase,
             layoutOptions: {
               x:
                 before.x +
                 (putObject.frameCountIndex * (after.x - before.x)) /
-                  putObject.frameCount,
+                putObject.frameCount,
               y:
                 before.y +
                 (putObject.frameCountIndex * (after.y - before.y)) /
-                  putObject.frameCount,
+                putObject.frameCount,
               width:
                 before.width +
                 (putObject.frameCountIndex * (after.width - before.width)) /
-                  putObject.frameCount,
+                putObject.frameCount,
               height:
                 before.height +
                 (putObject.frameCountIndex * (after.height - before.height)) /
-                  putObject.frameCount,
+                putObject.frameCount,
             },
           },
         };
       }
-      instance.render();
+      this.render();
 
       if (putObject["onClickAction"]) {
-        instance.rootController.registerClickAction(
+        this.rootController.registerClickAction(
           fullObjectId,
-          instance,
+          this,
           putObject["onClickAction"]
         );
       }
     }
   };
 
-  setTextValue (objectId, value) {
+  setTextValue(objectId: string, value: string) {
     // 変数の埋め込み処理
     const valueRemovedWhiteSpaces = (value + "").replace(
       /{{\s*(\w+?)\s}}/g,
@@ -349,16 +349,16 @@ export class Component {
     );
     const variableNames = [...valueRemovedWhiteSpaces.matchAll(/{{(\w+?)}}/g)];
     let valueWithVariables = valueRemovedWhiteSpaces;
-    variableNames.forEach(function (variableNameRow) {
+    variableNames.forEach((variableNameRow) => {
       const variableName = variableNameRow[1];
       valueWithVariables = valueWithVariables.replace(
         new RegExp(`{{${variableName}}}`, "g"),
-        instance.getComponentUserVariable(variableName)
+        this.getComponentUserVariable(variableName)
       );
     });
 
     for ({ object } of Object.values(
-      instance.screenObjectsManager.depthToLayer
+      this.screenObjectsManager.depthToLayer
     )) {
       if (!object) {
         continue;
@@ -368,45 +368,45 @@ export class Component {
         break;
       }
     }
-    instance.render();
+    this.render();
   }
 
-  getTextValue  (objectId) {
+  getTextValue(objectId: string) {
     for ({ object } of Object.values(
       instance.screenObjectsManager.depthToLayer
     )) {
       if (!object) {
         continue;
       }
-      if (object.fullObjectId === instance.generateFullObjectId(objectId)) {
+      if (object.fullObjectId === this.generateFullObjectId(objectId)) {
         return object.text.content;
       }
     }
     return undefined;
   }
 
-  render () {
-    instance.renderer.render(instance.screenObjectsManager);
+  render() {
+    this.renderer.render();
   }
 
-  tick () {
+  tick() {
     // 最後まで行ったら最初に戻る（判定これでいいのかな？）
-    if (instance.currentFrameCount > instance.lastFrameCount) {
-      instance.currentFrameCount = 1;
+    if (this.currentFrameCount > this.lastFrameCount) {
+      this.currentFrameCount = 1;
     }
 
     // 飛び先が指定されていたらそっちにいく
-    if (instance.jumpToFrameCount !== null) {
-      instance.currentFrameCount = instance.jumpToFrameCount;
-      instance.jumpToFrameCount = null;
+    if (this.jumpToFrameCount !== null) {
+      this.currentFrameCount = this.jumpToFrameCount;
+      this.jumpToFrameCount = null;
     }
 
     const currentScheduledFrameEvents =
-      instance.componentSource.scheduledEvents[instance.currentFrameCount] ||
+      this.componentSource.scheduledEvents[this.currentFrameCount] ||
       [];
 
-    currentScheduledFrameEvents.forEach(function (scheduledFrameEvent) {
-      if (instance.jumpToFrameCount !== null) {
+    currentScheduledFrameEvents.forEach((scheduledFrameEvent) => {
+      if (this.jumpToFrameCount !== null) {
         return; // frameCount>1のイベントよりも前にgotoAndPlayを実行していた場合は先に飛ぶ
       }
 
@@ -414,7 +414,7 @@ export class Component {
 
       if (event.type === "executeAction") {
         console.debug("executeAction", event.executeAction);
-        instance.handleAction(event.executeAction);
+        this.handleAction(event.executeAction);
       }
 
       if (event.type === "putImage" || event.type === "putText") {
@@ -429,7 +429,7 @@ export class Component {
         };
 
         if (event.type === "putImage") {
-          instance.handleAction({
+          this.handleAction({
             type: "putObject",
             putObject: {
               ...putObjectBase,
@@ -438,7 +438,7 @@ export class Component {
             },
           });
         } else if (event.type === "putText") {
-          instance.handleAction({
+          this.handleAction({
             type: "putObject",
             putObject: {
               ...putObjectBase,
@@ -450,6 +450,6 @@ export class Component {
       }
     });
 
-    instance.currentFrameCount += 1;
+    this.currentFrameCount += 1;
   }
 }
