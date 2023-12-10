@@ -7,6 +7,7 @@ export interface MoveObjectScheduledFrameEvent extends AbstractScheduledFrameEve
     frameNumberInEvent: number;
     frameCount: number;
     objectId: string;
+    layoutOptions: LayoutOptions;
     lastKeyFrame: {
       layoutOptions: LayoutOptions;
     }

@@ -1,6 +1,7 @@
 import { Action } from "./action/action";
 import { ComponentSource } from "./component-source";
 import { FirstFrameScheduledFrameEvent } from "./frame-event/first-frame-scheduled-frame-event";
+import { MoveObjectScheduledFrameEvent } from "./frame-event/move-object-scheduled-frame-event";
 import { Renderer } from "./renderer";
 import { RootController } from "./root-controller";
 import { ScreenObjectsManager } from "./screen-object-manager";
@@ -346,40 +347,43 @@ export class Component {
         if (event.type === "putAttachedImage" || event.type === "putAttachedText") {
           this.putAttachedObject(scheduledFrameEvent);
         }
+      } else if (scheduledFrameEvent.type === 'moveObject') {
+        this.moveObject(scheduledFrameEvent);
       }
     });
 
     this.currentFrameCount += 1;
   }
 
-  private moveObject() {
-    const before = putObject.layoutOptions;
-    const after = putObject.lastKeyFrame.layoutOptions;
+  private moveObject(scheduledFrameEvent: MoveObjectScheduledFrameEvent) {
+    const before = scheduledFrameEvent.moveObject.layoutOptions;
+    const after = scheduledFrameEvent.moveObject.lastKeyFrame.layoutOptions;
 
     // TODO: ここでdepthあるかの判定
-    this.screenObjectsManager.depthToLayer[depth] = {
-      object: {
-        ...objectBase,
-        layoutOptions: {
-          x:
-            before.x +
-            (putObject.frameCountIndex * (after.x - before.x)) /
-            putObject.frameCount,
-          y:
-            before.y +
-            (putObject.frameCountIndex * (after.y - before.y)) /
-            putObject.frameCount,
-          width:
-            before.width +
-            (putObject.frameCountIndex * (after.width - before.width)) /
-            putObject.frameCount,
-          height:
-            before.height +
-            (putObject.frameCountIndex * (after.height - before.height)) /
-            putObject.frameCount,
-        },
-      },
-    };
+    const fullObjectId = this.generateFullObjectId(scheduledFrameEvent.moveObject.objectId);
+    const currentObject = Object.values(this.screenObjectsManager.depthToLayer).find((layer) => layer.object.fullObjectId === fullObjectId);
+    if (currentObject) {
+      currentObject.object.layoutOptions = {
+        x:
+          before.x +
+          (scheduledFrameEvent.moveObject.frameNumberInEvent * (after.x - before.x)) /
+          scheduledFrameEvent.moveObject.frameCount,
+        y:
+          before.y +
+          (scheduledFrameEvent.moveObject.frameNumberInEvent * (after.y - before.y)) /
+          scheduledFrameEvent.moveObject.frameCount,
+        width:
+          before.width +
+          (scheduledFrameEvent.moveObject.frameNumberInEvent * (after.width - before.width)) /
+          scheduledFrameEvent.moveObject.frameCount,
+        height:
+          before.height +
+          (scheduledFrameEvent.moveObject.frameNumberInEvent * (after.height - before.height)) /
+          scheduledFrameEvent.moveObject.frameCount,
+      };
+    }
+
+    this.render();
   }
 
   private putAttachedObject(scheduledFrameEvent: FirstFrameScheduledFrameEvent) {

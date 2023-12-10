@@ -162,15 +162,16 @@ export class Compiler {
               if (frameEvent.lastKeyFrame) {
                 absoluteFrameCountToScheduledFrameEvents[
                   fixedFrameCountInEvent
-                ].push({
+                ].push(structuredClone({
                   type: 'moveObject',
                   moveObject: {
                     frameCount: frameEvent.frameCount,
+                    layoutOptions: frameEvent.layoutOptions,
                     lastKeyFrame: frameEvent.lastKeyFrame,
                     frameNumberInEvent: frameCountInEvent + 1,
                     objectId: frameEvent.objectId || defaultObjectId,
                   }
-                });
+                }));
               } else {
                 // 移動先がない場合もある
               }
