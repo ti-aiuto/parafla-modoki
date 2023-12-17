@@ -5,7 +5,14 @@
   "main": "index.js",
   "scripts": {
     "build": "npx webpack --mode production",
-    "dev": " npx webpack serve --mode development"
+    "dev": " npx webpack serve --mode development",
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "prepare": "npm.cmd run compile",
+    "pretest": "npm.cmd run compile",
+    "posttest": "npm.cmd run lint"
   },
   "author": "",
   "license": "ISC",
@@ -25,7 +32,8 @@
     "vue-template-compiler": "^2.6.14",
     "webpack": "^5.70.0",
     "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.15.1"
+    "webpack-dev-server": "^4.15.1",
+    "@types/node": "20.8.2"
   },
   "dependencies": {
     "core-js": "^3.21.1",
