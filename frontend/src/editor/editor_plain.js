@@ -1,47 +1,47 @@
 const UI_WAIT_TIME = 50; // 気持ち遅らせたほうが違和感ないので待つ
 
-import { AssetsManager } from "@/sdk/assets-manager";
-import { ObjectBuilder } from "@/sdk/object-builder";
+import {AssetsManager} from '@/sdk/assets-manager';
+import {ObjectBuilder} from '@/sdk/object-builder';
 import Vue from 'vue';
 
 export function initEditor() {
   const eventTypeTable = {
-    defineLabel: "ラベルを定義",
-    defineComponentUserFunction: "ユーザ関数を定義",
-    executeAction: "アクションを実行",
-    putImage: "画像を配置",
-    putText: "テキストを配置",
-    doNothing: "何もしない",
+    defineLabel: 'ラベルを定義',
+    defineComponentUserFunction: 'ユーザ関数を定義',
+    executeAction: 'アクションを実行',
+    putImage: '画像を配置',
+    putText: 'テキストを配置',
+    doNothing: '何もしない',
   };
   const actionTypeTable = {
-    eraseLayers: "指定深度を消去",
-    play: "再生",
-    stop: "停止",
-    gotoAndPlay: "指定ラベルにジャンプして再生",
-    setTextValue: "テキストの表示内容を更新",
-    executeScript: "スクリプトを実行",
-    callComponentUserFunction: "ユーザ関数を呼び出し",
-    registerGlobalKeydownListener: "キー押下リスナーを登録",
-    unregisterGlobalKeydownListener: "キー押下リスナーを登録解除",
-    startUserTimer: "タイマーを開始",
-    clearUserTimer: "タイマーを解除",
+    eraseLayers: '指定深度を消去',
+    play: '再生',
+    stop: '停止',
+    gotoAndPlay: '指定ラベルにジャンプして再生',
+    setTextValue: 'テキストの表示内容を更新',
+    executeScript: 'スクリプトを実行',
+    callComponentUserFunction: 'ユーザ関数を呼び出し',
+    registerGlobalKeydownListener: 'キー押下リスナーを登録',
+    unregisterGlobalKeydownListener: 'キー押下リスナーを登録解除',
+    startUserTimer: 'タイマーを開始',
+    clearUserTimer: 'タイマーを解除',
   };
 
   new Vue({
-    el: "#vue_root",
+    el: '#vue_root',
     methods: {
       updateFrameNumbers() {
         let frameNumber = 1;
-        this.frameEvents.forEach(function (frameEvent) {
-          frameEvent["scheduledFrameNumber"] = frameNumber;
+        this.frameEvents.forEach(frameEvent => {
+          frameEvent['scheduledFrameNumber'] = frameNumber;
           frameNumber += frameEvent.frameCount;
         });
       },
       loadWorkspace(workspace) {
-        console.debug("workspace読込", workspace);
-        this.frameEvents = workspace["frameEvents"];
+        console.debug('workspace読込', workspace);
+        this.frameEvents = workspace['frameEvents'];
         this.updateFrameNumbers();
-        this.assetsManager = new AssetsManager(workspace["allIdToAsset"]);
+        this.assetsManager = new AssetsManager(workspace['allIdToAsset']);
         this.reloadAllAssets();
       },
       start() {
@@ -49,13 +49,13 @@ export function initEditor() {
       },
       eventTypeI18n(event) {
         let content = eventTypeTable[event.type];
-        if (event.type === "defineLabel") {
-          content += `「${event["defineLabel"]["label"]}」`;
-        } else if (event.type === "defineComponentUserFunction") {
-          content += `「${event["defineComponentUserFunction"]["name"]}」`;
-        } else if (event.type === "putImage" || event.type === "putText") {
+        if (event.type === 'defineLabel') {
+          content += `「${event['defineLabel']['label']}」`;
+        } else if (event.type === 'defineComponentUserFunction') {
+          content += `「${event['defineComponentUserFunction']['name']}」`;
+        } else if (event.type === 'putImage' || event.type === 'putText') {
           if (event.lastKeyFrame) {
-            content += "\n※アニメーションあり";
+            content += '\n※アニメーションあり';
           }
           if (event.objectId) {
             content += `\n(オブジェクトID: ${event.objectId} アセットID: ${
@@ -70,46 +70,46 @@ export function initEditor() {
           return undefined;
         }
         let content = actionTypeTable[action.type];
-        if (action["type"] === "eraseLayers") {
-          content += `\n(深度: ${action["eraseLayers"]["depths"].join(",")})`;
-        } else if (action["type"] === "gotoAndPlay") {
-          content += `\n(行先: 「${action["gotoAndPlay"]["destination"]}」)`;
-        } else if (action["type"] === "setTextValue") {
-          content += `\n(対象: ${action["setTextValue"]["objectId"]})`;
-        } else if (action["type"] === "callComponentUserFunction") {
-          content += `\n(ユーザ関数名: ${action["callComponentUserFunction"]["name"]})`;
-        } else if (action["type"] === "registerGlobalKeydownListener") {
-          content += `\n(リスナーID: ${action["registerGlobalKeydownListener"]["listenerId"]})`;
-        } else if (action["type"] === "unregisterGlobalKeydownListener") {
-          content += `\n(リスナーID: ${action["unregisterGlobalKeydownListener"]["listenerId"]})`;
-        } else if (action["type"] === "startUserTimer") {
-          content += `\n(リスナーID: ${action["startUserTimer"]["listenerId"]})`;
-        } else if (action["type"] === "clearUserTimer") {
-          content += `\n(リスナーID: ${action["clearUserTimer"]["listenerId"]})`;
+        if (action['type'] === 'eraseLayers') {
+          content += `\n(深度: ${action['eraseLayers']['depths'].join(',')})`;
+        } else if (action['type'] === 'gotoAndPlay') {
+          content += `\n(行先: 「${action['gotoAndPlay']['destination']}」)`;
+        } else if (action['type'] === 'setTextValue') {
+          content += `\n(対象: ${action['setTextValue']['objectId']})`;
+        } else if (action['type'] === 'callComponentUserFunction') {
+          content += `\n(ユーザ関数名: ${action['callComponentUserFunction']['name']})`;
+        } else if (action['type'] === 'registerGlobalKeydownListener') {
+          content += `\n(リスナーID: ${action['registerGlobalKeydownListener']['listenerId']})`;
+        } else if (action['type'] === 'unregisterGlobalKeydownListener') {
+          content += `\n(リスナーID: ${action['unregisterGlobalKeydownListener']['listenerId']})`;
+        } else if (action['type'] === 'startUserTimer') {
+          content += `\n(リスナーID: ${action['startUserTimer']['listenerId']})`;
+        } else if (action['type'] === 'clearUserTimer') {
+          content += `\n(リスナーID: ${action['clearUserTimer']['listenerId']})`;
         }
         return content;
       },
       frameEventRowStyle(row) {
         if (row === this.selectedFrameEvent) {
-          return { color: "#fff", "background-color": "#0000cd" };
+          return {color: '#fff', 'background-color': '#0000cd'};
         }
 
-        if (row["type"] === "defineLabel") {
-          return { "background-color": "#E6FFE9" };
+        if (row['type'] === 'defineLabel') {
+          return {'background-color': '#E6FFE9'};
         }
-        if (row["onClickAction"]) {
-          return { "background-color": "#FFEEFF" };
+        if (row['onClickAction']) {
+          return {'background-color': '#FFEEFF'};
         }
       },
       assetRowStyle(assetId) {
         if (Number(assetId) === Number(this.selectedAssetId)) {
-          return { color: "#fff", "background-color": "#0000cd" };
+          return {color: '#fff', 'background-color': '#0000cd'};
         }
       },
       selectAsset(assetId) {
         this.clearSelected();
         this.selectedAssetId = Number(assetId);
-        if (this.selectedAsset?.type === "text") {
+        if (this.selectedAsset?.type === 'text') {
           this.updateTextAssetPreview();
         }
       },
@@ -118,7 +118,7 @@ export function initEditor() {
         while (wrapper.firstChild) {
           wrapper.removeChild(wrapper.firstChild);
         }
-        const previewElement = document.createElement("div");
+        const previewElement = document.createElement('div');
         wrapper.appendChild(previewElement);
         this.objectBuilder.updateText(previewElement, this.selectedAsset.text);
       },
@@ -128,8 +128,8 @@ export function initEditor() {
         frameEvent,
         fullObjectId
       ) {
-        if (frameEvent.type === "putImage") {
-          const putImageEvent = frameEvent["putImage"];
+        if (frameEvent.type === 'putImage') {
+          const putImageEvent = frameEvent['putImage'];
           const image = {
             image: this.assetsManager.find(putImageEvent.assetId)?.image, // TODO: なかった場合
             hoverImage: this.assetsManager.find(putImageEvent.hoverAssetId)
@@ -142,13 +142,13 @@ export function initEditor() {
           }
           this.objectBuilder.initImage(styleElement, fullObjectId, image);
           previewElement.dataset.fullObjectId = fullObjectId;
-          previewElement.style.border = "solid 6px #aaa";
+          previewElement.style.border = 'solid 6px #aaa';
           this.objectBuilder.setLayoutOptionsToElement(
             previewElement,
             frameEvent.layoutOptions
           );
-        } else if (frameEvent.type === "putText") {
-          const putTextEvent = frameEvent["putText"];
+        } else if (frameEvent.type === 'putText') {
+          const putTextEvent = frameEvent['putText'];
           const text = this.assetsManager.find(putTextEvent.assetId)?.text; // TODO: なかった場合
           if (!text) {
             return;
@@ -172,15 +172,15 @@ export function initEditor() {
         while (wrapper.firstChild) {
           wrapper.removeChild(wrapper.firstChild);
         }
-        const previewElement = document.createElement("div");
-        const styleElement = document.createElement("style");
+        const previewElement = document.createElement('div');
+        const styleElement = document.createElement('style');
         wrapper.appendChild(previewElement);
         wrapper.appendChild(styleElement);
         this.buildFrameEventElement(
           previewElement,
           styleElement,
           this.editingFrameEvent,
-          "modal-preview"
+          'modal-preview'
         );
       },
       updateEventPreview() {
@@ -188,15 +188,15 @@ export function initEditor() {
         while (wrapper.firstChild) {
           wrapper.removeChild(wrapper.firstChild);
         }
-        const previewElement = document.createElement("div");
-        const styleElement = document.createElement("style");
+        const previewElement = document.createElement('div');
+        const styleElement = document.createElement('style');
         wrapper.appendChild(previewElement);
         wrapper.appendChild(styleElement);
         this.buildFrameEventElement(
           previewElement,
           styleElement,
           this.selectedFrameEvent,
-          "left-column-preview"
+          'left-column-preview'
         );
       },
       selectFrameEvent(frameEvent) {
@@ -205,13 +205,13 @@ export function initEditor() {
         this.updateEventPreview();
       },
       openPreview() {
-        const previewWindow = open("./preview.html", "preview");
+        const previewWindow = open('./preview.html', 'preview');
         // 受け取れてるかわからないので繰り返し送信する
         let count = 0;
         const timerId = setInterval(() => {
           previewWindow.postMessage(
             JSON.stringify(this.generatWorkspaceJson()),
-            "*"
+            '*'
           );
           count++;
           if (count >= 5) {
@@ -228,15 +228,15 @@ export function initEditor() {
           this.editingFrameEvent = structuredClone(this.selectedFrameEvent);
 
           // 「未選択」の選択状態を正しく表示するためのロジック
-          if (this.editingFrameEvent.type === "putImage") {
-            if (!this.editingFrameEvent["putImage"].hoverAssetId) {
-              this.$set(this.editingFrameEvent["putImage"], "hoverAssetId", "");
+          if (this.editingFrameEvent.type === 'putImage') {
+            if (!this.editingFrameEvent['putImage'].hoverAssetId) {
+              this.$set(this.editingFrameEvent['putImage'], 'hoverAssetId', '');
             }
-            if (!this.editingFrameEvent["putImage"].activeAssetId) {
+            if (!this.editingFrameEvent['putImage'].activeAssetId) {
               this.$set(
-                this.editingFrameEvent["putImage"],
-                "activeAssetId",
-                ""
+                this.editingFrameEvent['putImage'],
+                'activeAssetId',
+                ''
               );
             }
           }
@@ -251,7 +251,7 @@ export function initEditor() {
       clickNewFrameEvent() {
         setTimeout(() => {
           this.editingTargetFrameEvent = null;
-          this.editingFrameEvent = { type: null };
+          this.editingFrameEvent = {type: null};
         }, UI_WAIT_TIME);
       },
       clickRemoveFrameEvent() {
@@ -259,7 +259,7 @@ export function initEditor() {
           return;
         }
         setTimeout(() => {
-          if (confirm("選択されたイベントを削除します")) {
+          if (confirm('選択されたイベントを削除します')) {
             const index = this.frameEvents.indexOf(this.selectedFrameEvent);
             if (index !== -1) {
               this.selectedFrameEvent = null;
@@ -319,113 +319,113 @@ export function initEditor() {
         );
       },
       buildAction(actionObject, actionType) {
-        if (actionType === "play") {
-          this.$set(actionObject, "play", {});
-        } else if (actionType === "stop") {
-          this.$set(actionObject, "stop", {});
-        } else if (actionType === "eraseLayers") {
-          this.$set(actionObject, "eraseLayers", { depths: [null] });
-        } else if (actionType === "gotoAndPlay") {
-          this.$set(actionObject, "gotoAndPlay", {
+        if (actionType === 'play') {
+          this.$set(actionObject, 'play', {});
+        } else if (actionType === 'stop') {
+          this.$set(actionObject, 'stop', {});
+        } else if (actionType === 'eraseLayers') {
+          this.$set(actionObject, 'eraseLayers', {depths: [null]});
+        } else if (actionType === 'gotoAndPlay') {
+          this.$set(actionObject, 'gotoAndPlay', {
             destination: null,
           });
-        } else if (actionType === "setTextValue") {
-          this.$set(actionObject, "setTextValue", {
+        } else if (actionType === 'setTextValue') {
+          this.$set(actionObject, 'setTextValue', {
             objectId: null,
             value: null,
           });
-        } else if (actionType === "executeScript") {
-          this.$set(actionObject, "executeScript", {
+        } else if (actionType === 'executeScript') {
+          this.$set(actionObject, 'executeScript', {
             content: null,
           });
-        } else if (actionType === "registerGlobalKeydownListener") {
-          this.$set(actionObject, "registerGlobalKeydownListener", {
+        } else if (actionType === 'registerGlobalKeydownListener') {
+          this.$set(actionObject, 'registerGlobalKeydownListener', {
             componentUserFunctionName: null,
             listenerId: null,
           });
-        } else if (actionType === "unregisterGlobalKeydownListener") {
-          this.$set(actionObject, "unregisterGlobalKeydownListener", {
+        } else if (actionType === 'unregisterGlobalKeydownListener') {
+          this.$set(actionObject, 'unregisterGlobalKeydownListener', {
             listenerId: null,
           });
-        } else if (actionType === "startUserTimer") {
-          this.$set(actionObject, "startUserTimer", {
+        } else if (actionType === 'startUserTimer') {
+          this.$set(actionObject, 'startUserTimer', {
             componentUserFunctionName: null,
             listenerId: null,
             interval: null,
           });
-        } else if (actionType === "clearUserTimer") {
-          this.$set(actionObject, "clearUserTimer", {
+        } else if (actionType === 'clearUserTimer') {
+          this.$set(actionObject, 'clearUserTimer', {
             listenerId: null,
           });
-        } else if (actionType === "callComponentUserFunction") {
-          this.$set(actionObject, "callComponentUserFunction", {
+        } else if (actionType === 'callComponentUserFunction') {
+          this.$set(actionObject, 'callComponentUserFunction', {
             name: null,
           });
         }
       },
       extractAction(updatedExecuteAction, actionType, rawUpdatedExecuteAction) {
-        if (actionType === "play") {
-          updatedExecuteAction["play"] = {};
-        } else if (actionType === "stop") {
-          updatedExecuteAction["stop"] = {};
-        } else if (actionType === "eraseLayers") {
-          if (rawUpdatedExecuteAction["eraseLayers"]["depths"][0] === "all") {
-            updatedExecuteAction["eraseLayers"] = { depths: ["all"] };
+        if (actionType === 'play') {
+          updatedExecuteAction['play'] = {};
+        } else if (actionType === 'stop') {
+          updatedExecuteAction['stop'] = {};
+        } else if (actionType === 'eraseLayers') {
+          if (rawUpdatedExecuteAction['eraseLayers']['depths'][0] === 'all') {
+            updatedExecuteAction['eraseLayers'] = {depths: ['all']};
           } else {
             // TODO: 本当に数値かチェックしてもいいかも
-            updatedExecuteAction["eraseLayers"] = {
+            updatedExecuteAction['eraseLayers'] = {
               depths: [
-                Number(rawUpdatedExecuteAction["eraseLayers"]["depths"][0]),
+                Number(rawUpdatedExecuteAction['eraseLayers']['depths'][0]),
               ],
             };
           }
-        } else if (actionType === "gotoAndPlay") {
-          updatedExecuteAction["gotoAndPlay"] = {
-            destination: rawUpdatedExecuteAction["gotoAndPlay"]["destination"],
+        } else if (actionType === 'gotoAndPlay') {
+          updatedExecuteAction['gotoAndPlay'] = {
+            destination: rawUpdatedExecuteAction['gotoAndPlay']['destination'],
           };
-        } else if (actionType === "setTextValue") {
-          updatedExecuteAction["setTextValue"] = {
-            objectId: rawUpdatedExecuteAction["setTextValue"]["objectId"],
-            value: rawUpdatedExecuteAction["setTextValue"]["value"],
+        } else if (actionType === 'setTextValue') {
+          updatedExecuteAction['setTextValue'] = {
+            objectId: rawUpdatedExecuteAction['setTextValue']['objectId'],
+            value: rawUpdatedExecuteAction['setTextValue']['value'],
           };
-        } else if (actionType === "executeScript") {
-          updatedExecuteAction["executeScript"] = {
-            content: rawUpdatedExecuteAction["executeScript"]["content"],
+        } else if (actionType === 'executeScript') {
+          updatedExecuteAction['executeScript'] = {
+            content: rawUpdatedExecuteAction['executeScript']['content'],
           };
-        } else if (actionType === "registerGlobalKeydownListener") {
-          updatedExecuteAction["registerGlobalKeydownListener"] = {
+        } else if (actionType === 'registerGlobalKeydownListener') {
+          updatedExecuteAction['registerGlobalKeydownListener'] = {
             listenerId:
-              rawUpdatedExecuteAction["registerGlobalKeydownListener"][
-                "listenerId"
+              rawUpdatedExecuteAction['registerGlobalKeydownListener'][
+                'listenerId'
               ],
             componentUserFunctionName:
-              rawUpdatedExecuteAction["registerGlobalKeydownListener"][
-                "componentUserFunctionName"
+              rawUpdatedExecuteAction['registerGlobalKeydownListener'][
+                'componentUserFunctionName'
               ],
           };
-        } else if (actionType === "unregisterGlobalKeydownListener") {
-          updatedExecuteAction["unregisterGlobalKeydownListener"] = {
+        } else if (actionType === 'unregisterGlobalKeydownListener') {
+          updatedExecuteAction['unregisterGlobalKeydownListener'] = {
             listenerId:
-              rawUpdatedExecuteAction["unregisterGlobalKeydownListener"][
-                "listenerId"
+              rawUpdatedExecuteAction['unregisterGlobalKeydownListener'][
+                'listenerId'
               ],
           };
-        } else if (actionType === "startUserTimer") {
-          updatedExecuteAction["startUserTimer"] = {
-            listenerId: rawUpdatedExecuteAction["startUserTimer"]["listenerId"],
+        } else if (actionType === 'startUserTimer') {
+          updatedExecuteAction['startUserTimer'] = {
+            listenerId: rawUpdatedExecuteAction['startUserTimer']['listenerId'],
             componentUserFunctionName:
-              rawUpdatedExecuteAction["startUserTimer"][
-                "componentUserFunctionName"
+              rawUpdatedExecuteAction['startUserTimer'][
+                'componentUserFunctionName'
               ],
-            interval: rawUpdatedExecuteAction["startUserTimer"]["interval"],
+            interval: rawUpdatedExecuteAction['startUserTimer']['interval'],
           };
-        } else if (actionType === "clearUserTimer") {
-          updatedExecuteAction["clearUserTimer"] = {
-            listenerId: rawUpdatedExecuteAction["clearUserTimer"]["listenerId"],
+        } else if (actionType === 'clearUserTimer') {
+          updatedExecuteAction['clearUserTimer'] = {
+            listenerId: rawUpdatedExecuteAction['clearUserTimer']['listenerId'],
           };
-        } else if (actionType === "callComponentUserFunction") {
-          updatedExecuteAction["callComponentUserFunction"] = {
-            name: rawUpdatedExecuteAction["callComponentUserFunction"]["name"],
+        } else if (actionType === 'callComponentUserFunction') {
+          updatedExecuteAction['callComponentUserFunction'] = {
+            name: rawUpdatedExecuteAction['callComponentUserFunction']['name'],
           };
         }
       },
@@ -450,49 +450,49 @@ export function initEditor() {
           height: 480,
         };
 
-        if (frameEventType === "defineLabel") {
-          this.$set(this.editingFrameEvent, "defineLabel", { label: null });
-        } else if (frameEventType === "defineComponentUserFunction") {
-          this.$set(this.editingFrameEvent, "defineComponentUserFunction", {
+        if (frameEventType === 'defineLabel') {
+          this.$set(this.editingFrameEvent, 'defineLabel', {label: null});
+        } else if (frameEventType === 'defineComponentUserFunction') {
+          this.$set(this.editingFrameEvent, 'defineComponentUserFunction', {
             name: null,
             content: null,
           });
-        } else if (frameEventType === "executeAction") {
-          this.$set(this.editingFrameEvent, "executeAction", { type: null });
-        } else if (frameEventType === "putImage") {
-          this.$set(this.editingFrameEvent, "putImage", {
+        } else if (frameEventType === 'executeAction') {
+          this.$set(this.editingFrameEvent, 'executeAction', {type: null});
+        } else if (frameEventType === 'putImage') {
+          this.$set(this.editingFrameEvent, 'putImage', {
             assetId: null,
-            hoverAssetId: "",
-            activeAssetId: "",
+            hoverAssetId: '',
+            activeAssetId: '',
           });
-          this.$set(this.editingFrameEvent, "frameCount", 0);
-          this.$set(this.editingFrameEvent, "depth", 1);
+          this.$set(this.editingFrameEvent, 'frameCount', 0);
+          this.$set(this.editingFrameEvent, 'depth', 1);
           this.$set(
             this.editingFrameEvent,
-            "layoutOptions",
+            'layoutOptions',
             structuredClone(layoutOptions)
           );
-        } else if (frameEventType === "putText") {
-          this.$set(this.editingFrameEvent, "putText", { assetId: null });
-          this.$set(this.editingFrameEvent, "frameCount", 0);
-          this.$set(this.editingFrameEvent, "depth", 1);
+        } else if (frameEventType === 'putText') {
+          this.$set(this.editingFrameEvent, 'putText', {assetId: null});
+          this.$set(this.editingFrameEvent, 'frameCount', 0);
+          this.$set(this.editingFrameEvent, 'depth', 1);
           this.$set(
             this.editingFrameEvent,
-            "layoutOptions",
+            'layoutOptions',
             structuredClone(layoutOptions)
           );
-        } else if (frameEventType === "doNothing") {
-          this.$set(this.editingFrameEvent, "doNothing", {});
-          this.$set(this.editingFrameEvent, "frameCount", 1);
-          this.$set(this.editingFrameEvent, "depth", 1);
+        } else if (frameEventType === 'doNothing') {
+          this.$set(this.editingFrameEvent, 'doNothing', {});
+          this.$set(this.editingFrameEvent, 'frameCount', 1);
+          this.$set(this.editingFrameEvent, 'depth', 1);
         }
       },
       onFrameEventActionTypeChanged() {
         const actionType = this.editingFrameEvent.executeAction.type;
         const found =
           this.editingTargetFrameEvent &&
-          this.editingTargetFrameEvent["executeAction"] &&
-          this.editingTargetFrameEvent["executeAction"][actionType];
+          this.editingTargetFrameEvent['executeAction'] &&
+          this.editingTargetFrameEvent['executeAction'][actionType];
         if (found) {
           this.$set(
             this.editingFrameEvent.executeAction,
@@ -509,81 +509,81 @@ export function initEditor() {
           // TODO: ここでいらないプロパティを消せるとよい
           const rawUpdatedFrameEvent = this.editingFrameEvent;
           const updatedFrameEvent = {
-            type: rawUpdatedFrameEvent["type"],
+            type: rawUpdatedFrameEvent['type'],
             frameCount: 0,
           };
           if (
-            ["putImage", "putObject", "doNothing"].includes(
+            ['putImage', 'putObject', 'doNothing'].includes(
               this.editingFrameEvent.type
             )
           ) {
-            updatedFrameEvent["frameCount"] = Number(
-              rawUpdatedFrameEvent["frameCount"]
+            updatedFrameEvent['frameCount'] = Number(
+              rawUpdatedFrameEvent['frameCount']
             );
           }
-          if (["putImage", "putText"].includes(this.editingFrameEvent.type)) {
-            updatedFrameEvent["depth"] = Number(rawUpdatedFrameEvent["depth"]);
-            updatedFrameEvent["objectId"] = rawUpdatedFrameEvent["objectId"];
-            updatedFrameEvent["layoutOptions"] = structuredClone(
-              rawUpdatedFrameEvent["layoutOptions"]
+          if (['putImage', 'putText'].includes(this.editingFrameEvent.type)) {
+            updatedFrameEvent['depth'] = Number(rawUpdatedFrameEvent['depth']);
+            updatedFrameEvent['objectId'] = rawUpdatedFrameEvent['objectId'];
+            updatedFrameEvent['layoutOptions'] = structuredClone(
+              rawUpdatedFrameEvent['layoutOptions']
             );
             if (
-              Number(rawUpdatedFrameEvent["frameCount"]) >= 2 &&
-              rawUpdatedFrameEvent["lastKeyFrame"]
+              Number(rawUpdatedFrameEvent['frameCount']) >= 2 &&
+              rawUpdatedFrameEvent['lastKeyFrame']
             ) {
-              updatedFrameEvent["lastKeyFrame"] = structuredClone(
-                rawUpdatedFrameEvent["lastKeyFrame"]["layoutOptions"]
+              updatedFrameEvent['lastKeyFrame'] = structuredClone(
+                rawUpdatedFrameEvent['lastKeyFrame']['layoutOptions']
               );
             }
 
-            if (rawUpdatedFrameEvent["onClickAction"]) {
-              updatedFrameEvent["onClickAction"] = {
-                type: rawUpdatedFrameEvent["onClickAction"]["type"],
+            if (rawUpdatedFrameEvent['onClickAction']) {
+              updatedFrameEvent['onClickAction'] = {
+                type: rawUpdatedFrameEvent['onClickAction']['type'],
               };
               this.extractAction(
-                updatedFrameEvent["onClickAction"],
-                rawUpdatedFrameEvent["onClickAction"]["type"],
-                rawUpdatedFrameEvent["onClickAction"]
+                updatedFrameEvent['onClickAction'],
+                rawUpdatedFrameEvent['onClickAction']['type'],
+                rawUpdatedFrameEvent['onClickAction']
               );
             }
           }
-          if (["putImage"].includes(this.editingFrameEvent.type)) {
-            updatedFrameEvent["putImage"] = {
-              assetId: Number(rawUpdatedFrameEvent["putImage"]["assetId"]),
-              hoverAssetId: rawUpdatedFrameEvent["putImage"]["hoverAssetId"]
-                ? Number(rawUpdatedFrameEvent["putImage"]["hoverAssetId"])
+          if (['putImage'].includes(this.editingFrameEvent.type)) {
+            updatedFrameEvent['putImage'] = {
+              assetId: Number(rawUpdatedFrameEvent['putImage']['assetId']),
+              hoverAssetId: rawUpdatedFrameEvent['putImage']['hoverAssetId']
+                ? Number(rawUpdatedFrameEvent['putImage']['hoverAssetId'])
                 : null,
-              activeAssetId: rawUpdatedFrameEvent["putImage"]["activeAssetId"]
-                ? Number(rawUpdatedFrameEvent["putImage"]["activeAssetId"])
+              activeAssetId: rawUpdatedFrameEvent['putImage']['activeAssetId']
+                ? Number(rawUpdatedFrameEvent['putImage']['activeAssetId'])
                 : null,
             };
           }
-          if (["putText"].includes(this.editingFrameEvent.type)) {
-            updatedFrameEvent["putText"] = {
-              assetId: Number(rawUpdatedFrameEvent["putText"]["assetId"]),
+          if (['putText'].includes(this.editingFrameEvent.type)) {
+            updatedFrameEvent['putText'] = {
+              assetId: Number(rawUpdatedFrameEvent['putText']['assetId']),
             };
           }
-          if (["defineLabel"].includes(this.editingFrameEvent.type)) {
-            updatedFrameEvent["defineLabel"] = {
-              label: rawUpdatedFrameEvent["defineLabel"]["label"],
+          if (['defineLabel'].includes(this.editingFrameEvent.type)) {
+            updatedFrameEvent['defineLabel'] = {
+              label: rawUpdatedFrameEvent['defineLabel']['label'],
             };
           }
           if (
-            ["defineComponentUserFunction"].includes(
+            ['defineComponentUserFunction'].includes(
               this.editingFrameEvent.type
             )
           ) {
-            updatedFrameEvent["defineComponentUserFunction"] = {
-              name: rawUpdatedFrameEvent["defineComponentUserFunction"]["name"],
+            updatedFrameEvent['defineComponentUserFunction'] = {
+              name: rawUpdatedFrameEvent['defineComponentUserFunction']['name'],
               content:
-                rawUpdatedFrameEvent["defineComponentUserFunction"]["content"],
+                rawUpdatedFrameEvent['defineComponentUserFunction']['content'],
             };
           }
 
-          if (["executeAction"].includes(this.editingFrameEvent.type)) {
+          if (['executeAction'].includes(this.editingFrameEvent.type)) {
             const rawUpdatedExecuteAction =
               this.editingFrameEvent.executeAction;
-            const actionType = rawUpdatedExecuteAction["type"];
+            const actionType = rawUpdatedExecuteAction['type'];
             const updatedExecuteAction = {
               type: actionType,
             };
@@ -593,11 +593,11 @@ export function initEditor() {
               rawUpdatedExecuteAction
             );
 
-            if (["stop", "gotoAndPlay"].includes(actionType)) {
-              updatedFrameEvent["frameCount"] = 1;
+            if (['stop', 'gotoAndPlay'].includes(actionType)) {
+              updatedFrameEvent['frameCount'] = 1;
             }
 
-            updatedFrameEvent["executeAction"] = updatedExecuteAction;
+            updatedFrameEvent['executeAction'] = updatedExecuteAction;
           }
 
           if (this.editingTargetFrameEvent) {
@@ -606,7 +606,7 @@ export function initEditor() {
             );
             if (index === -1) {
               return alert(
-                "エラー：入れ替え対象のイベント定義が見つかりません"
+                'エラー：入れ替え対象のイベント定義が見つかりません'
               );
             }
             this.$set(this.frameEvents, index, updatedFrameEvent);
@@ -631,7 +631,7 @@ export function initEditor() {
           width: 640,
           height: 480,
         };
-        this.$set(this.editingFrameEvent, "lastKeyFrame", {
+        this.$set(this.editingFrameEvent, 'lastKeyFrame', {
           layoutOptions,
         });
       },
@@ -641,18 +641,18 @@ export function initEditor() {
         );
       },
       onClickDisableAnimation() {
-        this.$set(this.editingFrameEvent, "lastKeyFrame", undefined);
+        this.$set(this.editingFrameEvent, 'lastKeyFrame', undefined);
       },
       onClickEnableClickAction() {
-        this.$set(this.editingFrameEvent, "onClickAction", {
+        this.$set(this.editingFrameEvent, 'onClickAction', {
           type: null,
         });
       },
       onClickDisableClickAction() {
-        this.$set(this.editingFrameEvent, "onClickAction", undefined);
+        this.$set(this.editingFrameEvent, 'onClickAction', undefined);
       },
       onOnClickActionTypeChanged() {
-        const actionType = this.editingFrameEvent.onClickAction["type"];
+        const actionType = this.editingFrameEvent.onClickAction['type'];
         this.buildAction(this.editingFrameEvent.onClickAction, actionType);
       },
       onChangeFrameCount() {
@@ -663,12 +663,12 @@ export function initEditor() {
       clickAddTextAsset() {
         this.editingTargetAsset = null;
         this.editingAsset = {
-          type: "text",
+          type: 'text',
           name: null,
           text: {
             content: null,
             fontSize: 16,
-            textColor: "#000000",
+            textColor: '#000000',
             padding: 4,
             lineHeight: 24,
           },
@@ -682,29 +682,29 @@ export function initEditor() {
         const fileName = file.name.toLowerCase();
         if (
           !(
-            fileName.endsWith("png") ||
-            fileName.endsWith("jpg") ||
-            fileName.endsWith("jpeg") ||
-            fileName.endsWith("svg") ||
-            fileName.endsWith("webp") ||
-            fileName.endsWith("gif")
+            fileName.endsWith('png') ||
+            fileName.endsWith('jpg') ||
+            fileName.endsWith('jpeg') ||
+            fileName.endsWith('svg') ||
+            fileName.endsWith('webp') ||
+            fileName.endsWith('gif')
           )
         ) {
-          return alert("非対応の形式です");
+          return alert('非対応の形式です');
         }
         const reader = new FileReader();
         reader.onload = () => {
-          if (!this.selectedAsset?.type === "image") {
+          if (!this.selectedAsset?.type === 'image') {
             return;
           }
-          this.$set(this.editingAsset.image, "source", reader.result);
+          this.$set(this.editingAsset.image, 'source', reader.result);
         };
         reader.readAsDataURL(file);
       },
       clickAddImageAsset() {
         this.editingTargetAsset = null;
         this.editingAsset = {
-          type: "image",
+          type: 'image',
           name: null,
           image: {
             content: null,
@@ -718,23 +718,23 @@ export function initEditor() {
         this.editingTargetAsset = this.selectedAsset;
         this.editingAsset = structuredClone(this.selectedAsset);
         if (this.editingAsset?.text?.borderWidth) {
-          this.$set(this.editingAsset.text, "borderEnabled", true);
+          this.$set(this.editingAsset.text, 'borderEnabled', true);
         }
       },
       clickEnableBackgroundColor() {
-        this.$set(this.editingAsset.text, "backgroundColor", "#000000");
+        this.$set(this.editingAsset.text, 'backgroundColor', '#000000');
       },
       clickDisableBackgroundColor() {
-        this.$set(this.editingAsset.text, "backgroundColor", undefined);
+        this.$set(this.editingAsset.text, 'backgroundColor', undefined);
       },
       clickEnableBorder() {
-        this.$set(this.editingAsset.text, "borderEnabled", true);
-        this.$set(this.editingAsset.text, "borderStyle", "solid");
-        this.$set(this.editingAsset.text, "borderWidth", "1");
-        this.$set(this.editingAsset.text, "borderColor", "#000000");
+        this.$set(this.editingAsset.text, 'borderEnabled', true);
+        this.$set(this.editingAsset.text, 'borderStyle', 'solid');
+        this.$set(this.editingAsset.text, 'borderWidth', '1');
+        this.$set(this.editingAsset.text, 'borderColor', '#000000');
       },
       clickDisableBorder() {
-        this.$set(this.editingAsset.text, "borderEnabled", false);
+        this.$set(this.editingAsset.text, 'borderEnabled', false);
       },
       clickDeleteAsset() {
         if (!this.selectedAssetId) {
@@ -747,7 +747,7 @@ export function initEditor() {
           );
           return;
         }
-        if (confirm("選択中のアセットを削除します")) {
+        if (confirm('選択中のアセットを削除します')) {
           this.assetsManager.delete(this.selectedAssetId);
           this.reloadAllAssets();
           this.clearSelected();
@@ -758,35 +758,35 @@ export function initEditor() {
         this.editingAsset = null;
       },
       extractTextAsset(target, source) {
-        this.$set(target, "type", "text");
-        this.$set(target, "name", source.name);
-        this.$set(target.text, "content", source.text.content);
-        this.$set(target.text, "fontSize", Number(source.text.fontSize));
-        this.$set(target.text, "textColor", source.text.textColor);
-        this.$set(target.text, "padding", Number(source.text.padding));
-        this.$set(target.text, "lineHeight", Number(source.text.lineHeight));
-        this.$set(target.text, "backgroundColor", source.text.backgroundColor);
+        this.$set(target, 'type', 'text');
+        this.$set(target, 'name', source.name);
+        this.$set(target.text, 'content', source.text.content);
+        this.$set(target.text, 'fontSize', Number(source.text.fontSize));
+        this.$set(target.text, 'textColor', source.text.textColor);
+        this.$set(target.text, 'padding', Number(source.text.padding));
+        this.$set(target.text, 'lineHeight', Number(source.text.lineHeight));
+        this.$set(target.text, 'backgroundColor', source.text.backgroundColor);
         if (source.text.borderEnabled) {
           this.$set(
             target.text,
-            "borderWidth",
+            'borderWidth',
             Number(source.text.borderWidth)
           );
-          this.$set(target.text, "borderStyle", source.text.borderStyle);
-          this.$set(target.text, "borderColor", source.text.borderColor);
+          this.$set(target.text, 'borderStyle', source.text.borderStyle);
+          this.$set(target.text, 'borderColor', source.text.borderColor);
         }
       },
       extractImageAsset(target, source) {
-        this.$set(target, "type", "image");
-        this.$set(target, "name", source.name);
-        this.$set(target.image, "source", source.image.source);
+        this.$set(target, 'type', 'image');
+        this.$set(target, 'name', source.name);
+        this.$set(target.image, 'source', source.image.source);
       },
       onSubmitTextAsset() {
         if (this.editingTargetAsset) {
           this.extractTextAsset(this.editingTargetAsset, this.editingAsset);
           this.selectAsset(this.selectedAssetId);
         } else {
-          const newAsset = { text: {} };
+          const newAsset = {text: {}};
           this.extractTextAsset(newAsset, this.editingAsset);
           const newId = this.assetsManager.add(newAsset);
           this.reloadAllAssets();
@@ -801,7 +801,7 @@ export function initEditor() {
           this.extractImageAsset(this.editingTargetAsset, this.editingAsset);
           this.selectAsset(this.selectedAssetId);
         } else {
-          const newAsset = { image: {} };
+          const newAsset = {image: {}};
           this.extractImageAsset(newAsset, this.editingAsset);
           const newId = this.assetsManager.add(newAsset);
           this.reloadAllAssets();
@@ -819,7 +819,7 @@ export function initEditor() {
         this.allIdToAsset = this.assetsManager.allIdToAsset();
       },
       checkAssetReference(assetId) {
-        return this.frameEvents.find((frameEvent) => {
+        return this.frameEvents.find(frameEvent => {
           if (frameEvent.putText?.assetId === assetId) {
             return true;
           }
@@ -852,13 +852,13 @@ export function initEditor() {
       },
       downloadWorkspace() {
         const data = {
-          app: "parahtml",
+          app: 'parahtml',
           version: 1,
           workspace: this.generatWorkspaceJson(),
         };
 
-        const blob = new Blob([JSON.stringify(data, null, "  ")], {
-          type: "application/json",
+        const blob = new Blob([JSON.stringify(data, null, '  ')], {
+          type: 'application/json',
         });
         this.downloadUrl = URL.createObjectURL(blob);
       },
@@ -868,37 +868,37 @@ export function initEditor() {
           return;
         }
         const fileName = file.name.toLowerCase();
-        if (!fileName.endsWith("json")) {
-          return alert("非対応の形式です");
+        if (!fileName.endsWith('json')) {
+          return alert('非対応の形式です');
         }
         const reader = new FileReader();
         reader.onload = () => {
           const json = JSON.parse(reader.result);
-          if (json["app"] !== "parahtml") {
-            alert("非対応の形式です");
+          if (json['app'] !== 'parahtml') {
+            alert('非対応の形式です');
           }
-          this.loadWorkspace(json["workspace"]);
+          this.loadWorkspace(json['workspace']);
           this.importingWorkspace = false;
         };
         reader.readAsText(file);
       },
       checkScript(scriptContent) {
         try {
-          new Function("context", "args", scriptContent);
-          alert("構文エラーはありません");
+          new Function('context', 'args', scriptContent);
+          alert('構文エラーはありません');
         } catch (e) {
           alert(`エラー：${e}`);
         }
       },
       calcImageSize() {
         const imageSource = this.assetsManager.find(
-          this.editingFrameEvent["putImage"]?.assetId
+          this.editingFrameEvent['putImage']?.assetId
         )?.image?.source;
         if (!imageSource) {
-          alert("画像が取得できませんでした");
+          alert('画像が取得できませんでした');
         }
-        return new Promise((resolver) => {
-          const imageElement = document.createElement("img");
+        return new Promise(resolver => {
+          const imageElement = document.createElement('img');
           imageElement.src = imageSource;
           imageElement.onload = function () {
             resolver([imageElement.naturalWidth, imageElement.naturalHeight]);
@@ -915,7 +915,7 @@ export function initEditor() {
           const width = (Number(height) / size[1]) * size[0];
           this.$set(
             this.editingFrameEvent.layoutOptions,
-            "width",
+            'width',
             Math.round(width)
           );
         }
@@ -930,7 +930,7 @@ export function initEditor() {
           const height = (Number(width) / size[0]) * size[1];
           this.$set(
             this.editingFrameEvent.layoutOptions,
-            "height",
+            'height',
             Math.round(height)
           );
         }
@@ -944,30 +944,34 @@ export function initEditor() {
         return this.assetsManager.find(this.selectedAssetId);
       },
       modalEventPreviewAvailable() {
-        return ["putImage", "putText"].includes(this.editingFrameEvent?.type);
+        return ['putImage', 'putText'].includes(this.editingFrameEvent?.type);
       },
       selectedEventPreviewAvailable() {
-        return ["putImage", "putText"].includes(this.selectedFrameEvent?.type);
+        return ['putImage', 'putText'].includes(this.selectedFrameEvent?.type);
       },
       textAssetIds() {
         return Object.keys(this.allIdToAsset).filter(
-          (assetId) => this.allIdToAsset[assetId]["type"] === "text"
+          assetId => this.allIdToAsset[assetId]['type'] === 'text'
         );
       },
       imageAssetIds() {
         return Object.keys(this.allIdToAsset).filter(
-          (assetId) => this.allIdToAsset[assetId]["type"] === "image"
+          assetId => this.allIdToAsset[assetId]['type'] === 'image'
         );
       },
       allLabelNames() {
         return this.frameEvents
-          .map((event) => event["defineLabel"] && event["defineLabel"]["label"])
-          .filter((item) => item);
+          .map(event => event['defineLabel'] && event['defineLabel']['label'])
+          .filter(item => item);
       },
       allUserFunctionNames() {
         return this.frameEvents
-          .map((event) => event["defineComponentUserFunction"] && event["defineComponentUserFunction"]["name"])
-          .filter((item) => item);
+          .map(
+            event =>
+              event['defineComponentUserFunction'] &&
+              event['defineComponentUserFunction']['name']
+          )
+          .filter(item => item);
       },
     },
     data: {

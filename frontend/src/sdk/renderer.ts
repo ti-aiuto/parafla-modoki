@@ -37,7 +37,7 @@ export class Renderer {
 
     // TODO: 列挙順がdepth順になっていることを保証する
     Object.keys(this.depthToLayerWrapper).forEach(depth => {
-      if (!depthToLayer.hasOwnProperty(depth)) {
+      if (!depthToLayer[depth] === undefined) {
         this.removeLayer(Number(depth)); // なくなってたら消す
       }
     });
