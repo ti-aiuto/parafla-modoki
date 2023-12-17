@@ -1,9 +1,10 @@
-import { AbstractFrameEvent } from "./abstract-frame-event";
+import {AbstractFrameEvent} from './abstract-frame-event';
 
-export interface DefineComponentUserFunctionFrameEvent extends AbstractFrameEvent {
+export interface DefineComponentUserFunctionFrameEvent
+  extends AbstractFrameEvent {
   type: 'defineComponentUserFunction';
   defineComponentUserFunction: {
     name: string;
     content: string;
-  }
+  };
 }

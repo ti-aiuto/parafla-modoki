@@ -1,11 +1,11 @@
-import { ScreenLayer } from "./screen/screen-layer";
+import {ScreenLayer} from './screen/screen-layer';
 
 export class ScreenObjectsManager {
-  depthToLayer: { [key in string]: ScreenLayer } = {};
+  depthToLayer: {[key in string]: ScreenLayer} = {};
 
   eraseLayers(depths: number[] | 'all'[]) {
     if (depths[0] === 'all') {
-      Object.keys(this.depthToLayer).forEach((eachDepth) => {
+      Object.keys(this.depthToLayer).forEach(eachDepth => {
         delete this.depthToLayer[eachDepth];
       });
     } else {
@@ -13,19 +13,19 @@ export class ScreenObjectsManager {
         delete this.depthToLayer[eachDepth];
       });
     }
-  };
+  }
 
   findLayersByDepths(depths: number[] | 'all'[]) {
     const result: ScreenLayer[] = [];
     if (depths[0] === 'all') {
-      Object.keys(this.depthToLayer).forEach((eachDepth) => {
+      Object.keys(this.depthToLayer).forEach(eachDepth => {
         const layer = this.depthToLayer[eachDepth];
         if (layer) {
           result.push(layer);
         }
       });
     } else {
-      depths.forEach((eachDepth) => {
+      depths.forEach(eachDepth => {
         const layer = this.depthToLayer[eachDepth];
         if (layer) {
           result.push(layer);
@@ -33,5 +33,5 @@ export class ScreenObjectsManager {
       });
     }
     return result;
-  };
+  }
 }

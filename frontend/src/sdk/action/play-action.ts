@@ -1,4 +1,4 @@
-import { AbstractAction } from "./abstract-action";
+import {AbstractAction} from './abstract-action';
 
 export interface PlayAction extends AbstractAction {
   type: 'play';

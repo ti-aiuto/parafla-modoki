@@ -1,7 +1,7 @@
-import { TextAssetContent } from "../asset/text-asset-content";
-import { AbstractScreenObject } from "./abstract-screen-object";
+import {TextAssetContent} from '../asset/text-asset-content';
+import {AbstractScreenObject} from './abstract-screen-object';
 
 export interface TextScreenObject extends AbstractScreenObject {
-  type: "text";
+  type: 'text';
   text: TextAssetContent;
 }

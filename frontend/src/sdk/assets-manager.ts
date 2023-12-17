@@ -1,11 +1,11 @@
-import { Asset } from "./asset/asset";
-import { ImageAsset } from "./asset/image-asset";
-import { TextAsset } from "./asset/text-asset";
+import {Asset} from './asset/asset';
+import {ImageAsset} from './asset/image-asset';
+import {TextAsset} from './asset/text-asset';
 
 export class AssetsManager {
-  items: { [key in string]: Asset };
+  items: {[key in string]: Asset};
 
-  constructor(initialItems: { [key in string]: Asset } = {}) {
+  constructor(initialItems: {[key in string]: Asset} = {}) {
     this.items = initialItems;
   }
 
@@ -56,7 +56,7 @@ export class AssetsManager {
     if (Object.keys(this.items).length) {
       maxId = Math.max.apply(
         null,
-        Object.keys(this.items).map((key) => Number(key))
+        Object.keys(this.items).map(key => Number(key))
       );
     }
     const newId = maxId + 1;

@@ -1,4 +1,4 @@
-import { TextAssetContent } from "./text-asset-content";
+import {TextAssetContent} from './text-asset-content';
 
 export interface TextAsset extends AbstractAsset {
   type: 'text';

@@ -1,4 +1,4 @@
-import { ImageAssetContent } from "./image-asset-content";
+import {ImageAssetContent} from './image-asset-content';
 
 export interface ImageAsset extends AbstractAsset {
   type: 'image';

@@ -1,10 +1,10 @@
-import { AssetsManager } from "./sdk/assets-manager";
-import { Compiler } from "./sdk/compiler";
-import { Component } from "./sdk/component";
-import { ObjectBuilder } from "./sdk/object-builder";
-import { Renderer } from "./sdk/renderer";
-import { RootController } from "./sdk/root-controller";
-import { ScreenObjectsManager } from "./sdk/screen-object-manager";
+import {AssetsManager} from './sdk/assets-manager';
+import {Compiler} from './sdk/compiler';
+import {Component} from './sdk/component';
+import {ObjectBuilder} from './sdk/object-builder';
+import {Renderer} from './sdk/renderer';
+import {RootController} from './sdk/root-controller';
+import {ScreenObjectsManager} from './sdk/screen-object-manager';
 
 // import "core-js/stable";
 // import Vue from "vue";

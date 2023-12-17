@@ -1,4 +1,4 @@
-import { AbstractPutObjectFrameEvent } from "./abstract-put-object-frame-event";
+import {AbstractPutObjectFrameEvent} from './abstract-put-object-frame-event';
 
 export interface PutImageFrameEvent extends AbstractPutObjectFrameEvent {
   type: 'putImage';
@@ -6,5 +6,5 @@ export interface PutImageFrameEvent extends AbstractPutObjectFrameEvent {
     assetId: number;
     hoverAssetId: number;
     activeAssetId: number;
-  }
+  };
 }

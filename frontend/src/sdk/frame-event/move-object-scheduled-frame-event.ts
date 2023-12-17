@@ -1,8 +1,9 @@
-import { AbstractScheduledFrameEvent } from "./abstract-scheduled-frame-event";
-import { LayoutOptions } from "./layout-options";
+import {AbstractScheduledFrameEvent} from './abstract-scheduled-frame-event';
+import {LayoutOptions} from './layout-options';
 
-export interface MoveObjectScheduledFrameEvent extends AbstractScheduledFrameEvent {
-  type: 'moveObject',
+export interface MoveObjectScheduledFrameEvent
+  extends AbstractScheduledFrameEvent {
+  type: 'moveObject';
   moveObject: {
     frameNumberInEvent: number;
     frameCount: number;
@@ -10,6 +11,6 @@ export interface MoveObjectScheduledFrameEvent extends AbstractScheduledFrameEve
     layoutOptions: LayoutOptions;
     lastKeyFrame: {
       layoutOptions: LayoutOptions;
-    }
-  }
+    };
+  };
 }

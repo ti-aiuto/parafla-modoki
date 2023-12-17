@@ -1,18 +1,18 @@
-const { VueLoaderPlugin } = require("vue-loader");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const {VueLoaderPlugin} = require('vue-loader');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 
 const main = {
   entry: {
-    editor: "./src/editor/editor.ts",
-    preview: "./src/preview/preview.ts",
+    editor: './src/editor/editor.ts',
+    preview: './src/preview/preview.ts',
   },
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "application-[name]-[chunkhash].js",
-    assetModuleFilename: "[name]-[hash][ext]",
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'application-[name]-[chunkhash].js',
+    assetModuleFilename: '[name]-[hash][ext]',
   },
   module: {
     rules: [
@@ -20,7 +20,7 @@ const main = {
         test: /\.ts$/,
         use: [
           {
-            loader: "ts-loader",
+            loader: 'ts-loader',
             options: {
               appendTsSuffixTo: [/\.vue$/],
             },
@@ -29,17 +29,17 @@ const main = {
       },
       {
         test: /\.vue$/,
-        loader: "vue-loader",
+        loader: 'vue-loader',
       },
       {
         test: /\.scss$/,
         use: [
           MiniCssExtractPlugin.loader,
-          "css-loader",
+          'css-loader',
           {
-            loader: "sass-loader",
+            loader: 'sass-loader',
             options: {
-              implementation: require("sass"),
+              implementation: require('sass'),
               sassOptions: {
                 fiber: false,
               },
@@ -53,28 +53,28 @@ const main = {
   plugins: [
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({
-      filename: "application-[chunkhash].css",
+      filename: 'application-[chunkhash].css',
     }),
     new HtmlWebpackPlugin({
-      filename: "editor.html",
-      chunks: ["editor"],
-      template: "./src/editor/editor.html",
+      filename: 'editor.html',
+      chunks: ['editor'],
+      template: './src/editor/editor.html',
     }),
     new HtmlWebpackPlugin({
-      filename: "preview.html",
-      chunks: ["preview"],
-      template: "./src/preview/preview.html",
+      filename: 'preview.html',
+      chunks: ['preview'],
+      template: './src/preview/preview.html',
     }),
     new CleanWebpackPlugin(),
   ],
   resolve: {
     alias: {
-      vue$: "vue/dist/vue.esm.js",
-      "@": path.resolve(__dirname, "./src/"),
+      vue$: 'vue/dist/vue.esm.js',
+      '@': path.resolve(__dirname, './src/'),
     },
-    extensions: [".ts", ".js"],
+    extensions: ['.ts', '.js'],
   },
-  target: ["web", "es5"],
+  target: ['web', 'es5'],
 };
 
 module.exports = main;

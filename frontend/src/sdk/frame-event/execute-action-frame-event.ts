@@ -1,7 +1,7 @@
-import { AbstractFrameEvent } from "./abstract-frame-event";
-import { Action } from "../action/action";
+import {AbstractFrameEvent} from './abstract-frame-event';
+import {Action} from '../action/action';
 
 export interface ExecuteActionFrameEvent extends AbstractFrameEvent {
-  type: 'executeAction',
+  type: 'executeAction';
   executeAction: Action;
 }

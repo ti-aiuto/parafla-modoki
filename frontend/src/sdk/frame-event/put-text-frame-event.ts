@@ -1,8 +1,8 @@
-import { AbstractPutObjectFrameEvent } from "./abstract-put-object-frame-event";
+import {AbstractPutObjectFrameEvent} from './abstract-put-object-frame-event';
 
 export interface PutTextFrameEvent extends AbstractPutObjectFrameEvent {
-  type: 'putText',
+  type: 'putText';
   putText: {
     assetId: number;
-  }
+  };
 }

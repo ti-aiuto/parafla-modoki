@@ -1,4 +1,4 @@
-import { ImageAssetContent } from "../asset/image-asset-content";
+import {ImageAssetContent} from '../asset/image-asset-content';
 
 export interface ButtonImageWithAssetContent {
   image: ImageAssetContent;
