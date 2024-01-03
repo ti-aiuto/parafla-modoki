@@ -98,7 +98,7 @@ export class ObjectBuilder {
       }
     } else {
       if (targetElement.innerHTML !== text.content) {
-        targetElement.innerHTML = text.content; // XSS
+        targetElement.innerHTML = text.content; // TODO: XSS, htmlEnabledの考慮
       }
     }
     // 全部デフォルト値を持った上で上書きしたほうがいい
@@ -125,6 +125,9 @@ export class ObjectBuilder {
     }
     if (text.lineHeight) {
       targetElement.style.lineHeight = `${text.lineHeight}px`;
+    }
+    if (text.align) {
+      targetElement.style.textAlign = text.align;
     }
 
     targetElement.style.boxSizing = 'border-box';
