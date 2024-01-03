@@ -779,6 +779,14 @@ export function initEditor() {
           );
           this.$set(target.text, 'borderStyle', source.text.borderStyle);
           this.$set(target.text, 'borderColor', source.text.borderColor);
+        } else {
+          this.$set(
+            target.text,
+            'borderWidth',
+            undefined
+          );
+          this.$set(target.text, 'borderStyle', undefined);
+          this.$set(target.text, 'borderColor', undefined);
         }
       },
       extractImageAsset(target, source) {
