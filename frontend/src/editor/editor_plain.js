@@ -849,7 +849,7 @@ export function initEditor() {
       generatWorkspaceJson() {
         return {
           frameEvents: this.frameEvents,
-          allIdToAsset: this.allIdToAsset,
+          allIdToAsset: this.assetsManager.allIdToAsset(),
           settings: {
             width: 640,
             height: 480,
