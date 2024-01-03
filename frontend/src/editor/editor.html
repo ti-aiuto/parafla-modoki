@@ -88,13 +88,39 @@
                   </div>  
                 </div>
 
-                <div class="form_row">
-                  <div class="form_row_label">
-                    文字色
+                
+                <div class="form_columns_row">
+                  <div class="form_row">
+                    <div class="form_row_label">
+                      文字色
+                    </div>
+
+                    <input type="color" class="form_input_color" v-model="editingAsset.text.textColor" required>
+                  </div>
+                  
+                  <div class="form_row">
+                    <div class="form_row_label">
+                      行揃え
+                    </div>
+
+                    <select class="form_select" v-model="editingAsset.text.align" required>
+                      <option value="left">left</option>
+                      <option value="center">center</option>
+                      <option value="right">right</option>
+                    </select>
                   </div>
 
-                  <input type="color" class="form_input_color" v-model="editingAsset.text.textColor" required>
-                </div>  
+                  <div class="form_row">
+                    <div class="form_row_label">
+                      HTML
+                    </div>
+
+                    <select class="form_select" v-model="editingAsset.text.htmlEnabled" required>
+                      <option value="true">有効</option>
+                      <option value="false">無効</option>
+                    </select>
+                  </div>
+                </div>
 
                 <div class="form_columns_row">
                   <div class="form_row">
