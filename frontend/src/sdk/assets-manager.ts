@@ -63,4 +63,8 @@ export class AssetsManager {
     this.items[newId] = object;
     return `${newId}`;
   }
+
+  update(id: number, object: Asset) {
+    this.items[id] = object;
+  }
 }

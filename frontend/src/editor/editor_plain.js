@@ -789,6 +789,7 @@ export function initEditor() {
       onSubmitTextAsset() {
         if (this.editingTargetAsset) {
           this.extractTextAsset(this.editingTargetAsset, this.editingAsset);
+          this.assetsManager.update(this.selectedAssetId, this.editingTargetAsset);
           this.selectAsset(this.selectedAssetId);
         } else {
           const newAsset = {text: {}};
@@ -804,6 +805,7 @@ export function initEditor() {
       onSubmitImageAsset() {
         if (this.editingTargetAsset) {
           this.extractImageAsset(this.editingTargetAsset, this.editingAsset);
+          this.assetsManager.update(this.selectedAssetId, this.editingTargetAsset);
           this.selectAsset(this.selectedAssetId);
         } else {
           const newAsset = {image: {}};
