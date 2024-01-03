@@ -1,6 +1,7 @@
 export interface TextAssetContent {
   content: string;
   fontSize: number;
+  fontFamily?: string;
   textColor: string;
   padding: number;
   lineHeight: number;

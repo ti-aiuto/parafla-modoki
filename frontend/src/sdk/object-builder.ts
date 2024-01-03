@@ -129,6 +129,9 @@ export class ObjectBuilder {
     if (text.align) {
       targetElement.style.textAlign = text.align;
     }
+    if (text.fontFamily) {
+      targetElement.style.fontFamily = text.fontFamily;
+    }
 
     targetElement.style.boxSizing = 'border-box';
   }

@@ -769,6 +769,7 @@ export function initEditor() {
         this.$set(target.text, 'lineHeight', Number(source.text.lineHeight));
         this.$set(target.text, 'backgroundColor', source.text.backgroundColor);
         this.$set(target.text, 'align', source.text.align);
+        this.$set(target.text, 'fontFamily', source.text.fontFamily);
         this.$set(target.text, 'htmlEnabled', source.text.htmlEnabled === 'true');
         if (source.text.borderEnabled) {
           this.$set(
