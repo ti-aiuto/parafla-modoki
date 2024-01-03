@@ -9,4 +9,6 @@ export interface TextAssetContent {
   borderWidth?: number;
   borderStyle?: string;
   borderColor?: string;
+  align?: string;
+  htmlEnabled?: boolean;
 }

@@ -671,6 +671,8 @@ export function initEditor() {
             textColor: '#000000',
             padding: 4,
             lineHeight: 24,
+            align: 'left',
+            htmlEnabled: false,
           },
         };
       },
@@ -766,6 +768,8 @@ export function initEditor() {
         this.$set(target.text, 'padding', Number(source.text.padding));
         this.$set(target.text, 'lineHeight', Number(source.text.lineHeight));
         this.$set(target.text, 'backgroundColor', source.text.backgroundColor);
+        this.$set(target.text, 'align', source.text.align);
+        this.$set(target.text, 'htmlEnabled', source.text.htmlEnabled);
         if (source.text.borderEnabled) {
           this.$set(
             target.text,
