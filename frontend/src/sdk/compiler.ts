@@ -225,7 +225,11 @@ export class Compiler {
         labelToFrameCount[label] = currentFrameCount;
       }
 
-      currentFrameCount += frameEvent.frameCount;
+      if (frameEvent.type === 'rollback') {
+        currentFrameCount -= frameEvent.frameCount;
+      } else {
+        currentFrameCount += frameEvent.frameCount;
+      }
     });
     return labelToFrameCount;
   }
