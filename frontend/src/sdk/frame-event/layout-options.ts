@@ -3,4 +3,5 @@ export interface LayoutOptions {
   y: number;
   width: number;
   height: number;
+  rotate?: number;
 }
