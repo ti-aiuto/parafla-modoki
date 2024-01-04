@@ -454,6 +454,8 @@ export function initEditor() {
           width: 640,
           height: 480,
           rotate: 0,
+          rotateOriginX: 0,
+          rotateOriginY: 0,
         };
 
         if (frameEventType === 'defineLabel') {
@@ -517,6 +519,8 @@ export function initEditor() {
           width: Number(layoutOptions.width),
           height: Number(layoutOptions.height),
           rotate: layoutOptions.rotate ? Number(layoutOptions.rotate) : undefined,
+          rotateOriginX: layoutOptions.rotateOriginX ? Number(layoutOptions.rotateOriginX) : undefined,
+          rotateOriginY: layoutOptions.rotateOriginY ? Number(layoutOptions.rotateOriginY) : undefined,
         };
       },
       onSubmit() {
