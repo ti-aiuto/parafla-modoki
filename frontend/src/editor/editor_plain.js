@@ -532,7 +532,7 @@ export function initEditor() {
               rawUpdatedFrameEvent['lastKeyFrame']
             ) {
               updatedFrameEvent['lastKeyFrame'] = structuredClone(
-                rawUpdatedFrameEvent['lastKeyFrame']['layoutOptions']
+                rawUpdatedFrameEvent['lastKeyFrame']
               );
             }
 
