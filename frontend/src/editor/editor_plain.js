@@ -7,6 +7,7 @@ import Vue from 'vue';
 export function initEditor() {
   const eventTypeTable = {
     defineLabel: 'ラベルを定義',
+    rollback: 'ロールバック',
     defineComponentUserFunction: 'ユーザ関数を定義',
     executeAction: 'アクションを実行',
     putImage: '画像を配置',
@@ -521,7 +522,7 @@ export function initEditor() {
             frameCount: 0,
           };
           if (
-            ['putImage', 'putObject', 'doNothing'].includes(
+            ['putImage', 'putObject', 'doNothing', 'rollback'].includes(
               this.editingFrameEvent.type
             )
           ) {

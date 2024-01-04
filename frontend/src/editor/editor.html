@@ -260,6 +260,7 @@
                     <option value="putText">テキストを配置</option>
                     <option value="executeAction">アクションを実行</option>
                     <option value="doNothing">何もしない</option>
+                    <option value="rollback" required>ロールバック</option>
                     <option value="defineComponentUserFunction">ユーザ関数を定義</option>
                   </select>
                 </div>
@@ -448,7 +449,7 @@
                   </div>
                 </template>
                                 
-                <template v-if="editingFrameEvent.type === 'doNothing'">
+                <template v-if="editingFrameEvent.type === 'doNothing' || editingFrameEvent.type === 'rollback'">
                   <div class="form_columns_row">
                     <div class="form_row">
                       <div class="form_row_label">
@@ -534,15 +535,6 @@
                       <button class="form_button" type="button" @click="onClickCentering">左右中央</button>
                     </div>
                   </div>
-                  
-                  <div class="form_columns_row" v-if="editingFrameEvent.type === 'putImage'">
-                    <div class="form_row">
-                      <button class="form_button" type="button" @click="onClickAutoWidth">高さに合わせて幅を設定</button>
-                    </div>
-                    <div class="form_row">
-                      <button class="form_button" type="button" @click="onClickAutoHeight">幅に合わせて高さを設定</button>
-                    </div>
-                  </div>
 
                   <template v-if="editingFrameEvent.lastKeyFrame && editingFrameEvent.lastKeyFrame.layoutOptions">
                     <div class="form_columns_row">
@@ -579,6 +571,15 @@
                       </div>
                     </div>
                   </template>
+
+                  <div class="form_columns_row" v-if="editingFrameEvent.type === 'putImage'">
+                    <div class="form_row">
+                      <button class="form_button" type="button" @click="onClickAutoWidth">高さに合わせて幅を設定</button>
+                    </div>
+                    <div class="form_row">
+                      <button class="form_button" type="button" @click="onClickAutoHeight">幅に合わせて高さを設定</button>
+                    </div>
+                  </div>
 
                   <div class="form_columns_row">
                     <div class="form_row">
