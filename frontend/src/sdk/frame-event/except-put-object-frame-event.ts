@@ -2,9 +2,11 @@ import {DefineComponentUserFunctionFrameEvent} from './define-component-user-fun
 import {ExecuteActionFrameEvent} from './execute-action-frame-event';
 import {DefineLabelFrameEvent} from './define-label-frame-event';
 import {DoNothingFrameEvent} from './do-nothing-frame-event';
+import { RollbackFrameEvent } from './rollback-frame-event';
 
 export type ExceptPutObjectFrameEvent =
   | ExecuteActionFrameEvent
   | DefineComponentUserFunctionFrameEvent
   | DefineLabelFrameEvent
-  | DoNothingFrameEvent;
+  | DoNothingFrameEvent
+  | RollbackFrameEvent;

@@ -104,6 +104,13 @@ export class Compiler {
       }
 
       const defaultObjectId = 'auto' + Math.random();
+      if (frameEvent.type === 'rollback') {
+        if (currentFrameCount < frameEvent.frameCount) {
+          throw new Error('ロールバックの移動量が不正');
+        }
+        currentFrameCount -= frameEvent.frameCount;
+        return;
+      }
       if (frameEvent.frameCount <= 1) {
         if (frameEvent.type === 'putText') {
           absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push({
