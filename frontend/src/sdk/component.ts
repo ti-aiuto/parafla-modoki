@@ -369,6 +369,18 @@ export class Component {
       this.screenObjectsManager.depthToLayer
     ).find(layer => layer.object.fullObjectId === fullObjectId);
     if (currentObject) {
+      let rotate = undefined;
+      if (
+        typeof before.rotate === 'number' &&
+        typeof after.rotate === 'number'
+      ) {
+        rotate =
+          before.rotate +
+          (scheduledFrameEvent.moveObject.frameNumberInEvent *
+            (after.rotate - before.rotate)) /
+            scheduledFrameEvent.moveObject.frameCount;
+      }
+
       currentObject.object.layoutOptions = {
         x:
           before.x +
@@ -390,6 +402,7 @@ export class Component {
           (scheduledFrameEvent.moveObject.frameNumberInEvent *
             (after.height - before.height)) /
             scheduledFrameEvent.moveObject.frameCount,
+        rotate: rotate,
       };
     }
 

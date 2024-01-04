@@ -13,6 +13,9 @@ export class ObjectBuilder {
     element.style.height = `${layoutOptions.height}px`;
     element.style.left = `${layoutOptions.x}px`;
     element.style.top = `${layoutOptions.y}px`;
+    if (layoutOptions.rotate) {
+      element.style.transform= `rotate(${layoutOptions.rotate}deg)`;
+    }
   }
 
   setCommonOptions(
