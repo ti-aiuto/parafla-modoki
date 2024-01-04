@@ -35,7 +35,11 @@ export function initEditor() {
         let frameNumber = 1;
         this.frameEvents.forEach(frameEvent => {
           frameEvent['scheduledFrameNumber'] = frameNumber;
-          frameNumber += frameEvent.frameCount;
+          if (frameEvent.type === 'rollback') {
+            frameNumber -= frameEvent.frameCount;
+          } else {
+            frameNumber += frameEvent.frameCount;
+          }
         });
       },
       loadWorkspace(workspace) {
@@ -522,7 +526,7 @@ export function initEditor() {
             frameCount: 0,
           };
           if (
-            ['putImage', 'putObject', 'doNothing', 'rollback'].includes(
+            ['putImage', 'putText', 'doNothing', 'rollback'].includes(
               this.editingFrameEvent.type
             )
           ) {
