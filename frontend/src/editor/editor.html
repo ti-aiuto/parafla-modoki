@@ -532,6 +532,27 @@
                     </div>
                   </template>
 
+                  
+                  <template v-if="editingFrameEvent.layoutOptions">
+                    <div class="form_columns_row">
+                      <div class="form_row">
+                        <div class="form_row_label">
+                          回転基準X
+                        </div>
+      
+                        <input type="number" class="form_input_number" v-model="editingFrameEvent.layoutOptions.rotateOriginX" required>
+                      </div>
+                      
+                      <div class="form_row">
+                        <div class="form_row_label">
+                          回転基準Y
+                        </div>
+      
+                        <input type="number" class="form_input_number" v-model="editingFrameEvent.layoutOptions.rotateOriginY" required>
+                      </div>
+                    </div>
+                  </template>
+
                   <div class="form_columns_row">
                     <div class="form_row">
                       <button class="form_button" type="button" @click="onClickEnableAnimation" :disabled="editingFrameEvent.lastKeyFrame || editingFrameEvent.frameCount < 2">アニメーションを有効化</button>
