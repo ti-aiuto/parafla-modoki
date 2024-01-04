@@ -504,6 +504,14 @@ export function initEditor() {
 
         this.buildAction(this.editingFrameEvent.executeAction, actionType);
       },
+      formatLayoutOptions(layoutOptions) {
+        return {
+          x: Number(layoutOptions.x),
+          y: Number(layoutOptions.y),
+          width: Number(layoutOptions.width),
+          height: Number(layoutOptions.height),
+        };
+      },
       onSubmit() {
         setTimeout(() => {
           // TODO: ここでいらないプロパティを消せるとよい
@@ -524,16 +532,18 @@ export function initEditor() {
           if (['putImage', 'putText'].includes(this.editingFrameEvent.type)) {
             updatedFrameEvent['depth'] = Number(rawUpdatedFrameEvent['depth']);
             updatedFrameEvent['objectId'] = rawUpdatedFrameEvent['objectId'];
-            updatedFrameEvent['layoutOptions'] = structuredClone(
+            updatedFrameEvent['layoutOptions'] = this.formatLayoutOptions(
               rawUpdatedFrameEvent['layoutOptions']
             );
             if (
               Number(rawUpdatedFrameEvent['frameCount']) >= 2 &&
               rawUpdatedFrameEvent['lastKeyFrame']
             ) {
-              updatedFrameEvent['lastKeyFrame'] = structuredClone(
-                rawUpdatedFrameEvent['lastKeyFrame']
-              );
+              updatedFrameEvent['lastKeyFrame'] = {
+                layoutOptions: this.formatLayoutOptions(
+                  rawUpdatedFrameEvent['lastKeyFrame']['layoutOptions']
+                ),
+              };
             }
 
             if (rawUpdatedFrameEvent['onClickAction']) {
@@ -770,7 +780,11 @@ export function initEditor() {
         this.$set(target.text, 'backgroundColor', source.text.backgroundColor);
         this.$set(target.text, 'align', source.text.align);
         this.$set(target.text, 'fontFamily', source.text.fontFamily);
-        this.$set(target.text, 'htmlEnabled', source.text.htmlEnabled === 'true');
+        this.$set(
+          target.text,
+          'htmlEnabled',
+          source.text.htmlEnabled === 'true'
+        );
         if (source.text.borderEnabled) {
           this.$set(
             target.text,
@@ -780,11 +794,7 @@ export function initEditor() {
           this.$set(target.text, 'borderStyle', source.text.borderStyle);
           this.$set(target.text, 'borderColor', source.text.borderColor);
         } else {
-          this.$set(
-            target.text,
-            'borderWidth',
-            undefined
-          );
+          this.$set(target.text, 'borderWidth', undefined);
           this.$set(target.text, 'borderStyle', undefined);
           this.$set(target.text, 'borderColor', undefined);
         }
@@ -797,7 +807,10 @@ export function initEditor() {
       onSubmitTextAsset() {
         if (this.editingTargetAsset) {
           this.extractTextAsset(this.editingTargetAsset, this.editingAsset);
-          this.assetsManager.update(this.selectedAssetId, this.editingTargetAsset);
+          this.assetsManager.update(
+            this.selectedAssetId,
+            this.editingTargetAsset
+          );
           this.selectAsset(this.selectedAssetId);
         } else {
           const newAsset = {text: {}};
@@ -813,7 +826,10 @@ export function initEditor() {
       onSubmitImageAsset() {
         if (this.editingTargetAsset) {
           this.extractImageAsset(this.editingTargetAsset, this.editingAsset);
-          this.assetsManager.update(this.selectedAssetId, this.editingTargetAsset);
+          this.assetsManager.update(
+            this.selectedAssetId,
+            this.editingTargetAsset
+          );
           this.selectAsset(this.selectedAssetId);
         } else {
           const newAsset = {image: {}};
