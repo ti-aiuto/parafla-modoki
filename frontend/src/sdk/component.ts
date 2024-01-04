@@ -403,6 +403,8 @@ export class Component {
             (after.height - before.height)) /
             scheduledFrameEvent.moveObject.frameCount,
         rotate: rotate,
+        rotateOriginX: before.rotateOriginX ?? 0,
+        rotateOriginY: before.rotateOriginY ?? 0,
       };
     }
 

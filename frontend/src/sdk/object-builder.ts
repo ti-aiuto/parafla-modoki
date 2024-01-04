@@ -14,7 +14,13 @@ export class ObjectBuilder {
     element.style.left = `${layoutOptions.x}px`;
     element.style.top = `${layoutOptions.y}px`;
     if (layoutOptions.rotate) {
-      element.style.transform= `rotate(${layoutOptions.rotate}deg)`;
+      element.style.transform = `rotate(${layoutOptions.rotate}deg)`;
+    }
+    if (
+      typeof layoutOptions.rotateOriginX !== 'undefined' &&
+      typeof layoutOptions.rotateOriginY !== 'undefined'
+    ) {
+      element.style.transformOrigin = `${layoutOptions.rotateOriginX}px ${layoutOptions.rotateOriginY}px`;
     }
   }
 

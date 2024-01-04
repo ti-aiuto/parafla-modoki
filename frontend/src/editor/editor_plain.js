@@ -518,9 +518,9 @@ export function initEditor() {
           y: Number(layoutOptions.y),
           width: Number(layoutOptions.width),
           height: Number(layoutOptions.height),
-          rotate: layoutOptions.rotate ? Number(layoutOptions.rotate) : undefined,
-          rotateOriginX: layoutOptions.rotateOriginX ? Number(layoutOptions.rotateOriginX) : undefined,
-          rotateOriginY: layoutOptions.rotateOriginY ? Number(layoutOptions.rotateOriginY) : undefined,
+          rotate: Number(layoutOptions.rotate ?? 0),
+          rotateOriginX: Number(layoutOptions.rotateOriginX ?? 0),
+          rotateOriginY: Number(layoutOptions.rotateOriginY ?? 0),
         };
       },
       onSubmit() {
