@@ -6,4 +6,5 @@ export interface LayoutOptions {
   rotate?: number;
   rotateOriginX?: number;
   rotateOriginY?: number;
+  opacity?: number;
 }
