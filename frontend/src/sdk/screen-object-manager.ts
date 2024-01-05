@@ -35,7 +35,7 @@ export class ScreenObjectsManager {
     return result;
   }
 
-  findObjectByFullObjectId(fullObjectId: string) {
+  findLayerByFullObjectId(fullObjectId: string) {
     return Object.values(this.depthToLayer).find(
       layer => layer.object.fullObjectId === fullObjectId
     );

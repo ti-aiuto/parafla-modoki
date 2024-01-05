@@ -1,6 +1,7 @@
 import {Action} from './action/action';
 import {ComponentSource} from './component-source';
 import {FirstFrameScheduledFrameEvent} from './frame-event/first-frame-scheduled-frame-event';
+import {LayoutOptions} from './frame-event/layout-options';
 import {MoveObjectScheduledFrameEvent} from './frame-event/move-object-scheduled-frame-event';
 import {Renderer} from './renderer';
 import {RootController} from './root-controller';
@@ -193,6 +194,24 @@ export class Component {
       getTextValue(objectId: string) {
         return that.getTextValue(objectId);
       },
+      getLayoutOptions(objectId: string) {
+        const layer = that.screenObjectsManager.findLayerByFullObjectId(
+          that.generateFullObjectId(objectId)
+        );
+        const layoutOptions = layer?.object?.layoutOptions;
+        if (layoutOptions) {
+          return structuredClone(layoutOptions);
+        }
+        return undefined;
+      },
+      setLayoutOptions(objectId: string, layoutOptions: LayoutOptions) {
+        const layer = that.screenObjectsManager.findLayerByFullObjectId(
+          that.generateFullObjectId(objectId)
+        );
+        if (layer) {
+          layer.object.layoutOptions = structuredClone(layoutOptions);
+        }
+      },
       startUserTimer(
         listenerId: string,
         componentUserFunctionName: string,
@@ -365,9 +384,9 @@ export class Component {
     const fullObjectId = this.generateFullObjectId(
       scheduledFrameEvent.moveObject.objectId
     );
-    const currentObject =
-      this.screenObjectsManager.findObjectByFullObjectId(fullObjectId);
-    if (currentObject) {
+    const currentLayer =
+      this.screenObjectsManager.findLayerByFullObjectId(fullObjectId);
+    if (currentLayer) {
       let rotate = undefined;
       if (
         typeof before.rotate === 'number' &&
@@ -380,7 +399,7 @@ export class Component {
             scheduledFrameEvent.moveObject.frameCount;
       }
 
-      currentObject.object.layoutOptions = {
+      currentLayer.object.layoutOptions = {
         x:
           before.x +
           (scheduledFrameEvent.moveObject.frameNumberInEvent *
