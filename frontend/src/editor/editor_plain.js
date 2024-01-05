@@ -660,12 +660,9 @@ export function initEditor() {
         }, UI_WAIT_TIME);
       },
       onClickEnableAnimation() {
-        const layoutOptions = {
-          x: 0,
-          y: 0,
-          width: 640,
-          height: 480,
-        };
+        const layoutOptions = this.formatLayoutOptions(
+          this.editingFrameEvent['layoutOptions']
+        )
         this.$set(this.editingFrameEvent, 'lastKeyFrame', {
           layoutOptions,
         });
