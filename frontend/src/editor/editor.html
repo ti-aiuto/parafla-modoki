@@ -859,6 +859,7 @@
           <button @click="clickRemoveFrameEvent" :disabled="!selectedFrameEvent">削除</button>
           <button @click="clickMoveDownwardFrameEvent" :disabled="!selectedFrameEvent || !canMoveDownwardSelected()">下に移動</button>
           <button @click="clickMoveUpwardFrameEvent" :disabled="!selectedFrameEvent || !canMoveUpwardSelected()">上に移動</button>
+          <button @click="clickCopyFrameEvent" :disabled="!selectedFrameEvent">コピー</button>
           <button @click="openPreview()">プレビュー</button>
           アセット：
           <button @click="clickAddTextAsset()" @click="clickAddTextAsset">テキストを追加</button>

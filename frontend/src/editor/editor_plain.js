@@ -325,6 +325,18 @@ export function initEditor() {
           this.selectedFrameEvent
         );
       },
+      clickCopyFrameEvent() {
+        if (!this.selectedFrameEvent) {
+          return;
+        }
+        const selectedIndex = this.frameEvents.indexOf(this.selectedFrameEvent);
+        this.frameEvents.splice(
+          selectedIndex,
+          0,
+          structuredClone(this.selectedFrameEvent)
+        );
+        this.updateFrameNumbers();
+      },
       buildAction(actionObject, actionType) {
         if (actionType === 'play') {
           this.$set(actionObject, 'play', {});
