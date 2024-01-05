@@ -289,6 +289,7 @@ export function initEditor() {
             this.selectedFrameEvent
           );
           this.$set(this.frameEvents, selectedIndex, prevItem);
+          this.updateFrameNumbers();
         }, UI_WAIT_TIME);
       },
       clickMoveDownwardFrameEvent() {
@@ -306,6 +307,7 @@ export function initEditor() {
             this.selectedFrameEvent
           );
           this.$set(this.frameEvents, selectedIndex, nextItem);
+          this.updateFrameNumbers();
         }, UI_WAIT_TIME);
       },
       canMoveUpwardSelected() {
