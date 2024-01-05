@@ -331,8 +331,10 @@
                       <div class="form_row_label">
                         ユーザ関数名
                       </div>
-    
-                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.callComponentUserFunction.name" required>
+
+                      <select class="form_input_text" v-model="editingFrameEvent.executeAction.callComponentUserFunction.name" required>
+                        <option v-for="labelName in allUserFunctionNames" :value="labelName">{{labelName}}</option>
+                      </select>
                     </div>  
                   </template>
 
@@ -693,8 +695,10 @@
                         <div class="form_row_label">
                           ユーザ関数名
                         </div>
-      
-                        <input type="text" class="form_input_text" v-model="editingFrameEvent.onClickAction.callComponentUserFunction.name" required>
+
+                        <select class="form_input_text" v-model="editingFrameEvent.onClickAction.callComponentUserFunction.name" required>
+                          <option v-for="labelName in allUserFunctionNames" :value="labelName">{{labelName}}</option>
+                        </select>
                       </div>  
                     </template>
   
