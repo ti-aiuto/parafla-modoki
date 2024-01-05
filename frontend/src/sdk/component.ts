@@ -365,9 +365,8 @@ export class Component {
     const fullObjectId = this.generateFullObjectId(
       scheduledFrameEvent.moveObject.objectId
     );
-    const currentObject = Object.values(
-      this.screenObjectsManager.depthToLayer
-    ).find(layer => layer.object.fullObjectId === fullObjectId);
+    const currentObject =
+      this.screenObjectsManager.findObjectByFullObjectId(fullObjectId);
     if (currentObject) {
       let rotate = undefined;
       if (

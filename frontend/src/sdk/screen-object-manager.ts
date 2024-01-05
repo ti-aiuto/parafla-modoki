@@ -34,4 +34,10 @@ export class ScreenObjectsManager {
     }
     return result;
   }
+
+  findObjectByFullObjectId(fullObjectId: string) {
+    return Object.values(this.depthToLayer).find(
+      layer => layer.object.fullObjectId === fullObjectId
+    );
+  }
 }
