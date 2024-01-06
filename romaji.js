@@ -144,11 +144,11 @@ const kanaRomajiTable = {
   ぎゅ: ["gyu"],
   ぎぇ: ["gye"],
   ぎょ: ["gyo"],
-  じゃ: ["zya", "jya", "ja"],
+  じゃ: ["ja", "zya", "jya"],
   じぃ: ["zyi", "jyi"],
-  じゅ: ["zyu", "jyu", "ju"],
-  じぇ: ["zye", "jye", "je"],
-  じょ: ["zyo", "jo"],
+  じゅ: ["ju", "zyu", "jyu"],
+  じぇ: ["je", "zye", "jye"],
+  じょ: ["jo", "zyo"],
   ぢゃ: ["dya"],
   ぢぃ: ["dyi"],
   ぢゅ: ["dyu"],
@@ -229,7 +229,7 @@ function convertRomaji(word) {
         if (partsResult.length) {
           const appendedPartsResult = [];
           for (let j of partsResult) {
-            for (let i of kanaRomajiTable['っ'].concat(j[0])) {
+            for (let i of [j[0]].concat(kanaRomajiTable['っ'])) {
                 appendedPartsResult.push(`${i}${j}`);
               }
           }
