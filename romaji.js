@@ -105,11 +105,11 @@ const kanaRomajiTable = {
   しゅ: ["syu", "shu"],
   しぇ: ["sye", "she"],
   しょ: ["syo", "sho"],
-  ちゃ: ["tya"],
+  ちゃ: ["tya", "cha"],
   ちぃ: ["tyi"],
-  ちゅ: ["tyu"],
+  ちゅ: ["tyu", "chu"],
   ちぇ: ["tye"],
-  ちょ: ["tyo"],
+  ちょ: ["tyo", "cho"],
   にゃ: ["nya"],
   にぃ: ["nyi"],
   にゅ: ["nyu"],
@@ -148,7 +148,7 @@ const kanaRomajiTable = {
   じぃ: ["zyi", "jyi"],
   じゅ: ["zyu", "jyu", "ju"],
   じぇ: ["zye", "jye", "je"],
-  じょ: ["zyo", "jo", "jo"],
+  じょ: ["zyo", "jo"],
   ぢゃ: ["dya"],
   ぢぃ: ["dyi"],
   ぢゅ: ["dyu"],
@@ -196,18 +196,17 @@ function convertRomaji(word) {
   const result = [];
   let cursor = 0;
   while (cursor < word.length) {
-    const part3 = word.substr(cursor, 3);
     const part2 = word.substr(cursor, 2);
     const part1 = word.substr(cursor, 1);
     if (
-      part3.match(/^ん/) &&
-      !part3.match(/^ん$/) &&
-      !part3.match(/^ん[なにぬねの]/)
+      part2.match(/^ん/) &&
+      !part2.match(/^ん$/) &&
+      !part2.match(/^ん[なにぬねの]/)
     ) {
-      const innerPart3 = word.substr(cursor + 1, 3);
+      // 「ん」でnが1回でも良いパターン
       const innerPart2 = word.substr(cursor + 1, 2);
       const innerPart1 = word.substr(cursor + 1, 1);
-      for (let part of [innerPart3, innerPart2, innerPart1]) {
+      for (let part of [innerPart2, innerPart1]) {
         const partsResult = convertRomajiPart(part);
         if (partsResult.length) {
           const appendedPartsResult = [];
@@ -221,10 +220,26 @@ function convertRomaji(word) {
           break;
         }
       }
-    } else if (false) {
+    } else if (part2.match(/^っ/) && !part2.match(/^っ$/)) {
       // っから始まるパターン
+      const innerPart2 = word.substr(cursor + 1, 2);
+      const innerPart1 = word.substr(cursor + 1, 1);
+      for (let part of [innerPart2, innerPart1]) {
+        const partsResult = convertRomajiPart(part);
+        if (partsResult.length) {
+          const appendedPartsResult = [];
+          for (let j of partsResult) {
+            for (let i of kanaRomajiTable['っ'].concat(j[0])) {
+                appendedPartsResult.push(`${i}${j}`);
+              }
+          }
+          result.push({ chunk: `っ${part}`, candidates: appendedPartsResult });
+          cursor += part.length + 1;
+          break;
+        }
+      }
     } else {
-      for (let part of [part3, part2, part1]) {
+      for (let part of [part2, part1]) {
         const partsResult = convertRomajiPart(part);
         if (partsResult.length) {
           result.push({ chunk: part, candidates: partsResult });
@@ -241,7 +256,8 @@ console.log(convertRomaji("しんねん"));
 console.log(convertRomaji("しんにゅう"));
 console.log(convertRomaji("ししゃ"));
 console.log(convertRomaji("しんしゃ"));
-// console.log(convertRomaji("たっせい"));
-// console.log(convertRomaji("じっしゃ"));
-// console.log(convertRomaji("しゃちょう"));
-// console.log(convertRomaji("しゃしん"));
+console.log(convertRomaji("たっせい"));
+console.log(convertRomaji("じっしゃ"));
+console.log(convertRomaji("しゃちょう"));
+console.log(convertRomaji("しゃしん"));
+console.log(convertRomaji("からばっじょ"));
