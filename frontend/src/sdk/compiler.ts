@@ -240,8 +240,9 @@ export class Compiler {
     const componentUserFunctions: ComponentUserFunctions = {};
     frameEvents.forEach(frameEvent => {
       if (frameEvent.type === 'defineComponentUserFunction') {
-        componentUserFunctions[frameEvent.defineComponentUserFunction.name] =
-          frameEvent.defineComponentUserFunction.content;
+        const content = frameEvent.defineComponentUserFunction.content;
+        const func = new Function('context', 'args', content);
+        componentUserFunctions[frameEvent.defineComponentUserFunction.name] = func;
       }
     });
     return componentUserFunctions;

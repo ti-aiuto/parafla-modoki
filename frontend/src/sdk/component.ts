@@ -19,7 +19,7 @@ export class Component {
   lastFrameCount: number;
   rootInstanceId = 'rootDummyHoge';
   componentUserVariables: {[key in string]: any} = {};
-  componentUserFunctions: {[key in string]: string} = {};
+  componentUserFunctions: {[key in string]: Function} = {};
 
   constructor(
     rootController: RootController,
@@ -98,8 +98,7 @@ export class Component {
 
   callComponentUserFunction(name: string, args: object = {}) {
     console.debug('ユーザ関数呼び出し', name, args);
-    const content = this.componentUserFunctions[name];
-    const func = new Function('context', 'args', content);
+    const func = this.componentUserFunctions[name];
     const context = this.createContext();
     return func(context, args || {});
   }

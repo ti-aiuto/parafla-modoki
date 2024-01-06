@@ -1,7 +1,7 @@
 import {ScheduledFrameEvent} from './frame-event/scheduled-frame-event';
 
 export type ScheduledEvents = {[key in string]: ScheduledFrameEvent[]};
-export type ComponentUserFunctions = {[key in string]: string};
+export type ComponentUserFunctions = {[key in string]: Function};
 export type LabelToFrameNumber = {[key in string]: number};
 
 export class ComponentSource {
