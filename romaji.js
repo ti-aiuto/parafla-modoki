@@ -10,7 +10,7 @@ const kanaRomajiTable = {
     'け': ['ke'], 
     'こ': ['ko', 'co'], 
     'さ': ['sa'], 
-    'し': ['si'], 
+    'し': ['si', 'shi'], 
     'す': ['su'], 
     'せ': ['se'], 
     'そ': ['so'], 
@@ -100,11 +100,11 @@ const kanaRomajiTable = {
     'きゅ': ['kyu'], 
     'きぇ': ['kye'], 
     'きょ': ['kyo'], 
-    'しゃ': ['sya'], 
+    'しゃ': ['sya', 'sha'], 
     'しぃ': ['syi'], 
-    'しゅ': ['syu'], 
-    'しぇ': ['sye'], 
-    'しょ': ['syo'], 
+    'しゅ': ['syu', 'shu'], 
+    'しぇ': ['sye', 'she'], 
+    'しょ': ['syo', 'sho'], 
     'ちゃ': ['tya'], 
     'ちぃ': ['tyi'], 
     'ちゅ': ['tyu'], 
@@ -162,6 +162,20 @@ const kanaRomajiTable = {
 };
 
 function convertRomaji(word) {
+    const result = [];
+    let cursor = 0;
+    while(cursor < word.length) {
+        const parts = [word.substr(cursor, 3), word.substr(cursor, 2), word.substr(cursor, 1)];
+        for(let part of parts) {
+            const romajis = kanaRomajiTable[part];
+            if (romajis) {
+                result.push(structuredClone(romajis));
+                cursor += part.length;
+                break;
+            }
+        }
+    }
+    return result;
 }
 
 console.log(convertRomaji('しんねん'));
