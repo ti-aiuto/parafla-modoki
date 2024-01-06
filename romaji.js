@@ -181,13 +181,13 @@ function convertRomajiPart(part) {
         }
         return structuredClone(charRomaji);
       });
-      for(let i of partCharRomaji[0]) {
+      for (let i of partCharRomaji[0]) {
         for (let j of partCharRomaji[1]) {
-            partCharProduct.push(`${i}${j}`);
+          partCharProduct.push(`${i}${j}`);
         }
       }
     }
-    return structuredClone([romajis.concat(partCharProduct)]);
+    return structuredClone(romajis.concat(partCharProduct));
   }
   return [];
 }
@@ -200,7 +200,6 @@ function convertRomaji(word) {
     const part2 = word.substr(cursor, 2);
     const part1 = word.substr(cursor, 1);
     if (
-      false &&
       part3.match(/^ん/) &&
       !part3.match(/^ん$/) &&
       !part3.match(/^ん[なにぬねの]/)
@@ -211,8 +210,13 @@ function convertRomaji(word) {
       for (let part of [innerPart3, innerPart2, innerPart1]) {
         const partsResult = convertRomajiPart(part);
         if (partsResult.length) {
-          result.push([["n", "nn"]]);
-          result.push(partsResult.map((partRomaji) => partRomaji));
+          const appendedPartsResult = [];
+          for (let i of ["n", "nn"]) {
+            for (let j of partsResult) {
+              appendedPartsResult.push(`${i}${j}`);
+            }
+          }
+          result.push({ chunk: `ん${part}`, candidates: appendedPartsResult });
           cursor += part.length + 1;
           break;
         }
@@ -233,27 +237,10 @@ function convertRomaji(word) {
   return JSON.stringify(result, null, "  ");
 }
 
-// 出力イメージ
-// [ { chunk: 'し', candidates: ['si', 'shi'] },
-//   { chunk: 'ん', candidates: ['n', 'nn'] },
-//   { chunk: 'しゃ', candidates: ['sya', 'sha', 'sixya', 'shixya', 'silya', 'sshilya'] } ]
-// [ { chunk: 'し', candidates: ['si', 'shi'] },
-//   { chunk: 'っ', candidates: ['xtu', 'xtu', 'p'] },
-//   { chunk: 'ぷ', candidates: ['pu'] } ]
-
-// [ { chunk: 'し', candidates: [['si', 'shi']] },
-//   { chunk: 'んしゃ', candidates: [['n', 'nn'], ['sya', 'sha', 'sixya', 'shixya', 'silya', 'sshilya']] },
-// [ { chunk: 'し', candidates: ['si', 'shi'] },
-//   { chunk: 'っぷ', candidates: [['xtu', 'xtu', 'p'], ['pu']] },
-// [ { chunk: 'し', candidates: [['si', 'shi']] },
-//   { chunk: 'ん', candidates: [['nn'],
-//   { chunk: 'ね', candidates: [['ne'],
-//   { chunk: 'ん', candidates: [['nn'] },
-
 console.log(convertRomaji("しんねん"));
-// console.log(convertRomaji("しんにゅう"));
+console.log(convertRomaji("しんにゅう"));
 console.log(convertRomaji("ししゃ"));
-// console.log(convertRomaji("しんしゃ"));
+console.log(convertRomaji("しんしゃ"));
 // console.log(convertRomaji("たっせい"));
 // console.log(convertRomaji("じっしゃ"));
 // console.log(convertRomaji("しゃちょう"));
