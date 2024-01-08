@@ -59,6 +59,7 @@ export class RootController {
     componentUserFunctionName: string,
     interval: number
   ) {
+    this.clearUserTimer(listenerId);
     let tickCount = 0;
     const timerId = setInterval(() => {
       tickCount++;

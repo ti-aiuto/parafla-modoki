@@ -31,7 +31,7 @@ function load(data: any) {
     Object.keys(vars).forEach(key => {
       text += key;
       text += '\t\t';
-      text += JSON.parse(vars[key]);
+      text += vars[key];
       text += '\n';
     });
     (document.getElementById('userVars') as any).value = text;
