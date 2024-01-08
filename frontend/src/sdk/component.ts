@@ -278,6 +278,7 @@ export class Component {
         action.unregisterGlobalKeydownListener.listenerId
       );
     }
+    this.render();
   }
 
   setTextValue(objectId: string, value: string) {
