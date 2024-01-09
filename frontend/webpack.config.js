@@ -70,7 +70,7 @@ const main = {
       filename: 'player.html',
       chunks: ['player'],
       template: './src/player/player.html',
-      workspace_json: require('./dist/workspace.json'),
+      workspace_json: require('./workspace_json/workspace.json'),
     }),
     new CleanWebpackPlugin(),
   ],
