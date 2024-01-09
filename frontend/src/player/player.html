@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript">window.workspace_json = <%= JSON.stringify(htmlWebpackPlugin.options.workspace_json) %></script>
+    <title>プレイヤー</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .variables {
+      }
+      .layout {
+        display: flex;
+      }
+      .player_root {
+        flex-shrink: 0;
+      }
+      .debugger {
+        padding: 12px;
+      }
+
+      #userVars {
+        width: 400px;
+        height: 300px;
+        font-size: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <div id="root" class="player_root"></div>
+      <div class="debugger">
+        <div>フレーム: <input id="frame" type="text" /></div>
+
+        <div>ユーザ変数</div>
+        <textarea id="userVars"></textarea>
+      </div>
+    </div>
+  </body>
+</html>

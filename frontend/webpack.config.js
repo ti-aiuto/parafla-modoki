@@ -8,6 +8,7 @@ const main = {
   entry: {
     editor: './src/editor/editor.ts',
     preview: './src/preview/preview.ts',
+    player: './src/player/player.ts',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -64,6 +65,12 @@ const main = {
       filename: 'preview.html',
       chunks: ['preview'],
       template: './src/preview/preview.html',
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'player.html',
+      chunks: ['player'],
+      template: './src/player/player.html',
+      workspace_json: require('./dist/workspace.json'),
     }),
     new CleanWebpackPlugin(),
   ],
