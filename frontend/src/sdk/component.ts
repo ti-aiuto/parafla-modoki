@@ -210,6 +210,7 @@ export class Component {
         if (layer) {
           layer.object.layoutOptions = structuredClone(layoutOptions);
         }
+        that.render();
       },
       startUserTimer(
         listenerId: string,
