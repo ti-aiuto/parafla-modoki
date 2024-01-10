@@ -69,8 +69,10 @@ const main = {
     }),
     new HtmlWebpackPlugin({
       filename: 'player.html',
-      chunks: ['player'],
+      chunks: ['player_program', 'player'],
+      chunksSortMode: 'manual',
       template: './src/player/player.html',
+      scriptLoading: 'blocking',
     }),
     new CleanWebpackPlugin(),
   ],
