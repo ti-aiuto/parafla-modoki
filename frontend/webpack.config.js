@@ -9,6 +9,7 @@ const main = {
     editor: './src/editor/editor.ts',
     preview: './src/preview/preview.ts',
     player: './src/player/player.ts',
+    player_program: './src/player/player_program.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -70,7 +71,6 @@ const main = {
       filename: 'player.html',
       chunks: ['player'],
       template: './src/player/player.html',
-      workspace_json: require('./workspace_json/workspace.json'),
     }),
     new CleanWebpackPlugin(),
   ],

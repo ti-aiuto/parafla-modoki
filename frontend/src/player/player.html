@@ -1,42 +1,29 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <script type="text/javascript">window.workspace_json = <%= JSON.stringify(htmlWebpackPlugin.options.workspace_json) %></script>
-    <meta charset="utf-8">
-    <title>プレイヤー</title>
+    <script src="player_program.js"></script>
+    <meta charset="utf-8" />
+    <title>でぃべ打</title>
     <style>
+      body {
+        background-color: #fafafa;
+      }
       * {
         margin: 0;
         padding: 0;
       }
-      .variables {
-      }
       .layout {
         display: flex;
+        justify-content: center;
       }
       .player_root {
-        flex-shrink: 0;
-      }
-      .debugger {
-        padding: 12px;
-      }
-
-      #userVars {
-        width: 400px;
-        height: 300px;
-        font-size: 10px;
+        margin: 12px;
       }
     </style>
   </head>
   <body>
     <div class="layout">
       <div id="root" class="player_root"></div>
-      <div class="debugger">
-        <div>フレーム: <input id="frame" type="text" /></div>
-
-        <div>ユーザ変数</div>
-        <textarea id="userVars"></textarea>
-      </div>
     </div>
   </body>
 </html>
