@@ -68,7 +68,7 @@ const main = {
       template: './src/preview/preview.html',
     }),
     new HtmlWebpackPlugin({
-      filename: 'player.html',
+      filename: 'index.html',
       chunks: ['player_program', 'player'],
       chunksSortMode: 'manual',
       template: './src/player/player.html',
