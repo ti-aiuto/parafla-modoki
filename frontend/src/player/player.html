@@ -26,6 +26,9 @@
       .info a {
         color: #aaa;
       }
+      .debugger{
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -40,6 +43,12 @@
             >バグ報告・出題内容の提案などお問い合わせはこちら</a
           >
         </div>
+        <div class="debugger">
+          <div>フレーム: <input id="frame" type="text" /></div>
+  
+          <div>ユーザ変数</div>
+          <textarea id="userVars"></textarea>
+        </div>  
       </div>
     </div>
   </body>
