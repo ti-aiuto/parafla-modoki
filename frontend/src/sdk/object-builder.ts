@@ -1,6 +1,7 @@
 import {TextAssetContent} from './asset/text-asset-content';
 import {ButtonImageWithAssetContent} from './frame-event/button-image-with-asset-content';
 import {LayoutOptions} from './frame-event/layout-options';
+import { AudioScreenObject } from './screen/audio-screen-object';
 import {ScreenObject} from './screen/screen-object';
 
 export class ObjectBuilder {
@@ -62,6 +63,7 @@ export class ObjectBuilder {
       targetElement.src = object.audio.content.source;
       targetElement.volume = object.audio.volume;
       targetElement.autoplay = object.audio.autoplay;
+      targetElement.dataset.playId = object.audio.playId;
       wrapper.appendChild(targetElement);
       return targetElement;
     } else if (object.type === 'text') {
@@ -84,6 +86,17 @@ export class ObjectBuilder {
       }
     } else {
       throw new Error(`想定外のオブジェクト: ${object}`);
+    }
+  }
+
+  playAudio(
+    targetElement: HTMLAudioElement,
+    object: AudioScreenObject
+  ) {
+    if (targetElement.dataset.playId !== object.audio.playId) {
+      targetElement.dataset.playId = object.audio.playId;
+      targetElement.currentTime = 0;
+      targetElement.play();
     }
   }
 

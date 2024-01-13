@@ -72,6 +72,8 @@ export class Renderer {
         );
         if (object.type === 'text') {
           this.objectBuilder.updateText(existingTargetElement, object.text);
+        } else if (object.type === 'audio') {
+          this.objectBuilder.playAudio(existingTargetElement as HTMLAudioElement, object);
         }
       } else {
         console.debug('cache無し');

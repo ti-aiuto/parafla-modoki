@@ -288,7 +288,11 @@ export class Component {
   }
 
   playAudio(objectId: string) {
-    alert(`${objectId}を再生`);
+    const currentLayer =
+      this.screenObjectsManager.findLayerByFullObjectId(this.generateFullObjectId(objectId));
+    if (currentLayer?.object?.type === 'audio'){
+      currentLayer.object.audio.playId = `play${Date.now()}`;
+    }
   }
 
   setTextValue(objectId: string, value: string) {
@@ -307,6 +311,7 @@ export class Component {
       );
     });
 
+    // TODO: ここはfindByLayerにできるかも
     for (const {object} of Object.values(
       this.screenObjectsManager.depthToLayer
     )) {
@@ -330,7 +335,8 @@ export class Component {
       if (!object) {
         continue;
       }
-      if (object.fullObjectId === this.generateFullObjectId(objectId)) {
+    // TODO: ここはfindByLayerにできるかも
+    if (object.fullObjectId === this.generateFullObjectId(objectId)) {
         if (object.type === 'text') {
           return object.text.content;
         } else {
@@ -502,6 +508,7 @@ export class Component {
             content: event.putAttachedAudio.content,
             volume: event.putAttachedAudio.volume,
             autoplay: event.putAttachedAudio.autoplay,
+            playId: 'first'
           },
         },
       };
