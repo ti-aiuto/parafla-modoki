@@ -105,9 +105,13 @@ export class Compiler {
     return {
       ...frameEvent,
       type: 'putAttachedAudio',
-      putAttachedAudio: this.assetsManager.findAudioAssetOrThrow(
-        frameEvent['putAudio'].assetId
-      ).audio,
+      putAttachedAudio: {
+        content: this.assetsManager.findAudioAssetOrThrow(
+          frameEvent['putAudio'].assetId
+        ).audio,
+        volume: frameEvent.putAudio.volume,
+        autoplay: frameEvent.putAudio.autoplay,
+      },
     };
   }
 
