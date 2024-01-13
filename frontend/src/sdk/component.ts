@@ -348,7 +348,9 @@ export class Component {
   }
 
   render() {
-    this.renderer.render();
+    setTimeout(() => {
+      this.renderer.render();
+    }, 0);
   }
 
   tick() {
