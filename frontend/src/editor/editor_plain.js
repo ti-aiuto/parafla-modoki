@@ -12,6 +12,7 @@ export function initEditor() {
     executeAction: 'アクションを実行',
     putImage: '画像を配置',
     putText: 'テキストを配置',
+    putAudio: '音声を配置',
     doNothing: '何もしない',
   };
   const actionTypeTable = {
@@ -21,6 +22,7 @@ export function initEditor() {
     gotoAndPlay: '指定ラベルにジャンプして再生',
     setTextValue: 'テキストの表示内容を更新',
     executeScript: 'スクリプトを実行',
+    playAudio: '音声を再生',
     callComponentUserFunction: 'ユーザ関数を呼び出し',
     registerGlobalKeydownListener: 'キー押下リスナーを登録',
     unregisterGlobalKeydownListener: 'キー押下リスナーを登録解除',

@@ -4,6 +4,7 @@ import {EraseLayersAction} from './erase-layers-aciton';
 import {ExecuteScriptAction} from './execute-script-action';
 import {GotoAndPlayAction} from './goto-and-play-action';
 import {PlayAction} from './play-action';
+import {PlayAudioAction} from './play-audio-action';
 import {RegisterGlobalKeydownListenerAction} from './register-global-keydown-listener-action';
 import {SetTextValueAction} from './set-text-value-action';
 import {StartUserTimerAction} from './start-user-timer-action';
@@ -16,6 +17,7 @@ export type Action =
   | PlayAction
   | StopAction
   | SetTextValueAction
+  | PlayAudioAction
   | ExecuteScriptAction
   | CallComponentUserFunctionAction
   | StartUserTimerAction
