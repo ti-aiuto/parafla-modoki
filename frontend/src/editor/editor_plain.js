@@ -641,12 +641,12 @@ export function initEditor() {
               assetId: Number(rawUpdatedFrameEvent['putText']['assetId']),
             };
           }
-          if (['putAuido'].includes(this.editingFrameEvent.type)) {
-            updatedFrameEvent['putAuido'] = {
-              assetId: Number(rawUpdatedFrameEvent['putAuido']['assetId']),
-              volume: Number(rawUpdatedFrameEvent['putAuido']['volume']),
+          if (['putAudio'].includes(this.editingFrameEvent.type)) {
+            updatedFrameEvent['putAudio'] = {
+              assetId: Number(rawUpdatedFrameEvent['putAudio']['assetId']),
+              volume: Number(rawUpdatedFrameEvent['putAudio']['volume']),
               autoplay:
-                `${rawUpdatedFrameEvent['putAuido']['autoplay']}` === 'true',
+                `${rawUpdatedFrameEvent['putAudio']['autoplay']}` === 'true',
             };
           }
           if (['defineLabel'].includes(this.editingFrameEvent.type)) {
