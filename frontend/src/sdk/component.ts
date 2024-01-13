@@ -187,6 +187,9 @@ export class Component {
       getComponentUserVariable(key: string, defaultValue: any) {
         return that.getComponentUserVariable(key, defaultValue);
       },
+      playAudio(objectId: string) {
+        that.playAudio(objectId);
+      },
       setTextValue(objectId: string, value: string) {
         that.setTextValue(objectId, value);
       },
@@ -254,6 +257,8 @@ export class Component {
         action.setTextValue.objectId,
         action.setTextValue.value
       );
+    } else if (action.type === 'playAudio') {
+      context.playAudio(action.playAudio.objectId);
     } else if (action.type === 'executeScript') {
       context.executeScript(action.executeScript.content);
     } else if (action.type === 'callComponentUserFunction') {
@@ -280,6 +285,10 @@ export class Component {
       );
     }
     this.render();
+  }
+
+  playAudio(objectId: string) {
+    alert(`${objectId}を再生`);
   }
 
   setTextValue(objectId: string, value: string) {
