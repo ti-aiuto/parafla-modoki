@@ -55,6 +55,15 @@ export class ObjectBuilder {
       wrapper.appendChild(targetElement);
       wrapper.appendChild(styleElement);
       return targetElement;
+    } else if (object.type === 'audio') {
+      const targetElement = document.createElement('audio');
+      targetElement.style.display = 'none';
+      this.setCommonOptions(targetElement, object, depth);
+      targetElement.src = object.audio.content.source;
+      targetElement.volume = object.audio.volume;
+      targetElement.autoplay = object.audio.autoplay;
+      wrapper.appendChild(targetElement);
+      return targetElement;
     } else if (object.type === 'text') {
       if (object.text.editable) {
         const targetElement = document.createElement('input');
