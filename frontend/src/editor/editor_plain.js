@@ -27,6 +27,11 @@ export function initEditor() {
     startUserTimer: 'タイマーを開始',
     clearUserTimer: 'タイマーを解除',
   };
+  const assetTypeTable = {
+    image: '画像',
+    text: 'テキスト',
+    audio: '音声',
+  };
 
   new Vue({
     el: '#vue_root',
@@ -105,6 +110,9 @@ export function initEditor() {
         if (row['onClickAction']) {
           return {'background-color': '#FFEEFF'};
         }
+      },
+      assetTypeI18n(assetType) {
+        return assetTypeTable[assetType];
       },
       assetRowStyle(assetId) {
         if (Number(assetId) === Number(this.selectedAssetId)) {
@@ -737,6 +745,28 @@ export function initEditor() {
         };
         reader.readAsDataURL(file);
       },
+      selectAudioFile(event) {
+        const file = event.target.files[0];
+        if (!file) {
+          return;
+        }
+        const fileName = file.name.toLowerCase();
+        if (
+          !(
+            fileName.endsWith('mp3')
+          )
+        ) {
+          return alert('非対応の形式です');
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (!this.selectedAsset?.type === 'audio') {
+            return;
+          }
+          this.$set(this.editingAsset.audio, 'source', reader.result);
+        };
+        reader.readAsDataURL(file);
+      },
       clickAddImageAsset() {
         this.editingTargetAsset = null;
         this.editingAsset = {
@@ -799,7 +829,7 @@ export function initEditor() {
           this.clearSelected();
         }
       },
-      clickCancelEditingTextAsset() {
+      clickCancelEditingAsset() {
         this.editingTargetAsset = null;
         this.editingAsset = null;
       },
@@ -837,6 +867,11 @@ export function initEditor() {
         this.$set(target, 'type', 'image');
         this.$set(target, 'name', source.name);
         this.$set(target.image, 'source', source.image.source);
+      },
+      extractAudioAsset(target, source) {
+        this.$set(target, 'type', 'audio');
+        this.$set(target, 'name', source.name);
+        this.$set(target.audio, 'source', source.audio.source);
       },
       onSubmitTextAsset() {
         if (this.editingTargetAsset) {
@@ -876,7 +911,22 @@ export function initEditor() {
         this.editingTargetAsset = null;
         this.editingAsset = null;
       },
-      clickCancelEditingImageAsset() {
+      onSubmitAudioAsset() {
+        if (this.editingTargetAsset) {
+          this.extractAudioAsset(this.editingTargetAsset, this.editingAsset);
+          this.assetsManager.update(
+            this.selectedAssetId,
+            this.editingTargetAsset
+          );
+          this.selectAsset(this.selectedAssetId);
+        } else {
+          const newAsset = {audio: {}};
+          this.extractAudioAsset(newAsset, this.editingAsset);
+          const newId = this.assetsManager.add(newAsset);
+          this.reloadAllAssets();
+          this.clearSelected();
+          this.selectAsset(newId);
+        }
         this.editingTargetAsset = null;
         this.editingAsset = null;
       },

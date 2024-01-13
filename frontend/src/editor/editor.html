@@ -189,7 +189,7 @@
 
               <div class="modal_bottom_control">
                 <button class="form_button" type="submit">OK</button>
-                <button class="form_button" @click="clickCancelEditingTextAsset" type="button">キャンセル</button>  
+                <button class="form_button" @click="clickCancelEditingAsset" type="button">キャンセル</button>  
               </div>
             </div>
           </form>
@@ -233,7 +233,55 @@
 
               <div class="modal_bottom_control">
                 <button class="form_button" type="submit">OK</button>
-                <button class="form_button" @click="clickCancelEditingImageAsset" type="button">キャンセル</button>  
+                <button class="form_button" @click="clickCancelEditingAsset" type="button">キャンセル</button>  
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="modal edit_text_modal" v-if="editingAsset?.type === 'audio' && editingAsset.audio">
+          <div class="modal_title">音声の編集</div>
+          
+          <form class="modal_content" @submit.prevent="onSubmitAudioAsset">
+            <div class="edit_text_modal_content">
+              <div class="edit_text_modal_form">
+                <div class="form_row">
+                  <div class="form_row_label">
+                    アセット名
+                  </div>
+
+                  <input type="text" class="form_input_text" required v-model="editingAsset.name">
+                </div>  
+
+                <div class="form_row">
+                  <div class="form_row_label">
+                    内容
+                  </div>
+
+                  <div>
+                    <div>
+                      <audio :src="editingAsset.audio.source" controls><br>
+                    </div>
+                      <div>
+                        <input type="text" :value="editingAsset.audio.source" required placeholder="(音声選択で自動入力)">
+                      </div>    
+                  </div>
+                </div>  
+
+                <div class="form_columns_row">
+                  <div class="form_row">
+                    <div class="form_row_label">
+                      音声の変更
+                    </div>
+  
+                    <input type="file" @change="selectAudioFile($event)">
+                  </div>  
+                </div>
+              </div>
+
+              <div class="modal_bottom_control">
+                <button class="form_button" type="submit">OK</button>
+                <button class="form_button" @click="clickCancelEditingAsset" type="button">キャンセル</button>  
               </div>
             </div>
           </form>
@@ -908,7 +956,7 @@
                 <tr v-for="assetId in Object.keys(allIdToAsset)" @click="selectAsset(assetId)" :style="assetRowStyle(assetId)" @dblclick="clickEditAsset">
                   <td class="asset_table_td">{{assetId}}</td>
                   <td class="asset_table_td">{{allIdToAsset[assetId].name}}</td>
-                  <td class="asset_table_td">{{allIdToAsset[assetId].type === 'image' ? '画像' : 'テキスト'}}</td>
+                  <td class="asset_table_td">{{assetTypeI18n(allIdToAsset[assetId].type)}}</td>
                 </tr>    
               </table>
             </div>
