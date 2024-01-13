@@ -326,6 +326,7 @@
                       <option value="stop">停止</option>
                       <option value="gotoAndPlay">指定ラベルへジャンプして再生</option>
                       <option value="setTextValue">テキストの表示内容を更新</option>
+                      <option value="playAudio">音声を再生</option>
                       <option value="executeScript">スクリプトを実行</option>
                       <option value="callComponentUserFunction">ユーザ関数を呼び出し</option>
                       <option value="registerGlobalKeydownListener">キー押下リスナーを登録</option>
@@ -373,6 +374,16 @@
     
                       <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.setTextValue.value">
                     </div>  
+                  </template>
+
+                  <template v-if="editingFrameEvent.executeAction.type === 'playAudio' && editingFrameEvent.executeAction.playAudio">
+                    <div class="form_row">
+                      <div class="form_row_label">
+                        オブジェクトID
+                      </div>
+    
+                      <input type="text" class="form_input_text" v-model="editingFrameEvent.executeAction.playAudio.objectId" required pattern="^\w+$">
+                    </div>
                   </template>
 
                   <template v-if="editingFrameEvent.executeAction.type === 'callComponentUserFunction' && editingFrameEvent.executeAction.callComponentUserFunction">
@@ -698,6 +709,7 @@
                         <option value="stop">停止</option>
                         <option value="gotoAndPlay">指定ラベルへジャンプして再生</option>
                         <option value="setTextValue">テキストの表示内容を更新</option>
+                        <option value="playAudio">音声を再生</option>
                         <option value="executeScript">スクリプトを実行</option>
                         <option value="callComponentUserFunction">ユーザ関数を呼び出し</option>
                         <option value="registerGlobalKeydownListener">キー押下リスナーを登録</option>
@@ -746,7 +758,17 @@
                         <input type="text" class="form_input_text" v-model="editingFrameEvent.onClickAction.setTextValue.value">
                       </div>  
                     </template>
-  
+
+                    <template v-if="editingFrameEvent.onClickAction.type === 'playAudio' && editingFrameEvent.onClickAction.playAudio">
+                      <div class="form_row">
+                        <div class="form_row_label">
+                          オブジェクトID
+                        </div>
+      
+                        <input type="text" class="form_input_text" v-model="editingFrameEvent.onClickAction.playAudio.objectId" required pattern="^\w+$">
+                      </div>
+                    </template>
+                    
                     <template v-if="editingFrameEvent.onClickAction.type === 'callComponentUserFunction' && editingFrameEvent.onClickAction.callComponentUserFunction">
                       <div class="form_row">
                         <div class="form_row_label">

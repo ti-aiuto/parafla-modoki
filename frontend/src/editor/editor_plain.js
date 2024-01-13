@@ -365,6 +365,10 @@ export function initEditor() {
             objectId: null,
             value: null,
           });
+        } else if (actionType === 'playAudio') {
+          this.$set(actionObject, 'playAudio', {
+            objectId: null,
+          });
         } else if (actionType === 'executeScript') {
           this.$set(actionObject, 'executeScript', {
             content: null,
@@ -418,6 +422,10 @@ export function initEditor() {
           updatedExecuteAction['setTextValue'] = {
             objectId: rawUpdatedExecuteAction['setTextValue']['objectId'],
             value: rawUpdatedExecuteAction['setTextValue']['value'],
+          };
+        } else if (actionType === 'playAudio') {
+          updatedExecuteAction['playAudio'] = {
+            objectId: rawUpdatedExecuteAction['playAudio']['objectId'],
           };
         } else if (actionType === 'executeScript') {
           updatedExecuteAction['executeScript'] = {
@@ -560,7 +568,7 @@ export function initEditor() {
             frameCount: 0,
           };
           if (
-            ['putImage', 'putText', 'doNothing', 'rollback'].includes(
+            ['putImage', 'putText', 'putAudio', 'doNothing', 'rollback'].includes(
               this.editingFrameEvent.type
             )
           ) {
@@ -568,7 +576,7 @@ export function initEditor() {
               rawUpdatedFrameEvent['frameCount']
             );
           }
-          if (['putImage', 'putText'].includes(this.editingFrameEvent.type)) {
+          if (['putImage', 'putText', 'putAudio'].includes(this.editingFrameEvent.type)) {
             updatedFrameEvent['depth'] = Number(rawUpdatedFrameEvent['depth']);
             updatedFrameEvent['objectId'] = rawUpdatedFrameEvent['objectId'];
             updatedFrameEvent['layoutOptions'] = this.formatLayoutOptions(
