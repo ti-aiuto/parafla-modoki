@@ -71,7 +71,7 @@ export function initEditor() {
           }
           if (event.objectId) {
             content += `\n(オブジェクトID: ${event.objectId} アセットID: ${
-              event.putImage?.assetId || event.putText?.assetId
+              event.putImage?.assetId || event.putText?.assetId || event.putAudio?.assetId
             })`;
           }
         }
