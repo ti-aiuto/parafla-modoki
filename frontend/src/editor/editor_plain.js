@@ -525,7 +525,11 @@ export function initEditor() {
             structuredClone(layoutOptions)
           );
         } else if (frameEventType === 'putAudio') {
-          this.$set(this.editingFrameEvent, 'putAudio', {assetId: null, volume: 1, autoplay: false});
+          this.$set(this.editingFrameEvent, 'putAudio', {
+            assetId: null,
+            volume: 1,
+            autoplay: false,
+          });
           this.$set(this.editingFrameEvent, 'frameCount', 0);
           this.$set(this.editingFrameEvent, 'depth', 1);
           this.$set(
@@ -577,15 +581,23 @@ export function initEditor() {
             frameCount: 0,
           };
           if (
-            ['putImage', 'putText', 'putAudio', 'doNothing', 'rollback'].includes(
-              this.editingFrameEvent.type
-            )
+            [
+              'putImage',
+              'putText',
+              'putAudio',
+              'doNothing',
+              'rollback',
+            ].includes(this.editingFrameEvent.type)
           ) {
             updatedFrameEvent['frameCount'] = Number(
               rawUpdatedFrameEvent['frameCount']
             );
           }
-          if (['putImage', 'putText', 'putAudio'].includes(this.editingFrameEvent.type)) {
+          if (
+            ['putImage', 'putText', 'putAudio'].includes(
+              this.editingFrameEvent.type
+            )
+          ) {
             updatedFrameEvent['depth'] = Number(rawUpdatedFrameEvent['depth']);
             updatedFrameEvent['objectId'] = rawUpdatedFrameEvent['objectId'];
             updatedFrameEvent['layoutOptions'] = this.formatLayoutOptions(
@@ -627,6 +639,14 @@ export function initEditor() {
           if (['putText'].includes(this.editingFrameEvent.type)) {
             updatedFrameEvent['putText'] = {
               assetId: Number(rawUpdatedFrameEvent['putText']['assetId']),
+            };
+          }
+          if (['putAuido'].includes(this.editingFrameEvent.type)) {
+            updatedFrameEvent['putAuido'] = {
+              assetId: Number(rawUpdatedFrameEvent['putAuido']['assetId']),
+              volume: Number(rawUpdatedFrameEvent['putAuido']['volume']),
+              autoplay:
+                `${rawUpdatedFrameEvent['putAuido']['autoplay']}` === 'true',
             };
           }
           if (['defineLabel'].includes(this.editingFrameEvent.type)) {
@@ -772,11 +792,7 @@ export function initEditor() {
           return;
         }
         const fileName = file.name.toLowerCase();
-        if (
-          !(
-            fileName.endsWith('mp3')
-          )
-        ) {
+        if (!fileName.endsWith('mp3')) {
           return alert('非対応の形式です');
         }
         const reader = new FileReader();
