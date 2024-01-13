@@ -374,7 +374,8 @@ export class Component {
 
         if (
           event.type === 'putAttachedImage' ||
-          event.type === 'putAttachedText'
+          event.type === 'putAttachedText' ||
+          event.type === 'putAttachedAudio'
         ) {
           this.putAttachedObject(scheduledFrameEvent);
         }
@@ -443,7 +444,11 @@ export class Component {
     scheduledFrameEvent: FirstFrameScheduledFrameEvent
   ) {
     const event = scheduledFrameEvent.firstFrame.event;
-    if (event.type !== 'putAttachedImage' && event.type !== 'putAttachedText') {
+    if (
+      event.type !== 'putAttachedImage' &&
+      event.type !== 'putAttachedText' &&
+      event.type !== 'putAttachedAudio'
+    ) {
       throw new Error(`${event}は配置イベントではありません`);
     }
 
@@ -484,6 +489,20 @@ export class Component {
           onClickAction: event['onClickAction'],
           type: 'text',
           text: event.putAttachedText.text,
+        },
+      };
+    } else if (event.type === 'putAttachedAudio') {
+      this.screenObjectsManager.depthToLayer[depth] = {
+        object: {
+          ...objectBase,
+          fullObjectId,
+          layoutOptions: event.layoutOptions,
+          type: 'audio',
+          audio: {
+            content: event.putAttachedAudio.content,
+            volume: event.putAttachedAudio.volume,
+            autoplay: event.putAttachedAudio.autoplay,
+          },
         },
       };
     }
