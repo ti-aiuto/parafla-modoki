@@ -88,6 +88,8 @@ export function initEditor() {
           content += `\n(行先: 「${action['gotoAndPlay']['destination']}」)`;
         } else if (action['type'] === 'setTextValue') {
           content += `\n(対象: ${action['setTextValue']['objectId']})`;
+        } else if (action['type'] === 'playAudio') {
+          content += `\n(対象: ${action['playAudio']['objectId']})`;
         } else if (action['type'] === 'callComponentUserFunction') {
           content += `\n(ユーザ関数名: ${action['callComponentUserFunction']['name']})`;
         } else if (action['type'] === 'registerGlobalKeydownListener') {
