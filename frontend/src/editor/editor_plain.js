@@ -524,6 +524,15 @@ export function initEditor() {
             'layoutOptions',
             structuredClone(layoutOptions)
           );
+        } else if (frameEventType === 'putAudio') {
+          this.$set(this.editingFrameEvent, 'putAudio', {assetId: null});
+          this.$set(this.editingFrameEvent, 'frameCount', 0);
+          this.$set(this.editingFrameEvent, 'depth', 1);
+          this.$set(
+            this.editingFrameEvent,
+            'layoutOptions',
+            structuredClone(layoutOptions)
+          );
         } else if (frameEventType === 'doNothing') {
           this.$set(this.editingFrameEvent, 'doNothing', {});
           this.$set(this.editingFrameEvent, 'frameCount', 1);
