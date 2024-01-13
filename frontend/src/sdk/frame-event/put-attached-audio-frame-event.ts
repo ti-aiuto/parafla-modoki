@@ -3,6 +3,6 @@ import {AbstractPutObjectFrameEvent} from './abstract-put-object-frame-event';
 
 export interface PutAttachedAudioFrameEvent
   extends AbstractPutObjectFrameEvent {
-  type: 'putAttacheduAdio';
+  type: 'putAttachedAudio';
   putAttachedAudio: AudioAssetContent;
 }

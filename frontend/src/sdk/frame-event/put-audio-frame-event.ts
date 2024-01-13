@@ -1,8 +1,9 @@
 import {AbstractPutObjectFrameEvent} from './abstract-put-object-frame-event';
 
 export interface PutAudioFrameEvent extends AbstractPutObjectFrameEvent {
-  type: 'putAUdio';
-  putAUdio: {
+  type: 'putAudio';
+  putAudio: {
+    assetId: number;
     volume: number;
     autoplay: boolean;
   };

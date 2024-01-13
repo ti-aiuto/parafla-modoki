@@ -1,4 +1,5 @@
 import {Asset} from './asset/asset';
+import { AudioAsset } from './asset/audio-asset';
 import {ImageAsset} from './asset/image-asset';
 import {TextAsset} from './asset/text-asset';
 
@@ -39,6 +40,17 @@ export class AssetsManager {
     }
     if (asset.type !== 'image') {
       throw new Error(`${id}のアセットは画像ではありません`);
+    }
+    return asset;
+  }
+
+  findAudioAssetOrThrow(id: number): AudioAsset {
+    const asset = this.find(id);
+    if (!asset) {
+      throw new Error(`${id}のアセットが見つかりませんでした`);
+    }
+    if (asset.type !== 'audio') {
+      throw new Error(`${id}のアセットは音声ではありません`);
     }
     return asset;
   }

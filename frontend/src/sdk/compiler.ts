@@ -6,6 +6,7 @@ import {
   ScheduledEvents,
 } from './component-source';
 import {FrameEvent} from './frame-event/frame-event';
+import {PutAttachedAudioFrameEvent} from './frame-event/put-attached-audio-frame-event';
 import {PutAttachedImageFrameEvent} from './frame-event/put-attached-image-frame-event';
 import {PutAttachedTextFrameEvent} from './frame-event/put-attached-text-frame-event';
 
@@ -94,6 +95,22 @@ export class Compiler {
     };
   }
 
+  private buildPutAttachedAudio(
+    frameEvent: FrameEvent
+  ): PutAttachedAudioFrameEvent {
+    if (frameEvent.type !== 'putAudio') {
+      throw new Error(`${frameEvent}はputAudioに該当しません`);
+    }
+
+    return {
+      ...frameEvent,
+      type: 'putAttachedAudio',
+      putAttachedAudio: this.assetsManager.findAudioAssetOrThrow(
+        frameEvent['putAudio'].assetId
+      ).audio,
+    };
+  }
+
   generateScheduledEvents(frameEvents: FrameEvent[]): ScheduledEvents {
     const absoluteFrameCountToScheduledFrameEvents: ScheduledEvents = {};
     let currentFrameCount = 1;
@@ -125,6 +142,14 @@ export class Compiler {
             type: 'firstFrame',
             firstFrame: {
               event: this.buildPutAttachedImage(frameEvent),
+              objectId: frameEvent.objectId || defaultObjectId,
+            },
+          });
+        } else if (frameEvent.type === 'putAudio') {
+          absoluteFrameCountToScheduledFrameEvents[currentFrameCount].push({
+            type: 'firstFrame',
+            firstFrame: {
+              event: this.buildPutAttachedAudio(frameEvent),
               objectId: frameEvent.objectId || defaultObjectId,
             },
           });
@@ -242,7 +267,8 @@ export class Compiler {
       if (frameEvent.type === 'defineComponentUserFunction') {
         const content = frameEvent.defineComponentUserFunction.content;
         const func = new Function('context', 'args', content);
-        componentUserFunctions[frameEvent.defineComponentUserFunction.name] = func;
+        componentUserFunctions[frameEvent.defineComponentUserFunction.name] =
+          func;
       }
     });
     return componentUserFunctions;
