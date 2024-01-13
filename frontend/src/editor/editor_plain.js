@@ -664,7 +664,7 @@ export function initEditor() {
       onClickEnableAnimation() {
         const layoutOptions = this.formatLayoutOptions(
           this.editingFrameEvent['layoutOptions']
-        )
+        );
         this.$set(this.editingFrameEvent, 'lastKeyFrame', {
           layoutOptions,
         });
@@ -743,7 +743,17 @@ export function initEditor() {
           type: 'image',
           name: null,
           image: {
-            content: null,
+            source: null,
+          },
+        };
+      },
+      clickAddAudioAsset() {
+        this.editingTargetAsset = null;
+        this.editingAsset = {
+          type: 'audio',
+          name: null,
+          audio: {
+            source: null,
           },
         };
       },
