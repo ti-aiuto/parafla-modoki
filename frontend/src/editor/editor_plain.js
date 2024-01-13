@@ -525,7 +525,7 @@ export function initEditor() {
             structuredClone(layoutOptions)
           );
         } else if (frameEventType === 'putAudio') {
-          this.$set(this.editingFrameEvent, 'putAudio', {assetId: null});
+          this.$set(this.editingFrameEvent, 'putAudio', {assetId: null, volume: 1, autoplay: false});
           this.$set(this.editingFrameEvent, 'frameCount', 0);
           this.$set(this.editingFrameEvent, 'depth', 1);
           this.$set(
