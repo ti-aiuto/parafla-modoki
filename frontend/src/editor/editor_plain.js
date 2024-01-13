@@ -1095,6 +1095,11 @@ export function initEditor() {
           assetId => this.allIdToAsset[assetId]['type'] === 'image'
         );
       },
+      audioAssetIds() {
+        return Object.keys(this.allIdToAsset).filter(
+          assetId => this.allIdToAsset[assetId]['type'] === 'audio'
+        );
+      },
       allLabelNames() {
         return this.frameEvents
           .map(event => event['defineLabel'] && event['defineLabel']['label'])
