@@ -65,7 +65,7 @@ export function initEditor() {
           content += `「${event['defineLabel']['label']}」`;
         } else if (event.type === 'defineComponentUserFunction') {
           content += `「${event['defineComponentUserFunction']['name']}」`;
-        } else if (event.type === 'putImage' || event.type === 'putText') {
+        } else if (event.type === 'putImage' || event.type === 'putText' || event.type === 'putAudio') {
           if (event.lastKeyFrame) {
             content += '\n※アニメーションあり';
           }
