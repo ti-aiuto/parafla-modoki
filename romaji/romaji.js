@@ -164,6 +164,8 @@ const kanaRomajiTable = {
   ぴゅ: ["pyu"],
   ぴぇ: ["pye"],
   ぴょ: ["pyo"],
+  てぃ: ["thi"],
+  でぃ: ["dhi"],
 };
 
 
