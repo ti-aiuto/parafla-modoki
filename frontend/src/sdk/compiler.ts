@@ -111,6 +111,7 @@ export class Compiler {
         ).audio,
         volume: frameEvent.putAudio.volume,
         autoplay: frameEvent.putAudio.autoplay,
+        initialPosition: frameEvent.putAudio.initialPosition,
       },
     };
   }

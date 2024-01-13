@@ -8,5 +8,6 @@ export interface PutAttachedAudioFrameEvent
     content: AudioAssetContent;
     volume: number;
     autoplay: boolean;
+    initialPosition: number;
   };
 }

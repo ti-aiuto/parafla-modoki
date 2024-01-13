@@ -63,6 +63,7 @@ export class ObjectBuilder {
       targetElement.src = object.audio.content.source;
       targetElement.volume = object.audio.volume;
       targetElement.autoplay = object.audio.autoplay;
+      targetElement.currentTime = object.audio.initialPosition;
       targetElement.dataset.playId = object.audio.playId;
       wrapper.appendChild(targetElement);
       return targetElement;
@@ -95,7 +96,7 @@ export class ObjectBuilder {
   ) {
     if (targetElement.dataset.playId !== object.audio.playId) {
       targetElement.dataset.playId = object.audio.playId;
-      targetElement.currentTime = 0;
+      targetElement.currentTime = object.audio.initialPosition;
       targetElement.play();
     }
   }

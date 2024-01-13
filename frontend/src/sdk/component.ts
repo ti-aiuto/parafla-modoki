@@ -508,6 +508,7 @@ export class Component {
             content: event.putAttachedAudio.content,
             volume: event.putAttachedAudio.volume,
             autoplay: event.putAttachedAudio.autoplay,
+            initialPosition: event.putAttachedAudio.initialPosition,
             playId: 'first'
           },
         },

@@ -529,6 +529,7 @@ export function initEditor() {
             assetId: null,
             volume: 1,
             autoplay: false,
+            initialPosition: 0,
           });
           this.$set(this.editingFrameEvent, 'frameCount', 0);
           this.$set(this.editingFrameEvent, 'depth', 1);
@@ -645,6 +646,7 @@ export function initEditor() {
             updatedFrameEvent['putAudio'] = {
               assetId: Number(rawUpdatedFrameEvent['putAudio']['assetId']),
               volume: Number(rawUpdatedFrameEvent['putAudio']['volume']),
+              initialPosition: Number(rawUpdatedFrameEvent['putAudio']['initialPosition']),
               autoplay:
                 `${rawUpdatedFrameEvent['putAudio']['autoplay']}` === 'true',
             };

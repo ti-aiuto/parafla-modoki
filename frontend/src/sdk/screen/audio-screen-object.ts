@@ -7,6 +7,7 @@ export interface AudioScreenObject extends AbstractScreenObject {
     volume: number;
     autoplay: boolean;
     content: AudioAssetContent;
+    initialPosition: number;
     playId: string; // このIDが変わったら再生しなおす
   };
 }

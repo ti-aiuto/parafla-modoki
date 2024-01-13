@@ -6,5 +6,6 @@ export interface PutAudioFrameEvent extends AbstractPutObjectFrameEvent {
     assetId: number;
     volume: number;
     autoplay: boolean;
+    initialPosition: number;
   };
 }
